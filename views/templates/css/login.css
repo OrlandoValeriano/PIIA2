@@ -1,0 +1,205 @@
+/* ================== IMPORT VARIABLES GLOBALES ===================== */
+@import url("variable.css");
+
+/* ================== SCREEN WIDTH 1152px ===================== */
+@media screen and (min-width: 1152px) {
+    :root {
+        --biggest-font-size: 5.5rem;
+        --h1-font-size: 2.5rem;
+        --h2-font-size: 1.5rem;
+        --h3-font-size: 1rem;
+        --normal-font-size: .875rem;
+        --smaller-font-size: .813rem;
+    }
+}
+
+body {
+    background-color: #f9f9f9;
+}
+
+.txt {
+    border: none;
+    border-radius: 30px;
+    box-shadow: 2px 5px 5px #d4d4d4;
+    width: 100%;
+    height: 40px;
+    outline: none;
+    padding-left: 40px;
+    padding-right: 15px;
+    color: #1a9c5f;
+}
+
+.btn {
+    width: 100%;
+    height: 40px;
+    border-radius: 30px;
+    border: none;
+    color: #fff;
+    background-color: #1f9e63;
+    transition: .4s ease-in-out;
+}
+
+.btn:hover {
+    background-color: #1e8d59;
+}
+
+.container {
+    margin-inline: 1rem;
+}
+
+/* ================== LOGIN ===================== */
+
+.main {
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    /* For animation ScrollReveal */
+}
+
+.login, .password {
+    position: relative;
+    padding: 35px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, .1), 0px 8px 16px rgba(0, 0, 0, .1);
+    border-radius: 8px;
+}
+
+.form {
+    width: 100%;
+    gap: 20px;
+}
+
+.login__logos {
+    margin-bottom: 20px;
+}
+
+.img_login_first {
+    max-width: 130px;
+    transition: transform .4s ease-in-out;
+}
+
+.img_login_first:hover {
+    transform: scale(1.1);
+}
+
+.figure__login{
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: 145px;
+    z-index: -1;
+}
+
+.login__form {
+    gap: 20px;
+}
+
+.img_login_second {
+    width: 170px;
+}
+
+.form-group {
+    width: 100%;
+}
+
+.input-container {
+    position: relative;
+}
+
+.input-container > i{
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: #198754;
+}
+
+.login__check {
+    width: 100%;
+    align-items: center;
+}
+
+.checkbox-box {
+    color: #198754;
+}
+
+
+.login__forgot > a {
+    position: relative;
+    color: #198754;
+}
+
+.login__forgot>a:hover {
+    color: #1e8d59;
+}
+
+.login__forgot>a::after {
+    content: '';
+    width: 0;
+    height: 2px;
+    background-color: #1a9c5f;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -3px;
+    transition: width .4s ease-in-out;
+}
+
+.login__forgot>a:hover::after {
+    width: 100%;
+}
+
+/* ================== RECUPERAR CONTRASEÑA ===================== */
+.pass__title {
+    text-align: center;
+    color: #000;
+}
+
+.pass__text {
+    max-width: 400px;
+    text-align: center;
+}
+
+.btn__back {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* For small devices */
+@media screen and (max-width:340px) {
+    .container {
+        margin-inline: 2rem;
+    }
+}
+
+/* For medium devices */
+@media screen and (min-width: 878px) {
+    .login, .password {
+        min-width: 878px;
+        min-height: 555px;
+        flex-direction: row;
+        justify-content: space-around;
+        border-radius: 30px;
+        overflow: hidden;
+    }
+
+    .img_login_first {
+        max-width: 200px;
+    }
+
+    .figure__login{
+        max-width: none;
+    }
+
+    .login__form {
+        min-width: 300px;
+    }
+}
+
+
+
+
+
+
+
