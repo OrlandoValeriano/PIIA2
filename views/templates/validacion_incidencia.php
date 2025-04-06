@@ -411,6 +411,36 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
             <!-- Más notificaciones... -->
           </div>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body px-5">
+          <div class="row align-items-center justify-content-start">
+            <?php foreach ($atajos as $atajo): ?>
+              <div class="col-6 text-center">
+                <a href="<?= $atajo['url'] ?>" class="text-decoration-none">
+                  <div class="squircle justify-content-center">
+                    <i class="fe <?= $atajo['icon'] ?> fe-32 align-self-center text-white"></i>
+                  </div>
+                  <p class="letra-atajo"><?= htmlspecialchars($atajo['text']) ?></p>
+                </a>
+              </div>
+            <?php endforeach; ?>
+          </div>
+        </div>
       </div>
     </div>
   </div>
