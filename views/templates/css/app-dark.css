@@ -18443,12 +18443,21 @@ button#downloadPDF {
 }
 
 #dataTable-certificaciones a {
-  background: #27ae60;
+  background: #1f3a33;
   color: white;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 #dataTable-certificaciones a:hover {
-  background: #1e8449;
+  background: #275342;
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
 }
 
 
@@ -18477,4 +18486,23 @@ button#downloadPDF {
   .cass{
     width: 500px;
   }
+}
+
+.wrapper {
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+}
+
+.blur-header::after {
+  content: '';
+  position: absolute;
+  width: 1000%;
+  height: 100%;
+  background-color: hsla(0, 0%, 100%, .1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  top: 0;
+  left: 0;
+  z-index: -1;
 }

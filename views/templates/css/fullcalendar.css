@@ -26,7 +26,8 @@
   border-radius: 8px;
   padding: 10px;
   background-color: #3b3b3b;
-  width: 100%; /* Abarcar todo el borde */
+  width: 100%;
+  /* Abarcar todo el borde */
 }
 
 .filter-container {
@@ -45,7 +46,8 @@
   transition: background-color 0.3s, border-color 0.3s;
   font-size: 16px;
   text-align: left;
-  width: 100%; /* Abarcar todo el borde */
+  width: 100%;
+  /* Abarcar todo el borde */
   display: flex;
   align-items: center;
 }
@@ -124,7 +126,8 @@
 
 /* Calendario */
 .calendar-new {
-  width: 100%; /* Ocupa todo el ancho disponible */
+  width: 100%;
+  /* Ocupa todo el ancho disponible */
   padding: 40px 30px;
   border-radius: 10px;
   background-color: rgb(255, 255, 255);
@@ -184,7 +187,7 @@
 .weekdays .day {
   width: calc(100% / 7 - 10px);
   text-align: center;
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 600;
 }
 
@@ -208,11 +211,11 @@
   background-color: #fff;
   transition: all 0.3s;
   border: 1px solid;
-  align-items:center;
+  align-items: center;
 }
 
-@media screen and (max-width: 470px){
-  .days .day{
+@media screen and (max-width: 470px) {
+  .days .day {
     height: 35px;
     font-size: 10px;
   }
@@ -237,8 +240,10 @@
 
 .economic-day {
   position: relative;
-  background-color: #f0f8ff; /* Color de fondo para días económicos */
-  border: 1px solid #00f;    /* Borde para días económicos */
+  background-color: #f0f8ff;
+  /* Color de fondo para días económicos */
+  border: 1px solid #00f;
+  /* Borde para días económicos */
 }
 
 .economic-icon {
@@ -247,19 +252,22 @@
   align-items: center;
   position: absolute;
   bottom: 10px;
-  width: 2rem;    /* Ajusta el tamaño del ícono */
-  height: 2rem;   /* Ajusta el tamaño del ícono */
+  width: 2rem;
+  /* Ajusta el tamaño del ícono */
+  height: 2rem;
+  /* Ajusta el tamaño del ícono */
 }
 
-.card-avisos{
+.card-avisos {
   background-color: #fff;
   border: 2px solid #2d591b;
   border-radius: 19px;
   text-align: center;
   margin-bottom: 1rem;
+  padding: 1rem;
 }
 
-.text-verde{
+.text-verde {
   color: #2d591b;
   font-size: 40px;
   font-weight: 5px;
@@ -267,6 +275,7 @@
 
 
 @media (max-width: 524px) {
+
   /* Mantener la cabecera del calendario */
   .calendar-new .header {
     flex-direction: column;
@@ -282,15 +291,18 @@
 
   .weekdays {
     display: flex;
-    justify-content: space-between; /* Distribuir los días de manera equitativa */
+    justify-content: space-between;
+    /* Distribuir los días de manera equitativa */
     gap: 1px;
   }
-  
+
   .weekdays .day {
-    flex: 1; /* Hacer que cada día ocupe el mismo espacio */
+    flex: 1;
+    /* Hacer que cada día ocupe el mismo espacio */
     text-align: center;
-    font-size: .85rem; /* Reducir un poco el tamaño de las letras */
-    padding: 2px;
-    white-space: nowrap; /* Evitar que el texto se rompa en una nueva línea */
+    font-size: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }

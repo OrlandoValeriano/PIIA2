@@ -143,11 +143,13 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
 
   <script src="js/form_carrera.js"></script>
+  <script src="js/navbar-animation.js" defer></script>
+
 </head>
 
 <body class="vertical  light  ">
   <div class="wrapper">
-    <nav class="topnav navbar navbar-light">
+    <nav class="topnav navbar navbar-light" id="nav-bar">
       <button type="button" class="navbar-toggler text-muted mt-2 p-0 mr-3 collapseSidebar">
         <i class="fe fe-menu navbar-toggler-icon"></i>
       </button>
@@ -189,8 +191,9 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
       </ul>
     </nav>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <main role="main" class="main-content">
-      <div class="col-md-12">
+  </div>
+  <main role="main" class="main-content">
+      <div class="col-md-12 mt-5">
       <form id="formincidencias" method="POST" action="../../models/insert.php" enctype="multipart/form-data">
       <input type="hidden" name="form_type" value="incidencia-usuario">
         <div class="card shadow mb-4">
@@ -352,7 +355,6 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
         </div>
       </form>
       </div>
-  </div>
   </main>
 
   <script>

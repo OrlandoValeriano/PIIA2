@@ -286,8 +286,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   <link rel="stylesheet" href="css/app-dark.css" id="darkTheme">
   <!-- Agregar en el <head> si aún no tienes Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
-  </link>
+  <script src="js/navbar-animation.js" defer></script>
   
 
 <!-- Bootstrap JS -->
@@ -298,7 +297,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
 
 <body class="vertical  light  ">
   <div class="wrapper">
-    <nav class="topnav navbar navbar-light">
+    <nav class="topnav navbar navbar-light" id="nav-bar">
       <button type="button" class="navbar-toggler text-muted mt-2 p-0 mr-3 collapseSidebar">
         <i class="fe fe-menu navbar-toggler-icon"></i>
       </button>
@@ -611,7 +610,7 @@ function actualizarCarrusel() {
   
   <!-- Tarjeta principal -->
   <div class="card shadow-lg p-4 mb-3">
-    <div class="wrapper">
+    <div>
       <div class="container-fluid">
         <!-- Filtros -->
         <div class="container-filter mb-3 d-flex justify-content-center flex-wrap">
@@ -633,7 +632,7 @@ function actualizarCarrusel() {
 
           <!-- Filtro de División -->
           <div class="card-body-filter division-filter box-shadow-div mx-2 mb-0 position-relative">
-            <button class="btn-filter d-flex align-items-center">
+            <button class="btn-filter d-flex align-items-center justify-content-center text-center">
               <span class="fe fe-24 fe-filter me-2"></span>
               <span class="filter-label" data-placeholder="División">
                 <?php echo $nombreCarrera; ?>
@@ -1104,9 +1103,9 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
                   <tbody>
                     <?php foreach ($certificacionesusuarios as $certificacionusuario): ?>
                       <tr>
-                        <td><?php echo htmlspecialchars($certificacionusuario['certificacion_descripcion']); ?></td>
-                        <td><?php echo htmlspecialchars($certificacionusuario['nombre_certificado']); ?></td>
-                        <td><?php echo htmlspecialchars($certificacionusuario['nombre_mes']); ?></td>
+                        <td class="cert-text"><?php echo htmlspecialchars($certificacionusuario['certificacion_descripcion']); ?></td>
+                        <td class="cert-text"><?php echo htmlspecialchars($certificacionusuario['nombre_certificado']); ?></td>
+                        <td class="cert-text"><?php echo htmlspecialchars($certificacionusuario['nombre_mes']); ?></td>
                         <!-- Mostrar el mes -->
                         <td class="text-center">
                           <?php if (!empty($certificacionusuario['url'])): ?>

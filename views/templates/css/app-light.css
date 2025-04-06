@@ -19793,16 +19793,21 @@ button#downloadPDF:hover {
 
 /* Estilo para el botón "Ver Certificado" */
 #dataTable-certificaciones a {
-  background: #27ae60;
+  background-color: #06753e;
   color: white;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 #dataTable-certificaciones a:hover {
-  background: #1e8449;
-
+  background: #04552b;
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
-
-
 
 /* Ocultar el botón en la impresión */
 @media print {
@@ -19842,3 +19847,25 @@ button#downloadPDF:hover {
   }
 } 
   
+.wrapper {
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+}
+
+.blur-header::after {
+  content: '';
+  position: absolute;
+  width: 1000%;
+  height: 100%;
+  background-color: hsla(0, 0%, 100%, .1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.cert-text{
+  color: #000 !important;
+}
