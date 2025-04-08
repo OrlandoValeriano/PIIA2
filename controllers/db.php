@@ -45,5 +45,5 @@ class Database
 }
 
 // Uso de la clase Database
-$database = new Database('10.10.200.154', 'piia', 'PIIA', '1234');
+$database = new Database('localhost', 'piia', 'root', '1234');
 $conn = $database->getConnection(); // Obtener la conexión para usarla en otros lugares

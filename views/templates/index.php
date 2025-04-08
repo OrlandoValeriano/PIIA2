@@ -2,6 +2,7 @@
 include('../../models/session.php');
 include('../../controllers/db.php'); // Conexión a la base de datos
 include('../../models/consultas.php'); // Incluir la clase de consultas
+include('../../models/accesso_restringido.php');
 include('aside.php');
 
 // Verificar si hay un mensaje de error en la sesión

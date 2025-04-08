@@ -46,13 +46,13 @@ class ControlAcceso {
         
         // 3. Mapeo de permisos por tipo de usuario
         $permisos = [
-            1 => ['dashboard_docentes.php', 'form_incidencias.php', 'validacion_incidencia.php'],
-            2 => ['dashboard_docentes.php', 'dashboard_carreras.php', 'form_incidencias.php', 'validacion_incidencia.php', 'form_horario.php'],
-            3 => ['recursos_humanos_empleados.php', 'formulario_usuario.php', 'form_incidencias.php', 'validacion_incidencia.php'],
-            4 => ['desarrollo_academico_docentes.php', 'form_materia.php', 'form_carrera.php', 'formulario_grupo.php', 'form_usuarios-carreras.php', 'form_edificio.php', 'form_horario.php'],
-            5 => ['dashboard_docentes.php', 'dashboard_carreras.php', 'desarrollo_academico_docentes.php', 'recursos_humanos_empleados.php'],
+            1 => ['index.php', 'dashboard_docentes.php', 'form_incidencias.php', 'validacion_incidencia.php'],
+            2 => ['index.php', 'dashboard_docentes.php', 'dashboard_carreras.php', 'form_incidencias.php', 'validacion_incidencia.php', 'form_horario.php'],
+            3 => ['index.php', 'recursos_humanos_empleados.php', 'formulario_usuario.php', 'form_incidencias.php', 'validacion_incidencia.php'],
+            4 => ['index.php', 'desarrollo_academico_docentes.php', 'form_materia.php', 'form_carrera.php', 'formulario_grupo.php', 'form_usuarios-carreras.php', 'form_edificio.php', 'form_horario.php'],
+            5 => ['index.php', 'dashboard_docentes.php', 'dashboard_carreras.php', 'desarrollo_academico_docentes.php', 'recursos_humanos_empleados.php'],
             6 => ['index.php'],
-            7 => ['validacion_incidencia.php']
+            7 => ['index.php', 'validacion_incidencia.php']
         ];
         
         // 4. Verificación de acceso
