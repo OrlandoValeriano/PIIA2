@@ -655,6 +655,68 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
                 </div>
               </div>
 
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <script>
+                // Obtener los datos desde PHP
+                var mesesTipo1 = <?php echo $mesesJson; ?>; // Meses para el gráfico tipo 1
+                var certificaciones1 = <?php echo $certificaciones1Json; ?>; // Certificaciones tipo 1
+
+                // Configuración del gráfico para certificaciones tipo 1
+                var ctxTipo1 = document.getElementById('columnChartTipo1').getContext('2d');
+                var columnChartTipo1 = new Chart(ctxTipo1, {
+                  type: 'bar', // Tipo de gráfico: 'bar' para barras
+                  data: {
+                    labels: mesesTipo1, // Los meses
+                    datasets: [{
+                      label: 'Certificaciones Pedagógicas',
+                      data: certificaciones1, // Cantidades de certificaciones tipo 1
+                      backgroundColor: 'rgba(59, 204, 23)', // Azul transparente
+                      borderColor: 'rgb(105, 215, 109)', // Azul fuerte
+                      borderWidth: 1,
+                      barThickness: 40, // Hacer las barras más delgadas
+                      borderRadius: 20, // Esquinas redondeadas
+                    }]
+                  },
+                  options: {
+                    responsive: true,  // Hace que el gráfico sea responsivo
+                    layout: {
+                      padding: {
+                        top: 10,
+                        right: 10,
+                        bottom: 10,
+                        left: 10
+                      }
+                    },
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        title: {
+                          display: true,
+                          text: 'Cantidad de Certificaciones'
+                        },
+                        ticks: {
+                          padding: 10
+                        }
+                      },
+                      x: {
+                        title: {
+                          display: true,
+                          text: 'Mes'
+                        },
+                        ticks: {
+                          padding: 10
+                        }
+                      }
+                    }
+                  }
+                });
+
+                // Redibujar el gráfico al cambiar el tamaño de la ventana
+                window.addEventListener('resize', function () {
+                  columnChartTipo1.resize();
+                });
+              </script>
+
               <div class="container-fluid mt-5 box-shadow-div p-5">
                 <div class="mb-3 font-weight-bold bg-success text-white rounded p-3 box-shadow-div-profile cont-div">
                   Acreditaciones Profesionales
@@ -1042,9 +1104,9 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   <script src="js/datamaps.custom.js"></script>
   <script src="js/Chart.min.js"></script>
   <script>
-  /* defind global options */
-  Chart.defaults.global.defaultFontFamily = base.defaultFontFamily;
-  Chart.defaults.global.defaultFontColor = colors.mutedColor;
+    /* defind global options */
+    Chart.defaults.global.defaultFontFamily = base.defaultFontFamily;
+    Chart.defaults.global.defaultFontColor = colors.mutedColor;
   </script>
   <script src="js/gauge.min.js"></script>
   <script src="js/jquery.sparkline.min.js"></script>
