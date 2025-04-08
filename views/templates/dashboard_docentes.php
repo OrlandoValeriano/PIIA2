@@ -362,7 +362,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
 
 <!-- Código HTML del carrusel -->
 <main role="main" class="main-content">
-<div id="teacherCarousel" class="carousel slide" data-bs-ride="carousel">
+<div id="teacherCarousel" class="carousel slide mt-5" data-bs-ride="carousel">
         <div class="container-fluid mb-3">
           <div class="mb-3 font-weight-bold bg-success text-white rounded p-3 box-shadow-div-profile flag-div">
             PERFIL DOCENTE
