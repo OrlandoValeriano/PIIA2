@@ -156,11 +156,13 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+g6Y1Ch6JvWc1R6FddRZnYf4M4w3LTpVj1q9Vkp8" crossorigin="anonymous"></script>
 
+  <script src="js/navbar-animation.js" defer></script>
+
 </head>
 
 <body class="vertical  light  ">
   <div class="wrapper">
-    <nav class="topnav navbar navbar-light">
+    <nav class="topnav navbar navbar-light" id="nav-bar">
       <button type="button" class="navbar-toggler text-muted mt-2 p-0 mr-3 collapseSidebar">
         <i class="fe fe-menu navbar-toggler-icon"></i>
       </button>

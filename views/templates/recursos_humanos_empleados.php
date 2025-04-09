@@ -15,7 +15,7 @@ $imgUser  = $consultas->obtenerImagen($idusuario);
 
 // Validar tipo de usuario
 if (!$tipoUsuarioId) {
-    die("Error: Tipo de usuario no encontrado para el ID proporcionado.");
+  die("Error: Tipo de usuario no encontrado para el ID proporcionado.");
 }
 
 $periodos = $consultas->obtenerPeriodo();
@@ -32,14 +32,14 @@ $carreras = $consultas->obtenerCarreras();
 
 // Fusionar datos de usuario y carrera
 if ($carrera) {
-    $usuario = array_merge($usuario, $carrera);
+  $usuario = array_merge($usuario, $carrera);
 }
 
 // Calcular antigüedad del usuario
 if (isset($usuario["fecha_contratacion"])) {
-    $fechaContratacionDate = new DateTime($usuario["fecha_contratacion"]);
-    $fechaActual = new DateTime();
-    $usuario['antiguedad'] = $fechaContratacionDate->diff($fechaActual)->y;
+  $fechaContratacionDate = new DateTime($usuario["fecha_contratacion"]);
+  $fechaActual = new DateTime();
+  $usuario['antiguedad'] = $fechaContratacionDate->diff($fechaActual)->y;
 }
 
 // Obtener incidencias con los nombres de los usuarios
@@ -52,13 +52,13 @@ $incidenciasGrafic = [];
 
 // Recorrer las incidencias por carrera y almacenarlas
 foreach ($incidenciasCarrera as $row) {
-    $carrerasGrafic[] = $row['nombre_carrera']; 
-    
-    // Validación para evitar Undefined array key
-    $cantidadRegistros = isset($row['cantidad_registros']) ? (int) $row['cantidad_registros'] : 0;
+  $carrerasGrafic[] = $row['nombre_carrera'];
 
-    // Agregar los valores al array correspondiente
-    $incidenciasGrafic[] = $cantidadRegistros;
+  // Validación para evitar Undefined array key
+  $cantidadRegistros = isset($row['cantidad_registros']) ? (int) $row['cantidad_registros'] : 0;
+
+  // Agregar los valores al array correspondiente
+  $incidenciasGrafic[] = $cantidadRegistros;
 }
 
 // Convertir datos a JSON para pasarlos a JavaScript
@@ -80,7 +80,7 @@ $periodos = $consultas->obtenerPeriodos();
 
 // Verificar si se ha enviado el formulario de cerrar sesión
 if (isset($_POST['logout'])) {
-    $sessionManager->logoutAndRedirect('../templates/auth-login.php');
+  $sessionManager->logoutAndRedirect('../templates/auth-login.php');
 }
 
 $incidenciasConPorcentaje = $consultas->obtenerIncidenciasPorcentaje();
@@ -102,49 +102,49 @@ $tipoUsuarioId = $consultas->obtenerTipoUsuarioPorId($idusuario);
 
 // Validar tipo de usuario
 if (!$tipoUsuarioId) {
-    die("Error: Tipo de usuario no encontrado.");
+  die("Error: Tipo de usuario no encontrado.");
 }
 
 // Definir atajos según el tipo de usuario
 $atajos = [];
 if ($tipoUsuarioId === 1) { // Usuario tipo 1 
-    $atajos = [
-        ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
-        ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
-        ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
-    ];
+  $atajos = [
+    ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
+    ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
+  ];
 } elseif ($tipoUsuarioId === 2) { // Usuario tipo 2 
-    $atajos = [
-      ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
-        ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
-        ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
-        ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php'],
-        ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php']
+  $atajos = [
+    ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
+    ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
+    ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php'],
+    ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php']
 
-    ];
+  ];
 } elseif ($tipoUsuarioId === 3) { // Usuario tipo 3 
-    $atajos = [
-      ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php'],
-        ['icon' => 'fe-user', 'color' => 'bg-primary', 'text' => 'Registro de usuarios', 'url' => 'formulario_usuario.php'],
-        ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de incidencias', 'url' => 'form_incidencias.php'],
-        ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
-    ];
+  $atajos = [
+    ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php'],
+    ['icon' => 'fe-user', 'color' => 'bg-primary', 'text' => 'Registro de usuarios', 'url' => 'formulario_usuario.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de incidencias', 'url' => 'form_incidencias.php'],
+    ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
+  ];
 } elseif ($tipoUsuarioId === 4) { // Usuario tipo 4 
-    $atajos = [
-      ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
-        ['icon' => 'fe-edit', 'color' => 'bg-primary', 'text' => 'Registro de materias', 'url' => 'form_materia.php'],
-        ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de carreras', 'url' => 'form_carrera.php'],
-        ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Registro de grupos', 'url' => 'formulario_grupo.php'],
-        ['icon' => 'fe-folder-plus', 'color' => 'bg-primary', 'text' => 'Asignacion de carreras', 'url' => 'form_usuarios-carreras.php'],
-        ['icon' => 'fe-briefcase', 'color' => 'bg-primary', 'text' => 'Registro de escenario', 'url' => 'form_edificio.php'],
-        ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php']
-    ];
+  $atajos = [
+    ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
+    ['icon' => 'fe-edit', 'color' => 'bg-primary', 'text' => 'Registro de materias', 'url' => 'form_materia.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de carreras', 'url' => 'form_carrera.php'],
+    ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Registro de grupos', 'url' => 'formulario_grupo.php'],
+    ['icon' => 'fe-folder-plus', 'color' => 'bg-primary', 'text' => 'Asignacion de carreras', 'url' => 'form_usuarios-carreras.php'],
+    ['icon' => 'fe-briefcase', 'color' => 'bg-primary', 'text' => 'Registro de escenario', 'url' => 'form_edificio.php'],
+    ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php']
+  ];
 } elseif ($tipoUsuarioId === 5) { // Usuario tipo 5
-    $atajos = [
-      ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
-      ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
-      ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
-      ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php']
+  $atajos = [
+    ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
+    ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
+    ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
+    ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php']
   ];
 } elseif ($tipoUsuarioId === 6) { // Usuario tipo 6
   $atajos = [
@@ -155,9 +155,9 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
   ];
 } else { // Otro tipo de usuario
-    $atajos = [
-      ['icon' => 'fe-home', 'color' => 'bg-primary', 'text' => 'Inicio', 'url' => 'index.php']
-    ];
+  $atajos = [
+    ['icon' => 'fe-home', 'color' => 'bg-primary', 'text' => 'Inicio', 'url' => 'index.php']
+  ];
 }
 ?>
 
@@ -201,6 +201,9 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+g6Y1Ch6JvWc1R6FddRZnYf4M4w3LTpVj1q9Vkp8" crossorigin="anonymous"></script>
 
+  <script src="js/navbar-animation.js" defer></script>
+
+
   </link>
   </link>
 
@@ -208,7 +211,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
 
 <body class="vertical  light  ">
   <div class="wrapper">
-    <nav class="topnav navbar navbar-light">
+    <nav class="topnav navbar navbar-light" id="nav-bar">
       <button type="button" class="navbar-toggler text-muted mt-2 p-0 mr-3 collapseSidebar">
         <i class="fe fe-menu navbar-toggler-icon"></i>
       </button>
@@ -231,12 +234,12 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle text-muted pr-0" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <span class="avatar avatar-sm mt-2">
-                  <img src="<?= htmlspecialchars($imgUser['imagen_url'] ?? './assets/avatars/default.jpg') ?>" 
-                      alt="Avatar del usuario" 
-                      class="avatar-img rounded-circle" 
-                      style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
-              </span>
+            <span class="avatar avatar-sm mt-2">
+              <img src="<?= htmlspecialchars($imgUser['imagen_url'] ?? './assets/avatars/default.jpg') ?>"
+                alt="Avatar del usuario"
+                class="avatar-img rounded-circle"
+                style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
+            </span>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" href="Perfil.php"><i class="fas fa-user"></i> Profile</a>
@@ -253,25 +256,25 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   <!-- Div de imagen de perfil (con espacio debajo del botón para separarlo) -->
   <div class="card text-center">
     <div class="card-body">
-        <h5 class="card-title">Filtrado por División</h5>
+      <h5 class="card-title">Filtrado por División</h5>
 
-        <div class="d-flex flex-column align-items-center">
-            <div class="d-flex justify-content-center mb-3">
-                <button id="filterBtn" class="btn btn-primary">Seleccionar División</button>
-                <div style="width: 20px;"></div>
-                <button class="btn btn-primary" onclick="descargarExcel()">Descargar Base de Datos</button>
-            </div>
-
-            <div class="filter-container position-relative">
-                <div id="filterOptions" class="filter-options d-none cass" style="top: 100%; left: 0; background: transparent; border: 1px solid #ccc; z-index: 10; overflow: hidden;text-overflow: ellipsis; white-space: nowrap;">
-                    <?php foreach ($carreras as $carrera): ?>
-                        <div class="dropdown-item" data-value="<?= htmlspecialchars($carrera['carrera_id']) ?>">
-                            <?= htmlspecialchars($carrera['nombre_carrera']) ?>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
+      <div class="d-flex flex-column align-items-center">
+        <div class="d-flex justify-content-center mb-3">
+          <button id="filterBtn" class="btn btn-primary">Seleccionar División</button>
+          <div style="width: 20px;"></div>
+          <button class="btn btn-primary" onclick="descargarExcel()">Descargar Base de Datos</button>
         </div>
+
+        <div class="filter-container position-relative">
+          <div id="filterOptions" class="filter-options d-none cass" style="top: 100%; left: 0; background: transparent; border: 1px solid #ccc; z-index: 10; overflow: hidden;text-overflow: ellipsis; white-space: nowrap;">
+            <?php foreach ($carreras as $carrera): ?>
+              <div class="dropdown-item" data-value="<?= htmlspecialchars($carrera['carrera_id']) ?>">
+                <?= htmlspecialchars($carrera['nombre_carrera']) ?>
+              </div>
+            <?php endforeach; ?>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -452,160 +455,160 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
 
       <!-- Parte de recursos humanos -->
       <div class="container-fluid mt-0">
-  <div class="mb-3 mt-0 font-weight-bold bg-success text-white rounded p-3 box-shadow-div-profile flag-div ">
-    RECURSOS HUMANOS
-  </div>
-  
-  <!-- Tarjeta principal -->
-  <div class="card shadow-lg p-4 mb-3">
-    <div class="wrapper">
-      <div class="container-fluid">
-        <!-- Filtros -->
-        <div class="container-filter mb-3 d-flex justify-content-center flex-wrap">
-          <!-- Filtro de Periodo -->
-          <div class="card-body-filter period-filter box-shadow-div mx-2 mb-0 mt-0 position-relative">
-            <span class="fe fe-24 fe-filter me-2"></span>
-            <label class="filter-label">Periodo:</label>
-            <div class="filter-options position-relative">
-              <select class="form-select" id="periodoSelect">
-                <option value="">Selecciona un periodo</option>
-                <?php foreach ($periodos as $periodo): ?>
-                  <option value="<?php echo $periodo['periodo_id']; ?>">
-                    <?php echo htmlspecialchars($periodo['descripcion']); ?>
-                  </option>
-                <?php endforeach; ?>
-              </select>
-            </div>
-          </div>
-
-          <!-- Filtro de División -->
-          <div class="card-body-filter division-filter box-shadow-div mx-2 mb-0 position-relative">
-            <button class="btn-filter d-flex align-items-center">
-              <span class="fe fe-24 fe-filter me-2"></span>
-              <span class="filter-label" data-placeholder="División">
-                <?php echo $nombreCarrera; ?>
-              </span>
-            </button>
-            <div class="filter-options position-absolute top-100 start-0 bg-white border shadow-sm d-none">
-              <ul class="list-unstyled m-0 p-2">
-                <li><a href="#" class="d-block py-1"><?php echo $nombreCarrera; ?></a></li>
-              </ul>
-            </div>
-          </div>
-
+        <div class="mb-3 mt-0 font-weight-bold bg-success text-white rounded p-3 box-shadow-div-profile flag-div ">
+          RECURSOS HUMANOS
         </div>
 
-        <!-- Sección de Incidencias -->
-        <h2 class="titulo text-center my-3">INCIDENCIAS</h2>
-        <div class="row d-flex justify-content-center">
-          <!-- Bloque de Días Económicos -->
-          <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-3">
-            <div class="card-body-calendar box-shadow-div mb-3">
-              <h3 class="h5">DIAS ECONOMICOS TOTALES</h3>
-              <div class="text-verde">4</div>
-            </div>
-            <div class="card-body-calendar box-shadow-div">
-              <h3 class="h5">DIAS ECONOMICOS TOMADOS</h3>
-              <div class="text-verde">1</div>
-            </div>
-          </div>
+        <!-- Tarjeta principal -->
+        <div class="card shadow-lg p-4 mb-3">
+          <div class="">
+            <div class="container-fluid">
+              <!-- Filtros -->
+              <div class="container-filter mb-3 d-flex justify-content-center flex-wrap">
+                <!-- Filtro de Periodo -->
+                <div class="card-body-filter period-filter box-shadow-div mx-2 mb-0 mt-0 position-relative">
+                  <span class="fe fe-24 fe-filter me-2"></span>
+                  <label class="filter-label">Periodo:</label>
+                  <div class="filter-options position-relative">
+                    <select class="form-select" id="periodoSelect">
+                      <option value="">Selecciona un periodo</option>
+                      <?php foreach ($periodos as $periodo): ?>
+                        <option value="<?php echo $periodo['periodo_id']; ?>">
+                          <?php echo htmlspecialchars($periodo['descripcion']); ?>
+                        </option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
+                </div>
 
-          <!-- Calendario -->
-          <div class="col-xl-6 col-lg-8 col-md-12 col-sm-12 mb-3">
-            <div class="calendar-new box-shadow-div">
-              <div class="header d-flex align-items-center">
-                <div class="month"></div>
-                <div class="btns d-flex justify-content-center">
-                  <div class="btn today-btn mx-1">
-                    <i class="fe fe-24 fe-calendar"></i>
+                <!-- Filtro de División -->
+                <div class="card-body-filter division-filter box-shadow-div mx-2 mb-0 position-relative">
+                  <button class="btn-filter d-flex align-items-center">
+                    <span class="fe fe-24 fe-filter me-2"></span>
+                    <span class="filter-label" data-placeholder="División">
+                      <?php echo $nombreCarrera; ?>
+                    </span>
+                  </button>
+                  <div class="filter-options position-absolute top-100 start-0 bg-white border shadow-sm d-none">
+                    <ul class="list-unstyled m-0 p-2">
+                      <li><a href="#" class="d-block py-1"><?php echo $nombreCarrera; ?></a></li>
+                    </ul>
                   </div>
-                  <div class="btn prev-btn mx-1">
-                    <i class="fe fe-24 fe-arrow-left"></i>
+                </div>
+
+              </div>
+
+              <!-- Sección de Incidencias -->
+              <h2 class="titulo text-center my-3">INCIDENCIAS</h2>
+              <div class="row d-flex justify-content-center">
+                <!-- Bloque de Días Económicos -->
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-3">
+                  <div class="card-body-calendar box-shadow-div mb-3">
+                    <h3 class="h5">DIAS ECONOMICOS TOTALES</h3>
+                    <div class="text-verde">4</div>
                   </div>
-                  <div class="btn next-btn mx-1">
-                    <i class="fe fe-24 fe-arrow-right"></i>
+                  <div class="card-body-calendar box-shadow-div">
+                    <h3 class="h5">DIAS ECONOMICOS TOMADOS</h3>
+                    <div class="text-verde">1</div>
+                  </div>
+                </div>
+
+                <!-- Calendario -->
+                <div class="col-xl-6 col-lg-8 col-md-12 col-sm-12 mb-3">
+                  <div class="calendar-new box-shadow-div">
+                    <div class="header d-flex align-items-center">
+                      <div class="month"></div>
+                      <div class="btns d-flex justify-content-center">
+                        <div class="btn today-btn mx-1">
+                          <i class="fe fe-24 fe-calendar"></i>
+                        </div>
+                        <div class="btn prev-btn mx-1">
+                          <i class="fe fe-24 fe-arrow-left"></i>
+                        </div>
+                        <div class="btn next-btn mx-1">
+                          <i class="fe fe-24 fe-arrow-right"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="weekdays d-flex">
+                      <div class="day">Dom</div>
+                      <div class="day">Lun</div>
+                      <div class="day">Mar</div>
+                      <div class="day">Mie</div>
+                      <div class="day">Jue</div>
+                      <div class="day">Vie</div>
+                      <div class="day">Sab</div>
+                    </div>
+                    <div class="days">
+                      <!-- días agregados dinámicamente -->
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bloque de Avisos -->
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-3">
+                  <div class="card-body-calendar box-shadow-div mb-3">
+                    <h3 class="h5">AVISOS</h3>
+                    <div class="text-verde"><?php echo count($avisos); ?></div>
+                  </div>
+                  <div class="card-body-calendar">
+                    <?php foreach ($avisos as $aviso): ?>
+                      <div class="card-avisos mb-2">
+                        <strong>Motivo:</strong> <?php echo htmlspecialchars($aviso['motivo']); ?><br>
+                        <strong>Fecha de incidencia:</strong> <?php echo htmlspecialchars($aviso['dia_incidencia']); ?>
+                      </div>
+                    <?php endforeach; ?>
                   </div>
                 </div>
               </div>
-              <div class="weekdays d-flex">
-                <div class="day">Dom</div>
-                <div class="day">Lun</div>
-                <div class="day">Mar</div>
-                <div class="day">Mie</div>
-                <div class="day">Jue</div>
-                <div class="day">Vie</div>
-                <div class="day">Sab</div>
-              </div>
-              <div class="days">
-                <!-- días agregados dinámicamente -->
-              </div>
-            </div>
-          </div>
 
-          <!-- Bloque de Avisos -->
-          <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-3">
-            <div class="card-body-calendar box-shadow-div mb-3">
-              <h3 class="h5">AVISOS</h3>
-              <div class="text-verde"><?php echo count($avisos); ?></div>
-            </div>
-            <div class="card-body-calendar">
-              <?php foreach ($avisos as $aviso): ?>
-                <div class="card-avisos mb-2">
-                  <strong>Motivo:</strong> <?php echo htmlspecialchars($aviso['motivo']); ?><br>
-                  <strong>Fecha de incidencia:</strong> <?php echo htmlspecialchars($aviso['dia_incidencia']); ?>
+              <!-- Modal de Incidencias -->
+              <div class="modal fade" id="incidenciasModal" tabindex="-1" aria-labelledby="incidenciasModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="incidenciasModalLabel">Formulario de Incidencias</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modalContent">
+                      <!-- Contenido cargado dinámicamente -->
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                  </div>
                 </div>
-              <?php endforeach; ?>
-            </div>
-          </div>
-        </div>
-
-        <!-- Modal de Incidencias -->
-        <div class="modal fade" id="incidenciasModal" tabindex="-1" aria-labelledby="incidenciasModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="incidenciasModalLabel">Formulario de Incidencias</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body" id="modalContent">
-                <!-- Contenido cargado dinámicamente -->
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
 
-<script>
-document.getElementById('periodoSelect').addEventListener('change', function() {
-    const selectedPeriodId = this.value;
-    console.log("Periodo seleccionado:", selectedPeriodId);
-    
-    if (selectedPeriodId) {
-        fetch(`get_period_dates.php?id=${selectedPeriodId}`)
-            .then(response => response.json())
-            .then(data => {
+      <script>
+        document.getElementById('periodoSelect').addEventListener('change', function() {
+          const selectedPeriodId = this.value;
+          console.log("Periodo seleccionado:", selectedPeriodId);
+
+          if (selectedPeriodId) {
+            fetch(`get_period_dates.php?id=${selectedPeriodId}`)
+              .then(response => response.json())
+              .then(data => {
                 if (data && data.fecha_inicio && data.fecha_termino) {
-                    const fechaInicio = new Date(data.fecha_inicio);
-                    const fechaTermino = new Date(data.fecha_termino);
-                    actualizarCalendario(fechaInicio, fechaTermino);
+                  const fechaInicio = new Date(data.fecha_inicio);
+                  const fechaTermino = new Date(data.fecha_termino);
+                  actualizarCalendario(fechaInicio, fechaTermino);
                 }
-            })
-            .catch(error => console.error("Error al obtener las fechas del periodo:", error));
-    }
-});
+              })
+              .catch(error => console.error("Error al obtener las fechas del periodo:", error));
+          }
+        });
 
-function actualizarCalendario(fechaInicio, fechaTermino) {
-    currentMonth = fechaInicio.getMonth();
-    currentYear = fechaInicio.getFullYear();
-    renderCalendar();
-}
-</script>
+        function actualizarCalendario(fechaInicio, fechaTermino) {
+          currentMonth = fechaInicio.getMonth();
+          currentYear = fechaInicio.getFullYear();
+          renderCalendar();
+        }
+      </script>
 
       <div class="container-fluid ">
         <div class="mb-3 font-weight-bold bg-success text-white rounded p-3 box-shadow-div-profile flag-div mt-1 mb-2">
@@ -624,7 +627,7 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
               </div> <!-- /.card-body -->
             </div> <!-- /.card -->
           </div> <!-- /.col -->
-          
+
           <script>
             // Recibimos los datos PHP en formato JSON y los convertimos a un objeto JavaScript
             var incidenciasData = <?php echo $incidenciasData; ?>;
@@ -643,58 +646,58 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
             });
 
             // Ahora podemos pasar estos datos a la configuración de la gráfica
-var donutChartOptions2 = {
-    series: values, // Usamos los porcentajes como series
-    chart: {
-      type: "donut",
-      height: '300px',
-      width: '100%',
-      responsive: [{
-        breakpoint: 768,
-        options: {
-          chart: {
-            height: 200
-          },
-          legend: {
-            position: 'bottom'
-          }
-        }
-      }]
-    },
-    labels: labels, // Etiquetas que corresponderán a los tipos de incidencia
-    legend: {
-      position: "bottom",
-      markers: {
-        width: 10,
-        height: 10,
-        radius: 6
-      }
-    },
-    stroke: {
-      colors: ["#ffffff"],
-      width: 1
-    },
-    fill: {
-      opacity: 1,
-      colors: ["#33701b", "#78d249", "#274c1b"] // Aquí puedes ajustar los colores
-    },
-    tooltip: {
-      y: {
-        formatter: function(val, opt) {
-          // Usamos el índice del segmento para acceder a las cantidades
-          var index = opt.seriesIndex;  // Obtenemos el índice del segmento
-          return cantidades[index] + ' incidencias';  // Mostramos la cantidad
-        }
-      }
-    }
-};
+            var donutChartOptions2 = {
+              series: values, // Usamos los porcentajes como series
+              chart: {
+                type: "donut",
+                height: '300px',
+                width: '100%',
+                responsive: [{
+                  breakpoint: 768,
+                  options: {
+                    chart: {
+                      height: 200
+                    },
+                    legend: {
+                      position: 'bottom'
+                    }
+                  }
+                }]
+              },
+              labels: labels, // Etiquetas que corresponderán a los tipos de incidencia
+              legend: {
+                position: "bottom",
+                markers: {
+                  width: 10,
+                  height: 10,
+                  radius: 6
+                }
+              },
+              stroke: {
+                colors: ["#ffffff"],
+                width: 1
+              },
+              fill: {
+                opacity: 1,
+                colors: ["#33701b", "#78d249", "#274c1b"] // Aquí puedes ajustar los colores
+              },
+              tooltip: {
+                y: {
+                  formatter: function(val, opt) {
+                    // Usamos el índice del segmento para acceder a las cantidades
+                    var index = opt.seriesIndex; // Obtenemos el índice del segmento
+                    return cantidades[index] + ' incidencias'; // Mostramos la cantidad
+                  }
+                }
+              }
+            };
 
-// Inicializar y renderizar el gráfico
-var donutChart3Ctn = document.querySelector("#donutChart3");
-if (donutChart3Ctn) {
-  var donutChart3 = new ApexCharts(donutChart3Ctn, donutChartOptions2);
-  donutChart3.render();
-}
+            // Inicializar y renderizar el gráfico
+            var donutChart3Ctn = document.querySelector("#donutChart3");
+            if (donutChart3Ctn) {
+              var donutChart3 = new ApexCharts(donutChart3Ctn, donutChartOptions2);
+              donutChart3.render();
+            }
           </script>
 
           <div class="container-fluid mt-5 box-shadow-div p-5">
@@ -731,13 +734,21 @@ if (donutChart3Ctn) {
                               <td><?php echo $incidencia['motivo']; ?></td>
                               <td><?php echo $incidencia['dia_incidencia']; ?></td>
                               <td>
-                                <?php 
-                                  switch ($incidencia['status_incidencia_id']) {
-                                    case 1: echo 'Pendiente'; break;
-                                    case 2: echo 'Resuelta'; break;
-                                    case 3: echo 'En proceso'; break;
-                                    default: echo 'Desconocido'; break;
-                                  }
+                                <?php
+                                switch ($incidencia['status_incidencia_id']) {
+                                  case 1:
+                                    echo 'Pendiente';
+                                    break;
+                                  case 2:
+                                    echo 'Resuelta';
+                                    break;
+                                  case 3:
+                                    echo 'En proceso';
+                                    break;
+                                  default:
+                                    echo 'Desconocido';
+                                    break;
+                                }
                                 ?>
                               </td>
                             </tr>
@@ -745,42 +756,42 @@ if (donutChart3Ctn) {
                         </tbody>
                       </table>
                       <div id="donutChart4"></div>
-                        <div id="incidencias-container" style="overflow-y: auto;">
+                      <div id="incidencias-container" style="overflow-y: auto;">
                         <table class="table table-striped table-bordered" id="tabla-incidencias">
-                            <thead class="thead-dark" style="position: sticky; top: 0; background-color: #343a40; color: white; z-index: 2;">
+                          <thead class="thead-dark" style="position: sticky; top: 0; background-color: #343a40; color: white; z-index: 2;">
+                            <tr>
+                              <th>Número de incidencia</th>
+                              <th>Usuario</th>
+                              <th>Fecha solicitada</th>
+                              <th>Motivo</th>
+                              <th>Hora de inicio</th>
+                              <th>Hora de término</th>
+                              <th>Horario de incidencia</th>
+                              <th>Día de la incidencia</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <?php if (!empty($incidenciasUsuarios)): ?>
+                              <?php foreach ($incidenciasUsuarios as $incidencia): ?>
                                 <tr>
-                                    <th>Número de incidencia</th>
-                                    <th>Usuario</th>
-                                    <th>Fecha solicitada</th>
-                                    <th>Motivo</th>
-                                    <th>Hora de inicio</th>
-                                    <th>Hora de término</th>
-                                    <th>Horario de incidencia</th>
-                                    <th>Día de la incidencia</th>
+                                  <td><?php echo htmlspecialchars($incidencia['numero_incidencia']); ?></td>
+                                  <td><?php echo htmlspecialchars($incidencia['usuario']); ?></td>
+                                  <td><?php echo htmlspecialchars($incidencia['fecha_solicitada']); ?></td>
+                                  <td><?php echo htmlspecialchars($incidencia['motivo']); ?></td>
+                                  <td><?php echo htmlspecialchars($incidencia['hora_inicio']); ?></td>
+                                  <td><?php echo htmlspecialchars($incidencia['hora_termino']); ?></td>
+                                  <td><?php echo htmlspecialchars($incidencia['horario_incidencia']); ?></td>
+                                  <td><?php echo htmlspecialchars($incidencia['dia_incidencia']); ?></td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (!empty($incidenciasUsuarios)): ?>
-                                    <?php foreach ($incidenciasUsuarios as $incidencia): ?>
-                                        <tr>
-                                            <td><?php echo htmlspecialchars($incidencia['numero_incidencia']); ?></td>
-                                            <td><?php echo htmlspecialchars($incidencia['usuario']); ?></td>
-                                            <td><?php echo htmlspecialchars($incidencia['fecha_solicitada']); ?></td>
-                                            <td><?php echo htmlspecialchars($incidencia['motivo']); ?></td>
-                                            <td><?php echo htmlspecialchars($incidencia['hora_inicio']); ?></td>
-                                            <td><?php echo htmlspecialchars($incidencia['hora_termino']); ?></td>
-                                            <td><?php echo htmlspecialchars($incidencia['horario_incidencia']); ?></td>
-                                            <td><?php echo htmlspecialchars($incidencia['dia_incidencia']); ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <tr>
-                                        <td colspan="8" class="text-center">No hay incidencias registradas.</td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
+                              <?php endforeach; ?>
+                            <?php else: ?>
+                              <tr>
+                                <td colspan="8" class="text-center">No hay incidencias registradas.</td>
+                              </tr>
+                            <?php endif; ?>
+                          </tbody>
                         </table>
-                    </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -819,351 +830,367 @@ if (donutChart3Ctn) {
           <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Obtener datos desde PHP
-    var carreras = <?php echo $carrerasJson; ?>;
-    var incidencias = <?php echo $incidenciasJson; ?>;
+          <script>
+            document.addEventListener("DOMContentLoaded", function() {
+              // Obtener datos desde PHP
+              var carreras = <?php echo $carrerasJson; ?>;
+              var incidencias = <?php echo $incidenciasJson; ?>;
 
-    console.log("Carreras:", carreras);
-    console.log("Incidencias:", incidencias);
+              console.log("Carreras:", carreras);
+              console.log("Incidencias:", incidencias);
 
-    // Verificar si hay datos
-    if (carreras.length === 0 || incidencias.length === 0) {
-        console.warn("No hay datos para mostrar en la gráfica.");
-        return;
-    }
+              // Verificar si hay datos
+              if (carreras.length === 0 || incidencias.length === 0) {
+                console.warn("No hay datos para mostrar en la gráfica.");
+                return;
+              }
 
-    // Verificar si ya existe un gráfico en #donutChart4 y destruirlo
-    if (typeof chart !== 'undefined' && chart !== null) {
-        chart.destroy(); // Destruir el gráfico anterior si existe
-    }
+              // Verificar si ya existe un gráfico en #donutChart4 y destruirlo
+              if (typeof chart !== 'undefined' && chart !== null) {
+                chart.destroy(); // Destruir el gráfico anterior si existe
+              }
 
-    // Configuración del gráfico de dona (donut)
-    var options = {
-        series: incidencias, // Datos de incidencias
-        chart: {
-            type: 'donut', // Cambiar a tipo 'donut'
-            height: 350
-        },
-        labels: carreras, // Etiquetas de las carreras
-        colors: [
-            '#66BB6A', // Verde claro
-            '#43A047', // Verde medio
-            '#2C6B2F', // Verde más oscuro
-            '#1B5E20', // Verde oscuro
-            '#81C784', // Verde pastel
-            '#388E3C', // Verde fuerte
-            '#4CAF50'  // Verde más brillante
-        ], // Colores verdes
-        legend: {
-            position: 'bottom'
-        },
-        plotOptions: {
-            pie: {
-                donut: {
-                    size: '60%' // Controlar el tamaño del agujero en el centro
+              // Configuración del gráfico de dona (donut)
+              var options = {
+                series: incidencias, // Datos de incidencias
+                chart: {
+                  type: 'donut', // Cambiar a tipo 'donut'
+                  height: 350
+                },
+                labels: carreras, // Etiquetas de las carreras
+                colors: [
+                  '#66BB6A', // Verde claro
+                  '#43A047', // Verde medio
+                  '#2C6B2F', // Verde más oscuro
+                  '#1B5E20', // Verde oscuro
+                  '#81C784', // Verde pastel
+                  '#388E3C', // Verde fuerte
+                  '#4CAF50' // Verde más brillante
+                ], // Colores verdes
+                legend: {
+                  position: 'bottom'
+                },
+                plotOptions: {
+                  pie: {
+                    donut: {
+                      size: '60%' // Controlar el tamaño del agujero en el centro
+                    }
+                  }
                 }
-            }
+              };
+
+              // Renderizar el gráfico en el div con ID 'donutChart4'
+              var chart = new ApexCharts(document.querySelector("#donutChart4"), options);
+              chart.render();
+            });
+          </script>
+          <script>
+            document.addEventListener("DOMContentLoaded", function() {
+              let table = document.getElementById("tabla-incidencias");
+              let container = document.getElementById("incidencias-container");
+              let rowCount = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
+
+              if (rowCount > 5) {
+                container.style.maxHeight = "400px"; // Agrega el scroll si hay más de 5 registros
+              } else {
+                container.style.maxHeight = "auto"; // Sin scroll si hay 5 o menos
+              }
+            });
+          </script>
+
+
+        </div> <!-- /.card-body -->
+      </div> <!-- /.card -->
+    </div> <!-- /.col -->
+  </div> <!-- /.row -->
+  </div> <!-- /.container-fluid -->
+  </div> <!-- /.container-fluid -->
+
+
+
+
+
+  <script src="js/jquery.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/moment.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/simplebar.min.js"></script>
+  <script src='js/daterangepicker.js'></script>
+  <script src='js/jquery.stickOnScroll.js'></script>
+  <script src="js/tinycolor-min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/d3.min.js"></script>
+  <script src="js/topojson.min.js"></script>
+  <script src="js/datamaps.all.min.js"></script>
+  <script src="js/datamaps-zoomto.js"></script>
+  <script src="js/datamaps.custom.js"></script>
+  <script src="js/Chart.min.js"></script>
+  <script>
+    /* defind global options */
+    Chart.defaults.global.defaultFontFamily = base.defaultFontFamily;
+    Chart.defaults.global.defaultFontColor = colors.mutedColor;
+  </script>
+  <script src="js/gauge.min.js"></script>
+  <script src="js/jquery.sparkline.min.js"></script>
+  <script src="js/apexcharts.min.js"></script>
+  <script src="js/apexcharts.custom.js"></script>
+  <script src='js/jquery.mask.min.js'></script>
+  <script src='js/select2.min.js'></script>
+  <script src='js/jquery.steps.min.js'></script>
+  <script src='js/jquery.validate.min.js'></script>
+  <script src='js/jquery.timepicker.js'></script>
+  <script src='js/dropzone.min.js'></script>
+  <script src='js/uppy.min.js'></script>
+  <script src='js/quill.min.js'></script>
+  <script src="js/fullcalendar.custom.js"></script>
+  <script src="js/fullcalendar.js"></script>
+  <script src="js/apps.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    $('.select2').select2({
+      theme: 'bootstrap4',
+    });
+    $('.select2-multi').select2({
+      multiple: true,
+      theme: 'bootstrap4',
+    });
+    $('.drgpicker').daterangepicker({
+      singleDatePicker: true,
+      timePicker: false,
+      showDropdowns: true,
+      locale: {
+        format: 'MM/DD/YYYY'
+      }
+    });
+    $('.time-input').timepicker({
+      'scrollDefault': 'now',
+      'zindex': '9999' /* fix modal open */
+    });
+    /** date range picker */
+    if ($('.datetimes').length) {
+      $('.datetimes').daterangepicker({
+        timePicker: true,
+        startDate: moment().startOf('hour'),
+        endDate: moment().startOf('hour').add(32, 'hour'),
+        locale: {
+          format: 'M/DD hh:mm A'
         }
+      });
+    }
+    var start = moment().subtract(29, 'days');
+    var end = moment();
+
+    function cb(start, end) {
+      $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+    }
+    $('#reportrange').daterangepicker({
+      startDate: start,
+      endDate: end,
+      ranges: {
+        'Today': [moment(), moment()],
+        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+      }
+    }, cb);
+    cb(start, end);
+    $('.input-placeholder').mask("00/00/0000", {
+      placeholder: "__/__/____"
+    });
+    $('.input-zip').mask('00000-000', {
+      placeholder: "____-___"
+    });
+    $('.input-money').mask("#.##0,00", {
+      reverse: true
+    });
+    $('.input-phoneus').mask('(000) 000-0000');
+    $('.input-mixed').mask('AAA 000-S0S');
+    $('.input-ip').mask('0ZZ.0ZZ.0ZZ.0ZZ', {
+      translation: {
+        'Z': {
+          pattern: /[0-9]/,
+          optional: true
+        }
+      },
+      placeholder: "___.___.___.___"
+    });
+    // editor
+    var editor = document.getElementById('editor');
+    if (editor) {
+      var toolbarOptions = [
+        [{
+          'font': []
+        }],
+        [{
+          'header': [1, 2, 3, 4, 5, 6, false]
+        }],
+        ['bold', 'italic', 'underline', 'strike'],
+        ['blockquote', 'code-block'],
+        [{
+            'header': 1
+          },
+          {
+            'header': 2
+          }
+        ],
+        [{
+            'list': 'ordered'
+          },
+          {
+            'list': 'bullet'
+          }
+        ],
+        [{
+            'script': 'sub'
+          },
+          {
+            'script': 'super'
+          }
+        ],
+        [{
+            'indent': '-1'
+          },
+          {
+            'indent': '+1'
+          }
+        ], // outdent/indent
+        [{
+          'direction': 'rtl'
+        }], // text direction
+        [{
+            'color': []
+          },
+          {
+            'background': []
+          }
+        ], // dropdown with defaults from theme
+        [{
+          'align': []
+        }],
+        ['clean'] // remove formatting button
+      ];
+      var quill = new Quill(editor, {
+        modules: {
+          toolbar: toolbarOptions
+        },
+        theme: 'snow'
+      });
+    }
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+  </script>
+  <script>
+    var uptarg = document.getElementById('drag-drop-area');
+    if (uptarg) {
+      var uppy = Uppy.Core().use(Uppy.Dashboard, {
+        inline: true,
+        target: uptarg,
+        proudlyDisplayPoweredByUppy: false,
+        theme: 'dark',
+        width: 770,
+        height: 210,
+        plugins: ['Webcam']
+      }).use(Uppy.Tus, {
+        endpoint: 'https://master.tus.io/files/'
+      });
+      uppy.on('complete', (result) => {
+        console.log('Upload complete! We’ve uploaded these files:', result.successful)
+      });
+    }
+  </script>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56159088-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'UA-56159088-1');
+
+
+    // Datos dinámicos desde PHP
+    const labels = <?php echo $labelsJSON; ?>;
+    const series = <?php echo $seriesJSON; ?>;
+
+    // Configuración de la gráfica
+    const donutChartOptions = {
+      series: series,
+      chart: {
+        type: "donut",
+        height: '300px',
+        width: '100%',
+        responsive: [{
+          breakpoint: 768,
+          options: {
+            chart: {
+              height: 200
+            },
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }]
+      },
+      plotOptions: {
+        pie: {
+          donut: {
+            size: "40%"
+          },
+          expandOnClick: false
+        }
+      },
+      labels: labels,
+      legend: {
+        position: "bottom",
+        markers: {
+          width: 10,
+          height: 10,
+          radius: 6
+        }
+      },
+      stroke: {
+        colors: ["#ffffff"],
+        width: 1
+      },
+      fill: {
+        opacity: 1,
+        colors: ["#33701b", "#78d249", "#274c1b", "#ff6f61", "#6a0572"]
+      }
     };
 
-    // Renderizar el gráfico en el div con ID 'donutChart4'
-    var chart = new ApexCharts(document.querySelector("#donutChart4"), options);
-    chart.render();
-});
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let table = document.getElementById("tabla-incidencias");
-        let container = document.getElementById("incidencias-container");
-        let rowCount = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
-
-        if (rowCount > 5) {
-            container.style.maxHeight = "400px"; // Agrega el scroll si hay más de 5 registros
-        } else {
-            container.style.maxHeight = "auto"; // Sin scroll si hay 5 o menos
-        }
-    });
-</script>
-
-
-                    </div> <!-- /.card-body -->
-                  </div> <!-- /.card -->
-                </div> <!-- /.col -->
-              </div> <!-- /.row -->
-            </div> <!-- /.container-fluid -->
-          </div> <!-- /.container-fluid -->
-
-
-
-
-
-      <script src="js/jquery.min.js"></script>
-      <script src="js/popper.min.js"></script>
-      <script src="js/moment.min.js"></script>
-      <script src="js/bootstrap.min.js"></script>
-      <script src="js/simplebar.min.js"></script>
-      <script src='js/daterangepicker.js'></script>
-      <script src='js/jquery.stickOnScroll.js'></script>
-      <script src="js/tinycolor-min.js"></script>
-      <script src="js/config.js"></script>
-      <script src="js/d3.min.js"></script>
-      <script src="js/topojson.min.js"></script>
-      <script src="js/datamaps.all.min.js"></script>
-      <script src="js/datamaps-zoomto.js"></script>
-      <script src="js/datamaps.custom.js"></script>
-      <script src="js/Chart.min.js"></script>
-      <script>
-        /* defind global options */
-        Chart.defaults.global.defaultFontFamily = base.defaultFontFamily;
-        Chart.defaults.global.defaultFontColor = colors.mutedColor;
-      </script>
-      <script src="js/gauge.min.js"></script>
-      <script src="js/jquery.sparkline.min.js"></script>
-      <script src="js/apexcharts.min.js"></script>
-      <script src="js/apexcharts.custom.js"></script>
-      <script src='js/jquery.mask.min.js'></script>
-      <script src='js/select2.min.js'></script>
-      <script src='js/jquery.steps.min.js'></script>
-      <script src='js/jquery.validate.min.js'></script>
-      <script src='js/jquery.timepicker.js'></script>
-      <script src='js/dropzone.min.js'></script>
-      <script src='js/uppy.min.js'></script>
-      <script src='js/quill.min.js'></script>
-      <script src="js/fullcalendar.custom.js"></script>
-      <script src="js/fullcalendar.js"></script>
-      <script src="js/apps.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-      <script>
-        $('.select2').select2({
-          theme: 'bootstrap4',
-        });
-        $('.select2-multi').select2({
-          multiple: true,
-          theme: 'bootstrap4',
-        });
-        $('.drgpicker').daterangepicker({
-          singleDatePicker: true,
-          timePicker: false,
-          showDropdowns: true,
-          locale: {
-            format: 'MM/DD/YYYY'
-          }
-        });
-        $('.time-input').timepicker({
-          'scrollDefault': 'now',
-          'zindex': '9999' /* fix modal open */
-        });
-        /** date range picker */
-        if ($('.datetimes').length) {
-          $('.datetimes').daterangepicker({
-            timePicker: true,
-            startDate: moment().startOf('hour'),
-            endDate: moment().startOf('hour').add(32, 'hour'),
-            locale: {
-              format: 'M/DD hh:mm A'
-            }
-          });
-        }
-        var start = moment().subtract(29, 'days');
-        var end = moment();
-
-        function cb(start, end) {
-          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-        }
-        $('#reportrange').daterangepicker({
-          startDate: start,
-          endDate: end,
-          ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-          }
-        }, cb);
-        cb(start, end);
-        $('.input-placeholder').mask("00/00/0000", {
-          placeholder: "__/__/____"
-        });
-        $('.input-zip').mask('00000-000', {
-          placeholder: "____-___"
-        });
-        $('.input-money').mask("#.##0,00", {
-          reverse: true
-        });
-        $('.input-phoneus').mask('(000) 000-0000');
-        $('.input-mixed').mask('AAA 000-S0S');
-        $('.input-ip').mask('0ZZ.0ZZ.0ZZ.0ZZ', {
-          translation: {
-            'Z': {
-              pattern: /[0-9]/,
-              optional: true
-            }
-          },
-          placeholder: "___.___.___.___"
-        });
-        // editor
-        var editor = document.getElementById('editor');
-        if (editor) {
-          var toolbarOptions = [
-            [{
-              'font': []
-            }],
-            [{
-              'header': [1, 2, 3, 4, 5, 6, false]
-            }],
-            ['bold', 'italic', 'underline', 'strike'],
-            ['blockquote', 'code-block'],
-            [{
-                'header': 1
-              },
-              {
-                'header': 2
-              }
-            ],
-            [{
-                'list': 'ordered'
-              },
-              {
-                'list': 'bullet'
-              }
-            ],
-            [{
-                'script': 'sub'
-              },
-              {
-                'script': 'super'
-              }
-            ],
-            [{
-                'indent': '-1'
-              },
-              {
-                'indent': '+1'
-              }
-            ], // outdent/indent
-            [{
-              'direction': 'rtl'
-            }], // text direction
-            [{
-                'color': []
-              },
-              {
-                'background': []
-              }
-            ], // dropdown with defaults from theme
-            [{
-              'align': []
-            }],
-            ['clean'] // remove formatting button
-          ];
-          var quill = new Quill(editor, {
-            modules: {
-              toolbar: toolbarOptions
-            },
-            theme: 'snow'
-          });
-        }
-        // Example starter JavaScript for disabling form submissions if there are invalid fields
-        (function() {
-          'use strict';
-          window.addEventListener('load', function() {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-            // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-              form.addEventListener('submit', function(event) {
-                if (form.checkValidity() === false) {
-                  event.preventDefault();
-                  event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-              }, false);
-            });
-          }, false);
-        })();
-      </script>
-      <script>
-        var uptarg = document.getElementById('drag-drop-area');
-        if (uptarg) {
-          var uppy = Uppy.Core().use(Uppy.Dashboard, {
-            inline: true,
-            target: uptarg,
-            proudlyDisplayPoweredByUppy: false,
-            theme: 'dark',
-            width: 770,
-            height: 210,
-            plugins: ['Webcam']
-          }).use(Uppy.Tus, {
-            endpoint: 'https://master.tus.io/files/'
-          });
-          uppy.on('complete', (result) => {
-            console.log('Upload complete! We’ve uploaded these files:', result.successful)
-          });
-        }
-      </script>
-      <!-- Global site tag (gtag.js) - Google Analytics -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56159088-1"></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-          dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-        gtag('config', 'UA-56159088-1');
-
-
-        // Datos dinámicos desde PHP
-        const labels = <?php echo $labelsJSON; ?>;
-        const series = <?php echo $seriesJSON; ?>;
-
-        // Configuración de la gráfica
-        const donutChartOptions = {
-            series: series,
-            chart: {
-                type: "donut",
-                height: '300px',
-                width: '100%',
-                responsive: [{
-                    breakpoint: 768,
-                    options: {
-                        chart: { height: 200 },
-                        legend: { position: 'bottom' }
-                    }
-                }]
-            },
-            plotOptions: {
-                pie: {
-                    donut: { size: "40%" },
-                    expandOnClick: false
-                }
-            },
-            labels: labels,
-            legend: {
-                position: "bottom",
-                markers: { width: 10, height: 10, radius: 6 }
-            },
-            stroke: { colors: ["#ffffff"], width: 1 },
-            fill: { opacity: 1, colors: ["#33701b", "#78d249", "#274c1b", "#ff6f61", "#6a0572"] }
-        };
-
-        // Renderizar la gráfica
-        const donutChart3Ctn = document.querySelector("#donutChart3");
-        if (donutChart3Ctn) {
-            const donutChart3 = new ApexCharts(donutChart3Ctn, donutChartOptions);
-            donutChart3.render();
-        }
-      </script>
-    <script>
-    function descargarExcel() {
-        window.location.href = "../../models/exportar_excel.php";
+    // Renderizar la gráfica
+    const donutChart3Ctn = document.querySelector("#donutChart3");
+    if (donutChart3Ctn) {
+      const donutChart3 = new ApexCharts(donutChart3Ctn, donutChartOptions);
+      donutChart3.render();
     }
-    </script>
+  </script>
+  <script>
+    function descargarExcel() {
+      window.location.href = "../../models/exportar_excel.php";
+    }
+  </script>
 </body>
 
 </html>

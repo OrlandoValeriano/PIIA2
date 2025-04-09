@@ -370,6 +370,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
 
                 <div class="modal-footer">
                   <button type="submit" class="btn btn-success" name="action" value="asignar">Asignar</button>
+                </div>
               </form>
               <form method="POST" action="../../models/insert.php">
                 <input type="hidden" name="form_type" value="borrar-horario">
@@ -548,7 +549,6 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
       </div>
     </div>
   </div>
-  </main> <!-- main -->
   <!-- jQuery (necesario para DataTables) -->
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -574,9 +574,6 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   <script src='js/uppy.min.js'></script>
   <script src='js/quill.min.js'></script>
   <script src='js/apps.js'></script>
-
-
-
 
   <!-- Google Analytics -->
   <script>
