@@ -341,14 +341,14 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   </div>
 
 
-<?php if ($tipoUsuarioId === 5 || $tipoUsuarioId == 3 || $tipoUsuarioId == 4): ?>
+  <?php if ($tipoUsuarioId === 3 || $tipoUsuarioId === 4 || $tipoUsuarioId === 5): ?>
     <!-- Filtro de carreras -->
     <div class="card text-center">
         <div class="card-body">
-            <h5 class="card-title">Filtrado por carrera</h5>
+            <h5 class="card-title">Filtrado por división</h5>
             <div class="filter-container">
                 <select id="carreraSelect" class="form-control" style="max-width: 300px; margin: auto;">
-                    <option selected disabled>Seleccionar carrera</option>
+                    <option value="all">Todas las divisiones</option>
                     <?php foreach ($carreras as $carrera): ?>
                         <option value="<?= htmlspecialchars($carrera['carrera_id']) ?>">
                             <?= htmlspecialchars($carrera['nombre_carrera']) ?>
@@ -358,6 +358,151 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
             </div>
         </div>
     </div>
+
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Solo inicializar el filtro si el usuario tiene permisos
+    <?php if ($tipoUsuarioId === 3 || $tipoUsuarioId === 4 || $tipoUsuarioId === 5): ?>
+    
+    const carreraSelect = document.getElementById('carreraSelect');
+    const carouselContent = document.getElementById('carouselContent');
+    const btnSiguiente = document.getElementById('siguiente');
+    const btnAnterior = document.getElementById('anterior');
+    
+    // Variable global para almacenar usuarios
+    let usuarios = [];
+    let currentIndex = 0;
+    
+    // Función para cargar docentes
+    function cargarDocentesPorCarrera(carreraId) {
+        // Mostrar estado de carga
+        carouselContent.innerHTML = '<div class="text-center py-4"><i class="fe fe-loader fe-spin fe-24"></i> Cargando docentes...</div>';
+        
+        // Deshabilitar botones durante la carga
+        if (btnSiguiente) btnSiguiente.disabled = true;
+        if (btnAnterior) btnAnterior.disabled = true;
+        
+        // Configurar timeout para evitar carga infinita
+        const timeout = setTimeout(() => {
+            carouselContent.innerHTML = '<p class="text-center text-danger">Tiempo de espera agotado</p>';
+        }, 10000); // 10 segundos de timeout
+        
+        $.ajax({
+            url: '../templates/filtrarPorCarrera.php',
+            type: 'POST',
+            data: { 
+                carrera_id: carreraId === 'all' ? '' : carreraId,
+                all_carreras: carreraId === 'all' ? 1 : 0
+            },
+            dataType: 'json',
+            success: function(response) {
+                clearTimeout(timeout); // Cancelar timeout
+                
+                if (response && Array.isArray(response) && response.length > 0) {
+                    usuarios = response;
+                    currentIndex = 0;
+                    actualizarCarrusel();
+                } else {
+                    carouselContent.innerHTML = '<p class="text-center text-danger">No se encontraron docentes</p>';
+                }
+            },
+            error: function(xhr, status, error) {
+                clearTimeout(timeout);
+                console.error("Error al cargar docentes:", error);
+                carouselContent.innerHTML = '<p class="text-center text-danger">Error al cargar docentes</p>';
+            },
+            complete: function() {
+                // Siempre habilitar botones al finalizar
+                if (btnSiguiente) btnSiguiente.disabled = false;
+                if (btnAnterior) btnAnterior.disabled = false;
+            }
+        });
+    }
+    
+    // Función para actualizar el carrusel
+    function actualizarCarrusel() {
+        if (!usuarios.length) return;
+        
+        const usuario = usuarios[currentIndex];
+        let antiguedad = 'N/A';
+        
+        // Calcular antigüedad si existe fecha de contratación
+        if (usuario.fecha_contratacion) {
+            const fechaContratacion = new Date(usuario.fecha_contratacion);
+            const fechaActual = new Date();
+            antiguedad = fechaActual.getFullYear() - fechaContratacion.getFullYear();
+            
+            // Ajuste por mes y día
+            if (fechaActual.getMonth() < fechaContratacion.getMonth() || 
+                (fechaActual.getMonth() === fechaContratacion.getMonth() && 
+                 fechaActual.getDate() < fechaContratacion.getDate())) {
+                antiguedad--;
+            }
+        }
+        
+        // Construir HTML del carrusel
+        carouselContent.innerHTML = `
+            <div class="carousel-item active">
+                <div class="row">
+                    <div class="col-12 col-md-5 col-xl-3 text-center">
+                        <strong class="name-line">Foto del Docente:</strong> <br>
+                        <img src="../${usuario.imagen_url || 'assets/avatars/default.jpg'}" 
+                             alt="Imagen del docente" class="img-fluid tamanoImg">
+                    </div>
+                    <div class="col-12 col-md-7 col-xl-9 data-teacher mb-0">
+                        <p class="teacher-info h4">
+                            <strong class="name-line">Docente:</strong> ${usuario.nombre_usuario || ''} ${usuario.apellido_p || ''} ${usuario.apellido_m || ''}<br>
+                            <strong class="name-line">Edad:</strong> ${usuario.edad || 'N/A'} años <br>
+                            <strong class="name-line">Fecha de contratación:</strong> ${usuario.fecha_contratacion || 'N/A'} <br>
+                            <strong class="name-line">Antigüedad:</strong> ${antiguedad} años <br>
+                            <strong class="name-line">División Adscrita:</strong> ${usuario.nombre_carrera || 'N/A'}<br>
+                            <strong class="name-line">Número de Empleado:</strong> ${usuario.numero_empleado || 'N/A'} <br>
+                            <strong class="name-line">Grado académico:</strong> ${usuario.grado_academico || 'N/A'} <br>
+                            <strong class="name-line">Cédula:</strong> ${usuario.cedula || 'N/A'} <br>
+                            <strong class="name-line">Correo:</strong> ${usuario.correo || 'N/A'} <br>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Actualizar estado de los botones
+        if (btnAnterior) btnAnterior.disabled = currentIndex === 0;
+        if (btnSiguiente) btnSiguiente.disabled = currentIndex === usuarios.length - 1;
+    }
+    
+    // Evento para cambiar de carrera
+    if (carreraSelect) {
+        carreraSelect.addEventListener('change', function() {
+            cargarDocentesPorCarrera(this.value);
+        });
+        
+        // Cargar docentes inicialmente
+        cargarDocentesPorCarrera('all');
+    }
+    
+    // Eventos para navegación
+    if (btnSiguiente) {
+        btnSiguiente.addEventListener('click', function() {
+            if (currentIndex < usuarios.length - 1) {
+                currentIndex++;
+                actualizarCarrusel();
+            }
+        });
+    }
+    
+    if (btnAnterior) {
+        btnAnterior.addEventListener('click', function() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                actualizarCarrusel();
+            }
+        });
+    }
+    
+    <?php endif; ?>
+});
+</script>
 <?php endif; ?>
 
 <!-- Código HTML del carrusel -->
@@ -760,16 +905,6 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
 }
 </script>
 
-
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
       
 <?php if ($usuario && $usuario['tipo_usuario_tipo_usuario_id'] == 2): ?>
   <div class="container-fluid">
@@ -793,6 +928,9 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
         <div class="my-4">
             <div class="chart-container" style="position: relative; width: 100%; height: 400px;">
                 <canvas id="evaluacionChart"></canvas>
+                <div id="noDataMessage" class="text-center" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                    <h4>No hay datos suficientes</h4>
+                </div>
             </div>
         </div>
     </div>
@@ -805,6 +943,7 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
     console.log('Datos de evaluación:', datosEvaluacion);
 
     const selectPeriodo = document.getElementById('filtroPeriodo');
+    const noDataMessage = document.getElementById('noDataMessage');
 
     const periodosUnicos = [...new Set(datosEvaluacion.map(item => item.periodo_descripcion))];
 
@@ -824,7 +963,17 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
 
         if (datosFiltrados.length === 0) {
             console.warn('No hay datos para este período.');
+            // Mostrar mensaje de no hay datos
+            noDataMessage.style.display = 'block';
+            // Destruir gráfico anterior si existe
+            if (evaluacionChart) {
+                evaluacionChart.destroy();
+                evaluacionChart = null;
+            }
             return;
+        } else {
+            // Ocultar mensaje si hay datos
+            noDataMessage.style.display = 'none';
         }
 
         // Separar nombre y apellidos y organizarlos en líneas
@@ -913,7 +1062,12 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
         });
     }
 
-    actualizarGrafico("todos");
+    // Verificar si hay datos inicialmente
+    if (datosEvaluacion.length === 0) {
+        noDataMessage.style.display = 'block';
+    } else {
+        actualizarGrafico("todos");
+    }
 
     selectPeriodo.addEventListener("change", function () {
         actualizarGrafico(this.value);
@@ -921,7 +1075,6 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
 </script>
 
 <?php endif; ?>
-
 
 
 <?php if ($usuario && $usuario['tipo_usuario_tipo_usuario_id'] == 1): ?>
@@ -949,31 +1102,53 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
                 </div>
             </div>
 
-            <!-- Contenedor del gráfico -->
-            <div class="my-4">
-                <canvas id="evaluacionChart"></canvas>
+            <!-- Contenedor del gráfico - Añadido text-center y ajustes -->
+            <div class="my-4 text-center">
+                <div style="display: inline-block; width: 80%; max-width: 900px;">
+                    <canvas id="evaluacionChart"></canvas>
+                </div>
+                <div id="noDataMessage" class="text-center py-4" style="display: none;">
+                    <h4 class="text-muted">No hay datos suficientes para mostrar</h4>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Incluir Chart.js -->
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Convertir el JSON de PHP a un objeto JavaScript
-        const datosEvaluacion = <?php echo $resultados_json; ?>;
-
+        const datosEvaluacion = <?php echo $resultados_json ?? '[]'; ?>;
+        
         // Verificar en la consola los datos recibidos
         console.log('Datos de evaluación:', datosEvaluacion);
 
-        if (datosEvaluacion.length === 0) {
-            console.error('No hay datos para mostrar.');
+        // Función para verificar si hay datos válidos
+        function hasValidData(data) {
+            if (!data || data.length === 0) return false;
+            
+            // Verificar que al menos un item tenga valores numéricos
+            return data.some(item => {
+                return !isNaN(parseFloat(item.evaluacionTECNM)) && 
+                       !isNaN(parseFloat(item.evaluacionEstudiantil));
+            });
+        }
+
+        if (!hasValidData(datosEvaluacion)) {
+            // Mostrar mensaje y ocultar canvas si no hay datos
+            document.getElementById('evaluacionChart').style.display = 'none';
+            document.getElementById('noDataMessage').style.display = 'block';
+            console.warn('No hay datos válidos para mostrar la gráfica.');
         } else {
             // Agrupar datos por período
             const datosPorPeriodo = {};
             datosEvaluacion.forEach(item => {
-                const periodo = item.periodo_descripcion; // Usamos la descripción del período
+                const periodo = item.periodo_descripcion;
                 if (!datosPorPeriodo[periodo]) {
-                    datosPorPeriodo[periodo] = { nombres: [], evaluacionTecnica: [], evaluacionEstudiantil: [] };
+                    datosPorPeriodo[periodo] = { 
+                        nombres: [], 
+                        evaluacionTecnica: [], 
+                        evaluacionEstudiantil: [] 
+                    };
                 }
                 datosPorPeriodo[periodo].nombres.push(item.nombre_completo);
                 datosPorPeriodo[periodo].evaluacionTecnica.push(parseFloat(item.evaluacionTECNM));
@@ -983,8 +1158,8 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
             console.log('Datos por período:', datosPorPeriodo);
 
             // Colores fijos para las evaluaciones
-            const colorEvaluacionTecnica = 'rgba(17, 194, 56, 0.95)'; // Verde claro
-            const colorEvaluacionEstudiantil = 'rgb(16, 117, 36)'; // Verde oscuro
+            const colorEvaluacionTecnica = 'rgba(17, 194, 56, 0.95)';
+            const colorEvaluacionEstudiantil = 'rgb(16, 117, 36)';
 
             // Preparar los datos para la gráfica
             const labels = [];
@@ -993,7 +1168,7 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
 
             Object.keys(datosPorPeriodo).forEach(periodo => {
                 datosPorPeriodo[periodo].nombres.forEach((nombre, index) => {
-                    labels.push(`${nombre} (${periodo})`); // Combinar nombre y período
+                    labels.push(`${nombre} (${periodo})`);
                     evaluacionTecnicaData.push(datosPorPeriodo[periodo].evaluacionTecnica[index]);
                     evaluacionEstudiantilData.push(datosPorPeriodo[periodo].evaluacionEstudiantil[index]);
                 });
@@ -1004,7 +1179,7 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
             const evaluacionChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: labels, // Nombres de los docentes con el período
+                    labels: labels,
                     datasets: [
                         {
                             label: 'Evaluación Técnica',
@@ -1026,9 +1201,11 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false, // Esto permite controlar mejor el tamaño
                     scales: {
                         y: {
                             beginAtZero: true,
+                            suggestedMax: 100,
                             title: {
                                 display: true,
                                 text: 'Puntaje'
@@ -1038,6 +1215,11 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
                             title: {
                                 display: true,
                                 text: 'Docentes (Período)'
+                            },
+                            ticks: {
+                                autoSkip: false,
+                                maxRotation: 45,
+                                minRotation: 45
                             }
                         }
                     },
@@ -1047,11 +1229,34 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
                         },
                         title: {
                             display: true,
-                            text: 'Evaluación Docente por Período'
+                            text: 'Evaluación Docente por Período',
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw.toFixed(2)}`;
+                                }
+                            }
                         }
+                    },
+                    layout: {
+                        padding: {
+                            left: 20,
+                            right: 20,
+                            top: 20,
+                            bottom: 20
+                        }
+                    },
+                    animation: {
+                        duration: 1000
                     }
                 }
             });
+
+            // Ajustar el tamaño del canvas
+            document.getElementById('evaluacionChart').style.height = '500px';
+            document.getElementById('evaluacionChart').style.width = '100%';
         }
     </script>
 <?php endif; ?>
