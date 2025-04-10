@@ -21,15 +21,14 @@ try {
   $semestres = $consultas->obtenerSemestres();
 
   $materias = $consultas->obtenerMaterias();
-  
+
   $grupos = $consultas->obtenerGrupos();
 
-  $periodos = $consultas ->obtenerPeriodo();
+  $periodos = $consultas->obtenerPeriodo();
 
   $materias = $consultas->verMaterias();
 
   $materiagrupo = $consultas->verMateriasGrupo();
-
 } catch (Exception $e) {
   // Si falla la conexión, retorna un error
   $response['message'] = 'Error al conectar con la base de datos: ' . $e->getMessage();
@@ -51,49 +50,49 @@ $tipoUsuarioId = $consultas->obtenerTipoUsuarioPorId($idusuario);
 
 // Validar tipo de usuario
 if (!$tipoUsuarioId) {
-    die("Error: Tipo de usuario no encontrado.");
+  die("Error: Tipo de usuario no encontrado.");
 }
 
 // Definir atajos según el tipo de usuario
 $atajos = [];
 if ($tipoUsuarioId === 1) { // Usuario tipo 1 
-    $atajos = [
-        ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
-        ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
-        ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
-    ];
+  $atajos = [
+    ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
+    ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
+  ];
 } elseif ($tipoUsuarioId === 2) { // Usuario tipo 2 
-    $atajos = [
-      ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
-        ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
-        ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
-        ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php'],
-        ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php']
+  $atajos = [
+    ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
+    ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
+    ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php'],
+    ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php']
 
-    ];
+  ];
 } elseif ($tipoUsuarioId === 3) { // Usuario tipo 3 
-    $atajos = [
-      ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php'],
-        ['icon' => 'fe-user', 'color' => 'bg-primary', 'text' => 'Registro de usuarios', 'url' => 'formulario_usuario.php'],
-        ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de incidencias', 'url' => 'form_incidencias.php'],
-        ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
-    ];
+  $atajos = [
+    ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php'],
+    ['icon' => 'fe-user', 'color' => 'bg-primary', 'text' => 'Registro de usuarios', 'url' => 'formulario_usuario.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de incidencias', 'url' => 'form_incidencias.php'],
+    ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
+  ];
 } elseif ($tipoUsuarioId === 4) { // Usuario tipo 4 
-    $atajos = [
-      ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
-        ['icon' => 'fe-edit', 'color' => 'bg-primary', 'text' => 'Registro de materias', 'url' => 'form_materia.php'],
-        ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de carreras', 'url' => 'form_carrera.php'],
-        ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Registro de grupos', 'url' => 'formulario_grupo.php'],
-        ['icon' => 'fe-folder-plus', 'color' => 'bg-primary', 'text' => 'Asignacion de carreras', 'url' => 'form_usuarios-carreras.php'],
-        ['icon' => 'fe-briefcase', 'color' => 'bg-primary', 'text' => 'Registro de escenario', 'url' => 'form_edificio.php'],
-        ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php']
-    ];
+  $atajos = [
+    ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
+    ['icon' => 'fe-edit', 'color' => 'bg-primary', 'text' => 'Registro de materias', 'url' => 'form_materia.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de carreras', 'url' => 'form_carrera.php'],
+    ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Registro de grupos', 'url' => 'formulario_grupo.php'],
+    ['icon' => 'fe-folder-plus', 'color' => 'bg-primary', 'text' => 'Asignacion de carreras', 'url' => 'form_usuarios-carreras.php'],
+    ['icon' => 'fe-briefcase', 'color' => 'bg-primary', 'text' => 'Registro de escenario', 'url' => 'form_edificio.php'],
+    ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php']
+  ];
 } elseif ($tipoUsuarioId === 5) { // Usuario tipo 5
-    $atajos = [
-      ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
-      ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
-      ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
-      ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php']
+  $atajos = [
+    ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
+    ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
+    ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
+    ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php']
   ];
 } elseif ($tipoUsuarioId === 6) { // Usuario tipo 6
   $atajos = [
@@ -104,9 +103,9 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
   ];
 } else { // Otro tipo de usuario
-    $atajos = [
-      ['icon' => 'fe-home', 'color' => 'bg-primary', 'text' => 'Inicio', 'url' => 'index.php']
-    ];
+  $atajos = [
+    ['icon' => 'fe-home', 'color' => 'bg-primary', 'text' => 'Inicio', 'url' => 'index.php']
+  ];
 }
 ?>
 <!doctype html>
@@ -139,11 +138,13 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   <link rel="stylesheet" href="css/app-light.css" id="lightTheme">
   <link rel="stylesheet" href="css/app-dark.css" id="darkTheme" disabled>
 
+  <script src="js/navbar-animation.js" defer></script>
+
 </head>
 
 <body class="vertical  light  ">
   <div class="wrapper">
-    <nav class="topnav navbar navbar-light">
+    <nav class="topnav navbar navbar-light" id="nav-bar">
       <button type="button" class="navbar-toggler text-muted mt-2 p-0 mr-3 collapseSidebar">
         <i class="fe fe-menu navbar-toggler-icon"></i>
       </button>
@@ -166,12 +167,12 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle text-muted pr-0" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <span class="avatar avatar-sm mt-2">
-                  <img src="<?= htmlspecialchars($imgUser['imagen_url'] ?? './assets/avatars/default.jpg') ?>" 
-                      alt="Avatar del usuario" 
-                      class="avatar-img rounded-circle" 
-                      style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
-              </span>
+            <span class="avatar avatar-sm mt-2">
+              <img src="<?= htmlspecialchars($imgUser['imagen_url'] ?? './assets/avatars/default.jpg') ?>"
+                alt="Avatar del usuario"
+                class="avatar-img rounded-circle"
+                style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
+            </span>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" href="Perfil.php"><i class="fas fa-user"></i> Profile</a>
@@ -184,303 +185,318 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
         </li>
       </ul>
     </nav>
-    <main role="main" class="main-content">
+  </div>
+  <main class="main-content">
+    <div class="container-fluid mt-5">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          <h2 class="page-title">Alta de materias</h2>
 
-    <div class="container-fluid">
-  <div class="row justify-content-center">
-    <div class="col-12 col-lg-10">
-      <h2 class="page-title">Alta de materias</h2>
-      <div class="card my-4">
-        <div class="card-header">
-        </div>
-        <div class="card-body">
-          <div id="example-basic">
-            <h3>Registro de materias</h3>
-            <section>
-              <form method="POST" action="../../models/insert.php" enctype="multipart/form-data" id="formRegistroMateria">
-                <input type="hidden" name="form_type" value="materia">
-                <div class="row mb-3">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="nombre_materia" class="form-label-custom">Nombre de la materia:</label>
-                      <input class="form-control" id="nombre_materia" name="nombre_materia" type="text" required>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="credito_materia" class="form-label-custom">Créditos de la materia:</label>
-                      <input type="number" class="form-control" id="credito_materia" name="credito_materia" required>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row mb-3">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="hora_teorica" class="form-label-custom">Horas teóricas:</label>
-                      <input type="number" class="form-control" id="hora_teorica" name="hora_teorica" required>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="hora_practica" class="form-label-custom">Horas prácticas:</label>
-                      <input type="number" class="form-control" id="hora_practica" name="hora_practica" required>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="text-center mt-4">
-                  <input type="submit" id="submit-materia" class="btn btn-primary" value="Registrar Materia">
-                </div>
-              </form>
-            </section>
-
-            <h3>Asignar materias a grupos</h3>
-            <section>
-            <form method="POST" action="../../models/insert.php" enctype="multipart/form-data" id="formAsignarMateria">
-            <input type="hidden" name="form_type" value="materia-grupo">
-              <div class="form-group">
-                <label for="semestre" class="form-label-custom">Materia:</label>
-                <select class="form-control" id="materia" name="materia" required>
-                  <option value="">Selecciona una materia</option>
-                  <?php foreach ($materias as $materia): ?>
-                    <option value="<?php echo $materia['materia_id']; ?>"><?php echo htmlspecialchars($materia['descripcion']); ?></option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="grupo" class="form-label-custom">Grupo:</label>
-                <select class="form-control" id="grupo" name="grupo" required>
-                  <option value="">Selecciona un Grupo</option>
-                  <?php foreach ($grupos as $grupo): ?>
-                    <option value="<?php echo $grupo['grupo_id']; ?>"><?php echo htmlspecialchars($grupo['descripcion']); ?></option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="periodo" class="form-label-custom">Periodo:</label>
-                <select class="form-control" id="periodo" name="periodo" required>
-                  <option value="">Selecciona un periodo</option>
-                  <?php foreach ($periodos as $periodo): ?>
-                    <option value="<?php echo $periodo['periodo_id']; ?>"><?php echo htmlspecialchars($periodo['descripcion']); ?></option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
-              <div class="text-center mt-4">
-                  <input type="submit" id="submit-materia-grupo" class="btn btn-primary" value="Asignar materia">
-                </div>
-              </form>
-
-            </section>
-
-          </div>
-        </div> <!-- .card-body -->
-      </div> <!-- .card -->
-    </div> <!-- .col-12 -->
-  </div> <!-- .row -->
-</div> <!-- .container-fluid -->
-
-<script>
- $(document).ready(function() {
-  $("#formAsignarMateria").steps({
-    headerTag: "h3",
-    bodyTag: "section",
-    transitionEffect: "fade", // Cambiar el efecto de transición a "fade"
-    transitionEffectSpeed: 1000, // Aumentar la duración de la transición (en milisegundos)
-    autoFocus: true,
-    enablePagination: false, // Desactivar los botones Next y Previous
-    enableAllSteps: true, // Hacer clickeables los encabezados
-    saveState: false, // No guardar el estado, permitir el cambio de pestañas sin validación
-    onStepChanged: function(event, currentIndex) {
-      // Acciones a realizar cuando cambie la pestaña, si es necesario
-    }
-  });
-});
-
-</script>
-
-      <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="defaultModalLabel">Notifications</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+          <div class="card my-4">
+            <div class="card-header">
+              <!-- Puedes agregar aquí un título o dejarlo vacío -->
             </div>
-            <div class="modal-body">
-              <div class="list-group list-group-flush my-n3">
-                <div class="list-group-item bg-transparent">
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      <span class="fe fe-box fe-24"></span>
+
+            <div class="card-body">
+              <div id="example-basic">
+                <!-- Registro de materias -->
+                <h3>Registro de materias</h3>
+                <section>
+                  <form method="POST" action="../../models/insert.php" enctype="multipart/form-data" id="formRegistroMateria">
+                    <input type="hidden" name="form_type" value="materia">
+
+                    <div class="row mb-3">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="nombre_materia" class="form-label-custom">Nombre de la materia:</label>
+                          <input class="form-control" id="nombre_materia" name="nombre_materia" type="text" required>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="credito_materia" class="form-label-custom">Créditos de la materia:</label>
+                          <input type="number" class="form-control" id="credito_materia" name="credito_materia" required>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col">
-                      <small><strong>Package has uploaded successfull</strong></small>
-                      <div class="my-0 text-muted small">Package is zipped and uploaded</div>
-                      <small class="badge badge-pill badge-light text-muted">1m ago</small>
+
+                    <div class="row mb-3">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="hora_teorica" class="form-label-custom">Horas teóricas:</label>
+                          <input type="number" class="form-control" id="hora_teorica" name="hora_teorica" required>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="hora_practica" class="form-label-custom">Horas prácticas:</label>
+                          <input type="number" class="form-control" id="hora_practica" name="hora_practica" required>
+                        </div>
+                      </div>
                     </div>
+
+                    <div class="text-center mt-4">
+                      <input type="submit" id="submit-materia" class="btn btn-primary" value="Registrar Materia">
+                    </div>
+                  </form>
+                </section>
+
+                <!-- Asignar materias a grupos -->
+                <h3>Asignar materias a grupos</h3>
+                <section>
+                  <form method="POST" action="../../models/insert.php" enctype="multipart/form-data" id="formAsignarMateria">
+                    <input type="hidden" name="form_type" value="materia-grupo">
+
+                    <div class="form-group">
+                      <label for="materia" class="form-label-custom">Materia:</label>
+                      <select class="form-control" id="materia" name="materia" required>
+                        <option value="">Selecciona una materia</option>
+                        <?php foreach ($materias as $materia): ?>
+                          <option value="<?php echo $materia['materia_id']; ?>">
+                            <?php echo htmlspecialchars($materia['descripcion']); ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="grupo" class="form-label-custom">Grupo:</label>
+                      <select class="form-control" id="grupo" name="grupo" required>
+                        <option value="">Selecciona un Grupo</option>
+                        <?php foreach ($grupos as $grupo): ?>
+                          <option value="<?php echo $grupo['grupo_id']; ?>">
+                            <?php echo htmlspecialchars($grupo['descripcion']); ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="periodo" class="form-label-custom">Periodo:</label>
+                      <select class="form-control" id="periodo" name="periodo" required>
+                        <option value="">Selecciona un periodo</option>
+                        <?php foreach ($periodos as $periodo): ?>
+                          <option value="<?php echo $periodo['periodo_id']; ?>">
+                            <?php echo htmlspecialchars($periodo['descripcion']); ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </div>
+
+                    <div class="text-center mt-4">
+                      <input type="submit" id="submit-materia-grupo" class="btn btn-primary" value="Asignar materia">
+                    </div>
+                  </form>
+                </section>
+
+              </div> <!-- #example-basic -->
+            </div> <!-- .card-body -->
+          </div> <!-- .card -->
+        </div> <!-- .col-12 -->
+      </div> <!-- .row -->
+    </div> <!-- .container-fluid -->
+
+    <script>
+      $(document).ready(function() {
+        $("#formAsignarMateria").steps({
+          headerTag: "h3",
+          bodyTag: "section",
+          transitionEffect: "fade", // Cambiar el efecto de transición a "fade"
+          transitionEffectSpeed: 1000, // Aumentar la duración de la transición (en milisegundos)
+          autoFocus: true,
+          enablePagination: false, // Desactivar los botones Next y Previous
+          enableAllSteps: true, // Hacer clickeables los encabezados
+          saveState: false, // No guardar el estado, permitir el cambio de pestañas sin validación
+          onStepChanged: function(event, currentIndex) {
+            // Acciones a realizar cuando cambie la pestaña, si es necesario
+          }
+        });
+      });
+    </script>
+
+    <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="defaultModalLabel">Notifications</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="list-group list-group-flush my-n3">
+              <div class="list-group-item bg-transparent">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="fe fe-box fe-24"></span>
+                  </div>
+                  <div class="col">
+                    <small><strong>Package has uploaded successfull</strong></small>
+                    <div class="my-0 text-muted small">Package is zipped and uploaded</div>
+                    <small class="badge badge-pill badge-light text-muted">1m ago</small>
                   </div>
                 </div>
-                <div class="list-group-item bg-transparent">
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      <span class="fe fe-download fe-24"></span>
-                    </div>
-                    <div class="col">
-                      <small><strong>Widgets are updated successfull</strong></small>
-                      <div class="my-0 text-muted small">Just create new layout Index, form, table</div>
-                      <small class="badge badge-pill badge-light text-muted">2m ago</small>
-                    </div>
+              </div>
+              <div class="list-group-item bg-transparent">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="fe fe-download fe-24"></span>
+                  </div>
+                  <div class="col">
+                    <small><strong>Widgets are updated successfull</strong></small>
+                    <div class="my-0 text-muted small">Just create new layout Index, form, table</div>
+                    <small class="badge badge-pill badge-light text-muted">2m ago</small>
                   </div>
                 </div>
-                <div class="list-group-item bg-transparent">
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      <span class="fe fe-inbox fe-24"></span>
-                    </div>
-                    <div class="col">
-                      <small><strong>Notifications have been sent</strong></small>
-                      <div class="my-0 text-muted small">Fusce dapibus, tellus ac cursus commodo</div>
-                      <small class="badge badge-pill badge-light text-muted">30m ago</small>
-                    </div>
-                  </div> <!-- / .row -->
-                </div>
-                <div class="list-group-item bg-transparent">
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      <span class="fe fe-link fe-24"></span>
-                    </div>
-                    <div class="col">
-                      <small><strong>Link was attached to menu</strong></small>
-                      <div class="my-0 text-muted small">New layout has been attached to the menu</div>
-                      <small class="badge badge-pill badge-light text-muted">1h ago</small>
-                    </div>
+              </div>
+              <div class="list-group-item bg-transparent">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="fe fe-inbox fe-24"></span>
+                  </div>
+                  <div class="col">
+                    <small><strong>Notifications have been sent</strong></small>
+                    <div class="my-0 text-muted small">Fusce dapibus, tellus ac cursus commodo</div>
+                    <small class="badge badge-pill badge-light text-muted">30m ago</small>
                   </div>
                 </div> <!-- / .row -->
-              </div> <!-- / .list-group -->
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
-            </div>
+              </div>
+              <div class="list-group-item bg-transparent">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="fe fe-link fe-24"></span>
+                  </div>
+                  <div class="col">
+                    <small><strong>Link was attached to menu</strong></small>
+                    <div class="my-0 text-muted small">New layout has been attached to the menu</div>
+                    <small class="badge badge-pill badge-light text-muted">1h ago</small>
+                  </div>
+                </div>
+              </div> <!-- / .row -->
+            </div> <!-- / .list-group -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+    <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body px-5">
-                <div class="row align-items-center justify-content-start">
-                    <?php foreach ($atajos as $atajo): ?>
-                        <div class="col-6 text-center">
-                            <a href="<?= $atajo['url'] ?>" class="text-decoration-none">
-                                <div class="squircle justify-content-center">
-                                    <i class="fe <?= $atajo['icon'] ?> fe-32 align-self-center text-white"></i>
-                                </div>
-                                <p class="letra-atajo"><?= htmlspecialchars($atajo['text']) ?></p>
-                            </a>
-                        </div>
-                    <?php endforeach; ?>
+          <div class="modal-header">
+            <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body px-5">
+            <div class="row align-items-center justify-content-start">
+              <?php foreach ($atajos as $atajo): ?>
+                <div class="col-6 text-center">
+                  <a href="<?= $atajo['url'] ?>" class="text-decoration-none">
+                    <div class="squircle justify-content-center">
+                      <i class="fe <?= $atajo['icon'] ?> fe-32 align-self-center text-white"></i>
+                    </div>
+                    <p class="letra-atajo"><?= htmlspecialchars($atajo['text']) ?></p>
+                  </a>
                 </div>
+              <?php endforeach; ?>
             </div>
+          </div>
         </div>
       </div>
-      </div>
+    </div>
 
-      <div class="container-fluid">
-  <div class="row">
-    <!-- Primera tabla -->
-    <div class="col-6">
-      <h2 class="mb-2 page-title">Materias registradas</h2>
-      <div class="row my-4">
-        <!-- Table -->
-        <div class="col-md-12">
-          <div class="card shadow">
-            <div class="card-body">
-              <!-- Table -->
-              <table class="table datatables" id="tabla-materias-1">
-                <thead class="thead-dark">
-                  <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Créditos</th>
-                    <th>Horas Teóricas</th>
-                    <th>Horas Prácticas</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php if ($materias): ?>
-                    <?php foreach ($materias as $materia): ?>
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Primera tabla -->
+        <div class="col-6">
+          <h2 class="mb-2 page-title">Materias registradas</h2>
+          <div class="row my-4">
+            <!-- Table -->
+            <div class="col-md-12">
+              <div class="card shadow">
+                <div class="card-body">
+                  <!-- Table -->
+                  <table class="table datatables" id="tabla-materias-1">
+                    <thead class="thead-dark">
                       <tr>
-                        <td><?php echo htmlspecialchars($materia['materia_id']); ?></td>
-                        <td><?php echo htmlspecialchars($materia['descripcion']); ?></td>
-                        <td><?php echo htmlspecialchars($materia['credito']); ?></td>
-                        <td><?php echo htmlspecialchars($materia['hora_teorica']); ?></td>
-                        <td><?php echo htmlspecialchars($materia['hora_practica']); ?></td>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Créditos</th>
+                        <th>Horas Teóricas</th>
+                        <th>Horas Prácticas</th>
                       </tr>
-                    <?php endforeach; ?>
-                  <?php else: ?>
-                    <tr>
-                      <td colspan="5" class="text-center">No hay materias registradas.</td>
-                    </tr>
-                  <?php endif; ?>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div> <!-- End table -->
-      </div> <!-- End section -->
-    </div> <!-- End .col-6 -->
+                    </thead>
+                    <tbody>
+                      <?php if ($materias): ?>
+                        <?php foreach ($materias as $materia): ?>
+                          <tr>
+                            <td><?php echo htmlspecialchars($materia['materia_id']); ?></td>
+                            <td><?php echo htmlspecialchars($materia['descripcion']); ?></td>
+                            <td><?php echo htmlspecialchars($materia['credito']); ?></td>
+                            <td><?php echo htmlspecialchars($materia['hora_teorica']); ?></td>
+                            <td><?php echo htmlspecialchars($materia['hora_practica']); ?></td>
+                          </tr>
+                        <?php endforeach; ?>
+                      <?php else: ?>
+                        <tr>
+                          <td colspan="5" class="text-center">No hay materias registradas.</td>
+                        </tr>
+                      <?php endif; ?>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div> <!-- End table -->
+          </div> <!-- End section -->
+        </div> <!-- End .col-6 -->
 
-    <!-- Segunda tabla -->
-    <div class="col-6">
-      <h2 class="mb-2 page-title">Materias asignadas a grupos</h2>
-      <div class="row my-4">
-        <!-- Table -->
-        <div class="col-md-12">
-          <div class="card shadow">
-            <div class="card-body">
-              <!-- Table -->
-              <table class="table datatables" id="tabla-materias-2">
-                <thead class="thead-dark">
-                  <tr>
-                    <th>Nombre de la materia</th>
-                    <th>Nombre del grupo</th>
-                    <th>Período</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php if ($materiagrupo): ?>
-                    <?php foreach ($materiagrupo as $materiasgrupos): ?>
+        <!-- Segunda tabla -->
+        <div class="col-6">
+          <h2 class="mb-2 page-title">Materias asignadas a grupos</h2>
+          <div class="row my-4">
+            <!-- Table -->
+            <div class="col-md-12">
+              <div class="card shadow">
+                <div class="card-body">
+                  <!-- Table -->
+                  <table class="table datatables" id="tabla-materias-2">
+                    <thead class="thead-dark">
                       <tr>
-                        <td><?php echo htmlspecialchars($materiasgrupos['materia_nombre']); ?></td>
-                        <td><?php echo htmlspecialchars($materiasgrupos['grupo_nombre']); ?></td>
-                        <td><?php echo htmlspecialchars($materiasgrupos['periodo_nombre']); ?></td>
+                        <th>Nombre de la materia</th>
+                        <th>Nombre del grupo</th>
+                        <th>Período</th>
                       </tr>
-                    <?php endforeach; ?>
-                  <?php else: ?>
-                    <tr>
-                      <td colspan="5" class="text-center">No hay materias registradas.</td>
-                    </tr>
-                  <?php endif; ?>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div> <!-- End table -->
-      </div> <!-- End section -->
-    </div> <!-- End .col-6 -->
-  </div> <!-- .row -->
-</div> <!-- .container-fluid -->
+                    </thead>
+                    <tbody>
+                      <?php if ($materiagrupo): ?>
+                        <?php foreach ($materiagrupo as $materiasgrupos): ?>
+                          <tr>
+                            <td><?php echo htmlspecialchars($materiasgrupos['materia_nombre']); ?></td>
+                            <td><?php echo htmlspecialchars($materiasgrupos['grupo_nombre']); ?></td>
+                            <td><?php echo htmlspecialchars($materiasgrupos['periodo_nombre']); ?></td>
+                          </tr>
+                        <?php endforeach; ?>
+                      <?php else: ?>
+                        <tr>
+                          <td colspan="5" class="text-center">No hay materias registradas.</td>
+                        </tr>
+                      <?php endif; ?>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div> <!-- End table -->
+          </div> <!-- End section -->
+        </div> <!-- End .col-6 -->
+      </div> <!-- .row -->
+    </div> <!-- .container-fluid -->
+  </main>
+
 
 
   <script src="js/jquery.min.js"></script>
@@ -507,19 +523,19 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     Chart.defaults.global.defaultFontFamily = base.defaultFontFamily;
     Chart.defaults.global.defaultFontColor = colors.mutedColor;
   </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src='js/jquery.steps.min.js'></script>
-<script src="js/jquery.validate.min.js"></script>
-<script src="js/gauge.min.js"></script>
-<script src="js/jquery.sparkline.min.js"></script>
-<script src="js/apexcharts.min.js"></script>
-<script src="js/apexcharts.custom.js"></script>
-<script src='js/jquery.mask.min.js'></script>
-<script src='js/select2.min.js'></script>
-<script src='js/jquery.timepicker.js'></script>
-<script src='js/dropzone.min.js'></script>
-<script src='js/uppy.min.js'></script>
-<script src='js/quill.min.js'></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src='js/jquery.steps.min.js'></script>
+  <script src="js/jquery.validate.min.js"></script>
+  <script src="js/gauge.min.js"></script>
+  <script src="js/jquery.sparkline.min.js"></script>
+  <script src="js/apexcharts.min.js"></script>
+  <script src="js/apexcharts.custom.js"></script>
+  <script src='js/jquery.mask.min.js'></script>
+  <script src='js/select2.min.js'></script>
+  <script src='js/jquery.timepicker.js'></script>
+  <script src='js/dropzone.min.js'></script>
+  <script src='js/uppy.min.js'></script>
+  <script src='js/quill.min.js'></script>
 
   <script>
     $('.select2').select2({

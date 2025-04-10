@@ -14,19 +14,19 @@ $response = ['status' => 'error', 'message' => ''];
 
 // Intenta conectar a la base de datos
 try {
-    // Inicializa las consultas
-    $consultas = new Consultas($conn);
-    // Obtén las carreras
-    $edificios = $consultas->obtenerEdificio();
+  // Inicializa las consultas
+  $consultas = new Consultas($conn);
+  // Obtén las carreras
+  $edificios = $consultas->obtenerEdificio();
 } catch (Exception $e) {
-    // Si falla la conexión, retorna un error
-    $response['message'] = 'Error al conectar con la base de datos: ' . $e->getMessage();
-    echo json_encode($response);
-    exit();  // Finaliza la ejecución si no hay conexión
+  // Si falla la conexión, retorna un error
+  $response['message'] = 'Error al conectar con la base de datos: ' . $e->getMessage();
+  echo json_encode($response);
+  exit();  // Finaliza la ejecución si no hay conexión
 }
 
 if (isset($_POST['logout'])) {
-    $sessionManager->logoutAndRedirect('../templates/auth-login.php');
+  $sessionManager->logoutAndRedirect('../templates/auth-login.php');
 }
 
 ?>
@@ -40,49 +40,49 @@ $tipoUsuarioId = $consultas->obtenerTipoUsuarioPorId($idusuario);
 
 // Validar tipo de usuario
 if (!$tipoUsuarioId) {
-    die("Error: Tipo de usuario no encontrado.");
+  die("Error: Tipo de usuario no encontrado.");
 }
 
 // Definir atajos según el tipo de usuario
 $atajos = [];
 if ($tipoUsuarioId === 1) { // Usuario tipo 1 
-    $atajos = [
-        ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
-        ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
-        ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
-    ];
+  $atajos = [
+    ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
+    ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
+  ];
 } elseif ($tipoUsuarioId === 2) { // Usuario tipo 2 
-    $atajos = [
-      ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
-        ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
-        ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
-        ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php'],
-        ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php']
+  $atajos = [
+    ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
+    ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
+    ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php'],
+    ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php']
 
-    ];
+  ];
 } elseif ($tipoUsuarioId === 3) { // Usuario tipo 3 
-    $atajos = [
-      ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php'],
-        ['icon' => 'fe-user', 'color' => 'bg-primary', 'text' => 'Registro de usuarios', 'url' => 'formulario_usuario.php'],
-        ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de incidencias', 'url' => 'form_incidencias.php'],
-        ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
-    ];
+  $atajos = [
+    ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php'],
+    ['icon' => 'fe-user', 'color' => 'bg-primary', 'text' => 'Registro de usuarios', 'url' => 'formulario_usuario.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de incidencias', 'url' => 'form_incidencias.php'],
+    ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
+  ];
 } elseif ($tipoUsuarioId === 4) { // Usuario tipo 4 
-    $atajos = [
-      ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
-        ['icon' => 'fe-edit', 'color' => 'bg-primary', 'text' => 'Registro de materias', 'url' => 'form_materia.php'],
-        ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de carreras', 'url' => 'form_carrera.php'],
-        ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Registro de grupos', 'url' => 'formulario_grupo.php'],
-        ['icon' => 'fe-folder-plus', 'color' => 'bg-primary', 'text' => 'Asignacion de carreras', 'url' => 'form_usuarios-carreras.php'],
-        ['icon' => 'fe-briefcase', 'color' => 'bg-primary', 'text' => 'Registro de escenario', 'url' => 'form_edificio.php'],
-        ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php']
-    ];
+  $atajos = [
+    ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
+    ['icon' => 'fe-edit', 'color' => 'bg-primary', 'text' => 'Registro de materias', 'url' => 'form_materia.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de carreras', 'url' => 'form_carrera.php'],
+    ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Registro de grupos', 'url' => 'formulario_grupo.php'],
+    ['icon' => 'fe-folder-plus', 'color' => 'bg-primary', 'text' => 'Asignacion de carreras', 'url' => 'form_usuarios-carreras.php'],
+    ['icon' => 'fe-briefcase', 'color' => 'bg-primary', 'text' => 'Registro de escenario', 'url' => 'form_edificio.php'],
+    ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php']
+  ];
 } elseif ($tipoUsuarioId === 5) { // Usuario tipo 5
-    $atajos = [
-      ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
-      ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
-      ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
-      ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php']
+  $atajos = [
+    ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
+    ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
+    ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
+    ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php']
   ];
 } elseif ($tipoUsuarioId === 6) { // Usuario tipo 6
   $atajos = [
@@ -93,14 +93,15 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
   ];
 } else { // Otro tipo de usuario
-    $atajos = [
-      ['icon' => 'fe-home', 'color' => 'bg-primary', 'text' => 'Inicio', 'url' => 'index.php']
-    ];
+  $atajos = [
+    ['icon' => 'fe-home', 'color' => 'bg-primary', 'text' => 'Inicio', 'url' => 'index.php']
+  ];
 }
 ?>
 
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -133,26 +134,26 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   <link rel="stylesheet" href="css/app-light.css" id="lightTheme">
   <link rel="stylesheet" href="css/app-dark.css" id="darkTheme" disabled>
   <!-- Incluye jQuery primero -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Luego incluye SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Luego incluye SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- Finalmente tu script personalizado -->
-<script>
+  <!-- Finalmente tu script personalizado -->
+  <script>
     // Tu código JavaScript aquí
-</script>
+  </script>
 
-<!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+  <!-- Bootstrap JS -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="js/navbar-animation.js" defer></script>
 
 
 </head>
 
 <body class="vertical  light  ">
   <div class="wrapper">
-  <nav class="topnav navbar navbar-light">
+    <nav class="topnav navbar navbar-light" id="nav-bar">
 
       <button type="button" class="navbar-toggler text-muted mt-2 p-0 mr-3 collapseSidebar">
         <i class="fe fe-menu navbar-toggler-icon"></i>
@@ -175,14 +176,14 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
           </a>
         </li>
         <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle text-muted pr-0" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link dropdown-toggle text-muted pr-0" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span class="avatar avatar-sm mt-2">
-                <img src="<?= htmlspecialchars($imgUser['imagen_url'] ?? './assets/avatars/default.jpg') ?>" 
-                    alt="Avatar del usuario" 
-                    class="avatar-img rounded-circle" 
-                    style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
+              <img src="<?= htmlspecialchars($imgUser['imagen_url'] ?? './assets/avatars/default.jpg') ?>"
+                alt="Avatar del usuario"
+                class="avatar-img rounded-circle"
+                style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
             </span>
-        </a>
+          </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" href="Perfil.php"><i class="fas fa-user"></i> Profile</a>
             <a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Settings</a>
@@ -195,264 +196,264 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
         </li>
       </ul>
     </nav>
+  </div>
 
-    <main role="main" class="main-content">
-    <div class="container-fluid">
-    <div class="d-flex justify-content-center align-items-center mb-3 col">
-              <p class="titulo-grande"><strong>Edificios</strong></p>
-            </div>
-  <div class="row">
-    <!-- Formulario del lado izquierdo -->
-    <div class="col-6">
-      <div class="card shadow mb-4">
-        <div class="card-body">
-          <div class="d-flex justify-content-center align-items-center mb-3 col">
-            <p class="titulo-grande"><strong>Registro de Edificios</strong></p>
-          </div>
-          <form method="POST" action="../../models/insert.php" enctype="multipart/form-data" id="formRegistroGrupo">
-            <input type="hidden" name="form_type" value="edificio"> <!-- Campo oculto para el tipo de formulario -->
-            <div class="row mb-3">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label for="descripcion" class="form-label">Edificio:</label>
-                  <input class="form-control" id="descripcion" name="descripcion" type="text" required>
-                  <div class="invalid-feedback">Este campo no puede estar vacío.</div>
+  <main role="main" class="main-content">
+    <div class="container-fluid mt-5">
+      <div class="d-flex justify-content-center align-items-center mb-3 col">
+        <p class="titulo-grande"><strong>Edificios</strong></p>
+      </div>
+      <div class="row">
+        <!-- Formulario del lado izquierdo -->
+        <div class="col-6">
+          <div class="card shadow mb-4">
+            <div class="card-body">
+              <div class="d-flex justify-content-center align-items-center mb-3 col">
+                <p class="titulo-grande"><strong>Registro de Edificios</strong></p>
+              </div>
+              <form method="POST" action="../../models/insert.php" enctype="multipart/form-data" id="formRegistroGrupo">
+                <input type="hidden" name="form_type" value="edificio"> <!-- Campo oculto para el tipo de formulario -->
+                <div class="row mb-3">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="descripcion" class="form-label">Edificio:</label>
+                      <input class="form-control" id="descripcion" name="descripcion" type="text" required>
+                      <div class="invalid-feedback">Este campo no puede estar vacío.</div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="row mt-3">
-                      <div class="col-md-12 text-center">
-                        <button type="submit" class="btn btn-success btn-lg">Registrar Edificio</button>
-                      </div>
-                    </div>
-          </form>
-        </div> <!-- /.card-body -->
-      </div> <!-- /.card -->
-    </div>
-
-    <!-- Tabla del lado derecho -->
-    <div class="col-6">
-      <div class="card shadow">
-        <div class="card-body">
-          <div class="d-flex justify-content-center align-items-center mb-3 col">
-            <p class="titulo-grande"><strong>Edificios</strong></p>
-          </div>
-          <table class="table datatables" id="dataTable-edificios">
-            <thead>
-              <tr>
-                <th>ID Edificio</th>
-                <th>Descripción</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php foreach ($edificios as $edificio): ?>
-                <tr>
-                  <td><?php echo $edificio['edificio_id']; ?></td>
-                  <td><?php echo $edificio['descripcion']; ?></td>
-                </tr>
-              <?php endforeach; ?>
-            </tbody>
-          </table>
-        </div> <!-- /.card-body -->
-      </div> <!-- /.card -->
-    </div>
-  </div> <!-- /.row -->
-</div> <!-- /.container-fluid -->
-
-
-
-        <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="defaultModalLabel">Notifications</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <div class="list-group list-group-flush my-n3">
-                  <div class="list-group-item bg-transparent">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="fe fe-box fe-24"></span>
-                      </div>
-                      <div class="col">
-                        <small><strong>Package has uploaded successfull</strong></small>
-                        <div class="my-0 text-muted small">Package is zipped and uploaded</div>
-                        <small class="badge badge-pill badge-light text-muted">1m ago</small>
-                      </div>
-                    </div>
+                <div class="row mt-3">
+                  <div class="col-md-12 text-center">
+                    <button type="submit" class="btn btn-success btn-lg">Registrar Edificio</button>
                   </div>
-                  <div class="list-group-item bg-transparent">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="fe fe-download fe-24"></span>
-                      </div>
-                      <div class="col">
-                        <small><strong>Widgets are updated successfull</strong></small>
-                        <div class="my-0 text-muted small">Just create new layout Index, form, table</div>
-                        <small class="badge badge-pill badge-light text-muted">2m ago</small>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="list-group-item bg-transparent">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="fe fe-inbox fe-24"></span>
-                      </div>
-                      <div class="col">
-                        <small><strong>Notifications have been sent</strong></small>
-                        <div class="my-0 text-muted small">Fusce dapibus, tellus ac cursus commodo</div>
-                        <small class="badge badge-pill badge-light text-muted">30m ago</small>
-                      </div>
-                    </div> <!-- / .row -->
-                  </div>
-                  <div class="list-group-item bg-transparent">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="fe fe-link fe-24"></span>
-                      </div>
-                      <div class="col">
-                        <small><strong>Link was attached to menu</strong></small>
-                        <div class="my-0 text-muted small">New layout has been attached to the menu</div>
-                        <small class="badge badge-pill badge-light text-muted">1h ago</small>
-                      </div>
-                    </div>
-                  </div> <!-- / .row -->
-                </div> <!-- / .list-group -->
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
-              </div>
-            </div>
-          </div>
+                </div>
+              </form>
+            </div> <!-- /.card-body -->
+          </div> <!-- /.card -->
         </div>
-        <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+
+        <!-- Tabla del lado derecho -->
+        <div class="col-6">
+          <div class="card shadow">
+            <div class="card-body">
+              <div class="d-flex justify-content-center align-items-center mb-3 col">
+                <p class="titulo-grande"><strong>Edificios</strong></p>
+              </div>
+              <table class="table datatables" id="dataTable-edificios">
+                <thead>
+                  <tr>
+                    <th>ID Edificio</th>
+                    <th>Descripción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php foreach ($edificios as $edificio): ?>
+                    <tr>
+                      <td><?php echo $edificio['edificio_id']; ?></td>
+                      <td><?php echo $edificio['descripcion']; ?></td>
+                    </tr>
+                  <?php endforeach; ?>
+                </tbody>
+              </table>
+            </div> <!-- /.card-body -->
+          </div> <!-- /.card -->
+        </div>
+      </div> <!-- /.row -->
+    </div> <!-- /.container-fluid -->
+
+
+
+    <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body px-5">
-                <div class="row align-items-center justify-content-start">
-                    <?php foreach ($atajos as $atajo): ?>
-                        <div class="col-6 text-center">
-                            <a href="<?= $atajo['url'] ?>" class="text-decoration-none">
-                                <div class="squircle justify-content-center">
-                                    <i class="fe <?= $atajo['icon'] ?> fe-32 align-self-center text-white"></i>
-                                </div>
-                                <p class="letra-atajo"><?= htmlspecialchars($atajo['text']) ?></p>
-                            </a>
-                        </div>
-                    <?php endforeach; ?>
+          <div class="modal-header">
+            <h5 class="modal-title" id="defaultModalLabel">Notifications</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="list-group list-group-flush my-n3">
+              <div class="list-group-item bg-transparent">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="fe fe-box fe-24"></span>
+                  </div>
+                  <div class="col">
+                    <small><strong>Package has uploaded successfull</strong></small>
+                    <div class="my-0 text-muted small">Package is zipped and uploaded</div>
+                    <small class="badge badge-pill badge-light text-muted">1m ago</small>
+                  </div>
                 </div>
-            </div>
+              </div>
+              <div class="list-group-item bg-transparent">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="fe fe-download fe-24"></span>
+                  </div>
+                  <div class="col">
+                    <small><strong>Widgets are updated successfull</strong></small>
+                    <div class="my-0 text-muted small">Just create new layout Index, form, table</div>
+                    <small class="badge badge-pill badge-light text-muted">2m ago</small>
+                  </div>
+                </div>
+              </div>
+              <div class="list-group-item bg-transparent">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="fe fe-inbox fe-24"></span>
+                  </div>
+                  <div class="col">
+                    <small><strong>Notifications have been sent</strong></small>
+                    <div class="my-0 text-muted small">Fusce dapibus, tellus ac cursus commodo</div>
+                    <small class="badge badge-pill badge-light text-muted">30m ago</small>
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+              <div class="list-group-item bg-transparent">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="fe fe-link fe-24"></span>
+                  </div>
+                  <div class="col">
+                    <small><strong>Link was attached to menu</strong></small>
+                    <div class="my-0 text-muted small">New layout has been attached to the menu</div>
+                    <small class="badge badge-pill badge-light text-muted">1h ago</small>
+                  </div>
+                </div>
+              </div> <!-- / .row -->
+            </div> <!-- / .list-group -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
+          </div>
         </div>
+      </div>
     </div>
+    <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body px-5">
+            <div class="row align-items-center justify-content-start">
+              <?php foreach ($atajos as $atajo): ?>
+                <div class="col-6 text-center">
+                  <a href="<?= $atajo['url'] ?>" class="text-decoration-none">
+                    <div class="squircle justify-content-center">
+                      <i class="fe <?= $atajo['icon'] ?> fe-32 align-self-center text-white"></i>
+                    </div>
+                    <p class="letra-atajo"><?= htmlspecialchars($atajo['text']) ?></p>
+                  </a>
+                </div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    </main> <!-- main -->
-  </div> <!-- .wrapper -->
-<!-- jQuery (necesario para DataTables) -->
+  </main> <!-- main -->
+  <!-- jQuery (necesario para DataTables) -->
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- DataTables JS -->
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  <!-- DataTables JS -->
+  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
-<!-- DataTables Bootstrap4 JS -->
-<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+  <!-- DataTables Bootstrap4 JS -->
+  <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 
-<!-- Otros scripts -->
-<script src="js/bootstrap.bundle.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/moment.min.js"></script>
-<script src="js/simplebar.min.js"></script>
-<script src='js/daterangepicker.js'></script>
-<script src='js/jquery.stickOnScroll.js'></script>
-<script src="js/tinycolor-min.js"></script>
-<script src="js/config.js"></script>
-<script src='js/jquery.mask.min.js'></script>
-<script src='js/select2.min.js'></script>
-<script src='js/jquery.steps.min.js'></script>
-<script src='js/jquery.validate.min.js'></script>
-<script src='js/jquery.timepicker.js'></script>|
-<script src='js/dropzone.min.js'></script>
-<script src='js/uppy.min.js'></script>
-<script src='js/quill.min.js'></script>
-<script src='js/apps.js'></script>
+  <!-- Otros scripts -->
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/moment.min.js"></script>
+  <script src="js/simplebar.min.js"></script>
+  <script src='js/daterangepicker.js'></script>
+  <script src='js/jquery.stickOnScroll.js'></script>
+  <script src="js/tinycolor-min.js"></script>
+  <script src="js/config.js"></script>
+  <script src='js/jquery.mask.min.js'></script>
+  <script src='js/select2.min.js'></script>
+  <script src='js/jquery.steps.min.js'></script>
+  <script src='js/jquery.validate.min.js'></script>
+  <script src='js/jquery.timepicker.js'></script>|
+  <script src='js/dropzone.min.js'></script>
+  <script src='js/uppy.min.js'></script>
+  <script src='js/quill.min.js'></script>
+  <script src='js/apps.js'></script>
 
-<?php if (isset($_GET['success'])): ?>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
+  <?php if (isset($_GET['success'])): ?>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
         <?php if ($_GET['success'] === 'true'): ?>
-            Swal.fire({
-                icon: 'success',
-                title: '¡Éxito!',
-                text: 'El edificio ha sido registrado correctamente.',
-                confirmButtonText: 'Aceptar'
-            });
+          Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: 'El edificio ha sido registrado correctamente.',
+            confirmButtonText: 'Aceptar'
+          });
         <?php elseif ($_GET['success'] === 'false'): ?>
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Ocurrió un problema al registrar el edificio. Por favor, inténtalo de nuevo.',
-                confirmButtonText: 'Aceptar'
-            });
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ocurrió un problema al registrar el edificio. Por favor, inténtalo de nuevo.',
+            confirmButtonText: 'Aceptar'
+          });
         <?php endif; ?>
+      });
+    </script>
+  <?php endif; ?>
+
+
+  <!-- Código de inicialización de DataTable -->
+  <script>
+    $(function() {
+      $('#dataTable-1').DataTable({
+        "responsive": true,
+        "autoWidth": false,
+        "pageLength": 10,
+        "language": {
+          "decimal": "",
+          "emptyTable": "No hay informacion",
+          "info": "Mostrando _START_ a _END_ de _TOTAL_ grupos",
+          "infoEmpty": "Mostrando 0 a 0 de 0 Saldos",
+          "thousands": ",",
+          "lengthMenu": "Mostrar _MENU_ Grupos",
+          "loadingRecords": "Cargando...",
+          "processing": "Procesando...",
+          "search": "Buscador de grupos",
+          "zeroRecords": "Sin resultados encontrados",
+          "paginate": {
+            "first": "Primero",
+            "last": "Último",
+            "next": "Siguiente",
+            "previous": "Anterior"
+          }
+        },
+        // Define la opción lengthMenu
+        "lengthMenu": [
+          [16, 32, 64, -1],
+          [16, 32, 64, "Todos"]
+        ]
+      });
     });
-</script>
-<?php endif; ?>
+  </script>
 
 
-<!-- Código de inicialización de DataTable -->
-<script>
-$(function() {
-   $('#dataTable-1').DataTable({
-       "responsive": true,
-       "autoWidth": false,
-       "pageLength": 10,
-       "language": {
-           "decimal": "",
-           "emptyTable": "No hay informacion",
-           "info": "Mostrando _START_ a _END_ de _TOTAL_ grupos",
-           "infoEmpty": "Mostrando 0 a 0 de 0 Saldos",
-           "thousands": ",",
-           "lengthMenu": "Mostrar _MENU_ Grupos",
-           "loadingRecords": "Cargando...",
-           "processing": "Procesando...",
-           "search": "Buscador de grupos",
-           "zeroRecords": "Sin resultados encontrados",
-           "paginate": {
-               "first": "Primero",
-               "last": "Último",
-               "next": "Siguiente",
-               "previous": "Anterior"
-           }
-       },
-       // Define la opción lengthMenu
-       "lengthMenu": [
-           [16, 32, 64, -1],
-           [16, 32, 64, "Todos"]
-       ]
-   });
-});
-</script>
+  <!-- Google Analytics -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
 
-
-<!-- Google Analytics -->
-<script>
-  window.dataLayer = window.dataLayer || [];
-
-  function gtag() {
-    dataLayer.push(arguments);
-  }
-  gtag('js', new Date());
-  gtag('config', 'UA-56159088-1');
-</script>
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'UA-56159088-1');
+  </script>
 
 </body>
 
