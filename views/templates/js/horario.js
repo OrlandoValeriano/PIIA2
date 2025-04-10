@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
     async function filtrarHorario() {
         const periodo = document.getElementById('periodo_periodo_id').value;
         const usuarioId = document.getElementById('usuario_usuario_id').value;
+        console.log(usuarioId);
         const carrera = document.getElementById('carrera_carrera_id').value;
 
         // Validar si todos los filtros están seleccionados
@@ -96,6 +97,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (!response.ok) throw new Error('Error en la respuesta del servidor');
             const data = await response.json();
+
+            // Mostrar número de empleado en consola
+            if (data.numero_empleado) {
+                console.log(data.numero_empleado);
+                document.getElementById('numero_empleado').value = data.numero_empleado;
+            } else {
+                console.warn('No se encontró el número de empleado');
+                document.getElementById('numero_empleado').value = '';
+            } 
 
             if (data.length === 0) {
                 // Mostrar SweetAlert si no hay datos
