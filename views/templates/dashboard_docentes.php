@@ -1104,7 +1104,7 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
 
             <!-- Contenedor del gráfico - Añadido text-center y ajustes -->
             <div class="my-4 text-center">
-                <div style="display: inline-block; width: 80%; max-width: 900px;">
+                <div style="display: inline-block; width: 100%; max-width: 100%;">
                     <canvas id="evaluacionChart"></canvas>
                 </div>
                 <div id="noDataMessage" class="text-center py-4" style="display: none;">
