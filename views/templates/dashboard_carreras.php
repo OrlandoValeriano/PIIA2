@@ -321,7 +321,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
                   </div>
                   <div class="d-flex justify-content-center">
                     <img src="<?= '../' . htmlspecialchars($carreraData["imagen_url"]) ?>" alt="Imagen del docente"
-                      class="w-25">
+                      class="w-25 img_dashcarr">
                   </div>
                 </div>
 

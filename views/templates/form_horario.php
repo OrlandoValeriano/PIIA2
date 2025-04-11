@@ -224,26 +224,27 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
       <div id="contenedor">
         <!-- Tarjeta principal -->
         <div class="card box-shadow-div p-4 mb-3">
-          <div class="logo-container row align-items-center">
-            <div class="logo-institucional col-md-1">
+          <div class="container_form-horario d-flex align-items-center">
+            <div class="container_logo-form-horario">
               <!-- Espacio para el logo institucional -->
               <img src="assets/images/logo.png" alt="Logo Institucional">
             </div>
-            <div class="titulo-container col-md-6 text-center text-md-start">
-              <h1 class="text-wrap">TECNOLÓGICO DE ESTUDIOS SUPERIORES DE CHIMALHUACÁN</h1>
-            </div>
+              <h1 class="d-flex">TECNOLÓGICO DE ESTUDIOS SUPERIORES DE CHIMALHUACÁN</h1>
             <form method="POST" action="../../models/insert.php">
               <input type="hidden" name="form_type" value="horario"> <!-- Indicamos el tipo de formulario -->
-
-              <div class="form-group col-md-12">
+              <div class="container_form-form-horario">
                 <label for="periodo_periodo_id" class="form-label-custom">Periodo:</label>
-                <select class="form-control" id="periodo_periodo_id" name="periodo_periodo_id" required onchange="filtrarHorario()">
+                <select class="form-control" id="periodo_periodo_id" name="periodo_periodo_id" required
+                  onchange="filtrarHorario()">
                   <option value="">Selecciona un periodo</option>
                   <?php foreach ($periodos as $periodo): ?>
-                    <option value="<?php echo $periodo['periodo_id']; ?>"><?php echo htmlspecialchars($periodo['descripcion']); ?></option>
+                    <option value="<?php echo $periodo['periodo_id']; ?>">
+                      <?php echo htmlspecialchars($periodo['descripcion']); ?>
+                    </option>
                   <?php endforeach; ?>
                 </select>
               </div>
+            </form>
           </div>
 
           <div class="row">
