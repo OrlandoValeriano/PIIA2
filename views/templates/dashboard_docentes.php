@@ -1340,13 +1340,12 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
       </div> <!---- fin de la card principál------>
       
       
-<div class="container-fluid">
+      <div class="container-fluid">
   <div id="contenedor">
     <!-- Tarjeta principal -->
     <div class="card box-shadow-div p-4 mb-3">
       <div class="logo-container row align-items-center">
         <div class="logo-institucional col-md-2">
-          <!-- Espacio para el logo institucional -->
           <img src="assets/images/logo.png" alt="Logo Institucional" class="img-fluid">
         </div>
         <div class="titulo-container col-md-8 text-center text-md-start">
@@ -1373,155 +1372,265 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
 
       <!-- Contenido principal -->
       <div class="row">
-            <div class="col-md-4">
-                <div class="form-group mt-2">
-                  <label for="numero_empleado" class="form-label">Número de empleado:</label>
-                  <input type="text" id="numero_empleado" class="form-control" value="" readonly>
-                </div>
-              </div>
         <div class="col-md-4">
-          <!-- Docente -->
           <div class="form-group mt-2">
-    <label for="usuario_usuario_id">Docente:</label>
-    <select class="form-control" id="usuario_usuario_id" name="usuario_usuario_id" required disabled>
-        <option value="">Selecciona un docente</option>
-        <?php foreach ($usuarios as $usuario): ?>
-            <option value="<?php echo $usuario['usuario_id']; ?>" <?= ($usuario['usuario_id'] == $usuarioActualId) ? 'selected' : ''; ?>>
-                <?php echo htmlspecialchars($usuario['nombre_usuario'] . ' ' . $usuario['apellido_p'] . ' ' . $usuario['apellido_m']); ?>
-            </option>
-        <?php endforeach; ?>
-
-    </select>
-</div>
+            <label for="numero_empleado" class="form-label">Número de empleado:</label>
+            <input type="text" id="numero_empleado" class="form-control" value="<?php echo htmlspecialchars($usuario['numero_empleado'] ?? ''); ?>" readonly>
+          </div>
+        </div>
+        
+        <div class="col-md-4">
+          <div class="form-group mt-2">
+            <label for="usuario_usuario_id">Docente:</label>
+            <select class="form-control" id="usuario_usuario_id" name="usuario_usuario_id" required <?php echo ($tipoUsuarioId != 2 && $tipoUsuarioId != 3 && $tipoUsuarioId != 4 && $tipoUsuarioId != 5) ? 'disabled' : ''; ?>>
+              <option value="">Selecciona un docente</option>
+              <?php 
+              // Obtener lista de usuarios según el tipo de usuario
+              $usuarios = [];
+              if ($tipoUsuarioId == 2 || $tipoUsuarioId == 5) { // Jefe de carrera o Dirección
+                $usuarios = $consultas->obtenerUsuariosPorCarrera($carreraId);
+              } elseif ($tipoUsuarioId == 3 || $tipoUsuarioId == 4) { // RH o Desarrollo Académico
+                $usuarios = $consultas->obtenerTodosUsuariosDocentes();
+              } else {
+                // Para otros tipos de usuario, solo mostrar su propio perfil
+                $usuarios = [$usuario];
+              }
+              
+              foreach ($usuarios as $docente): ?>
+                <option value="<?php echo $docente['usuario_id']; ?>" <?= ($docente['usuario_id'] == $idusuario) ? 'selected' : ''; ?>>
+                  <?php echo htmlspecialchars($docente['nombre_usuario'] . ' ' . $docente['apellido_p'] . ' ' . $docente['apellido_m']); ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+          </div>
         </div>
       
         <div class="col-md-4">
-    <!-- Carrera -->
-    <div class="form-group mt-2">
-        <label for="carrera_carrera_id" class="form-label">Carrera:</label>
-        <select class="form-control" id="carrera_carrera_id" name="carrera_carrera_id" required>
-            <option value="">Selecciona una carrera</option>
-            <?php
-            // Solo mostrar la carrera asociada al usuario
-            foreach ($carreras as $carrera):
-                // Verifica si el ID de la carrera coincide con el ID de la carrera del usuario
-                if ($carrera['carrera_id'] == $carreraId):
-            ?>
-                    <option value="<?php echo $carrera['carrera_id']; ?>" selected>
-                        <?php echo htmlspecialchars($carrera['nombre_carrera']); ?>
-                    </option>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </select>
-    </div>
-</div>
-
-
-      </div>
-<!-- Tabla -->
-<div class="row">
-        <div class="col-12 mb-0">
-          <div class="schedule-container">
-            <div class="table-responsive">
-              <table class="table table-borderless table-striped">
-                <div style="display: flex; justify-content: center; align-items: center; margin-top: 2.5%;">
-                    <div>
-                          Sin elementos para mostrar
-                    </div>
-                </div>
-              </table>
-            </div>
+          <div class="form-group mt-2">
+            <label for="carrera_carrera_id" class="form-label">Carrera:</label>
+            <select class="form-control" id="carrera_carrera_id" name="carrera_carrera_id" required <?php echo ($tipoUsuarioId != 3 && $tipoUsuarioId != 4 && $tipoUsuarioId != 5) ? 'disabled' : ''; ?>>
+              <option value="">Selecciona una carrera</option>
+              <?php foreach ($carreras as $carrera): ?>
+                <option value="<?php echo $carrera['carrera_id']; ?>" <?= ($carrera['carrera_id'] == $carreraId) ? 'selected' : ''; ?>>
+                  <?php echo htmlspecialchars($carrera['nombre_carrera']); ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
           </div>
         </div>
       </div>
-
-      <!-- Botón de descarga PDF -->
-
-      <div class="pdf-container no-print">
-        <button id="downloadPDF" onclick="generatePDF()" class="btn btn-primary">Descargar PDF</button>
+      
+      <!-- Tabla del Horario - Siempre visible -->
+      <div class="row" id="horarioContainer">
+        <div class="col-12 mb-0">
+          <div class="schedule-container">
+            <div class="table-responsive">
+              <table class="table table-borderless table-striped" id="tablaHorario">
+                <thead>
+                  <tr>
+                    <th>Hora</th>
+                    <th>Lunes</th>
+                    <th>Martes</th>
+                    <th>Miércoles</th>
+                    <th>Jueves</th>
+                    <th>Viernes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr id="initialMessage">
+                    <td colspan="6" class="text-center text-muted">Seleccione un docente para ver su horario</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div id="loadingMessage" class="text-center py-4" style="display: none;">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="sr-only">Cargando horario...</span>
+                </div>
+                <p class="mt-2">Cargando horario, por favor espere...</p>
+              </div>
+              <div id="noDataMessage" class="text-center py-4" style="display: none;">
+                <p class="text-muted">No se encontró horario para este docente</p>
+              </div>
+            </div>
+          </div>
+                <!-- Botón de descarga PDF - Siempre visible -->
+            <div class="pdf-container no-print text-center mt-3 mb-3">
+              <button id="downloadPDF" onclick="generatePDF()" class="btn btn-primary">Descarga en PDF</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-    const tipoUsuario = <?php echo json_encode($tipoUsuarioId); ?>;
-    function actualizarHorario(docenteId, carreraId) {
-    // Limpiar la tabla antes de hacer la solicitud AJAX
-    const horarioTabla = $(".table.table-borderless.table-striped");
-    horarioTabla.html(""); // Vaciar la tabla
+$(document).ready(function() {
+    // Elementos iniciales
+    const initialMessage = $('#initialMessage');
+    const loadingMessage = $('#loadingMessage');
+    const noDataMessage = $('#noDataMessage');
+    const downloadPDFBtn = $('#downloadPDF');
+    
+    // Configuración inicial
+    initialMessage.show();
+    loadingMessage.hide();
+    noDataMessage.hide();
+    
+    // Si hay un docente seleccionado por defecto, cargar su horario
+    const docenteInicial = $('#usuario_usuario_id').val();
+    if (docenteInicial && docenteInicial !== "") {
+        $('#usuario_usuario_id').trigger('change');
+    }
 
-    $.ajax({
-        url: '../templates/obtenerHorario.php', // Endpoint para obtener el horario
-        type: 'POST',
-        data: { 
-            usuario_id: docenteId,
-            carrera_id: carreraId // Enviar también el ID de la carrera
-        },
-        dataType: 'json',
-        success: function (response) {
-            if (response.success) {
-                const barChartDiv = $("#barChart");
-
-                // Si hay datos en el horario, construir la tabla
-                if (response.horario.length > 0) {
-                    let tablaHTML = `
-                        <thead>
-                            <tr>
-                                <th>Hora</th>
-                                <th>Lunes</th>
-                                <th>Martes</th>
-                                <th>Miércoles</th>
-                                <th>Jueves</th>
-                                <th>Viernes</th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
-
+    // Manejar cambio en selección de docente
+    $('#usuario_usuario_id').change(function() {
+        const docenteId = $(this).val();
+        const carreraId = $('#carrera_carrera_id').val();
+        
+        if (docenteId === "") {
+            // Si no se seleccionó docente, mostrar mensaje inicial
+            initialMessage.show();
+            loadingMessage.hide();
+            noDataMessage.hide();
+            $('#tablaHorario tbody').html('<tr id="initialMessage"><td colspan="6" class="text-center text-muted">Seleccione un docente para ver su horario</td></tr>');
+            return;
+        }
+        
+        // Mostrar spinner de carga
+        initialMessage.hide();
+        loadingMessage.show();
+        noDataMessage.hide();
+        $('#tablaHorario tbody').html('');
+        
+        // Configurar timeout para mostrar mensaje si no hay respuesta
+        let timeoutHandle = setTimeout(function() {
+            if ($('#tablaHorario tbody').html().trim() === '') {
+                loadingMessage.hide();
+                noDataMessage.show();
+            }
+        }, 10000); // 10 segundos
+        
+        // Cargar horario
+        actualizarHorario(docenteId, carreraId, timeoutHandle);
+    });
+    
+    // Función para actualizar el horario
+    function actualizarHorario(docenteId, carreraId, timeoutHandle) {
+        if (!docenteId || !carreraId) return;
+        
+        $.ajax({
+            url: '../templates/obtenerHorario.php',
+            type: 'POST',
+            data: { 
+                usuario_id: docenteId,
+                carrera_id: carreraId
+            },
+            dataType: 'json',
+            success: function(response) {
+                clearTimeout(timeoutHandle); // Cancelar timeout
+                loadingMessage.hide();
+                initialMessage.hide();
+                
+                if (response.success && response.horario && response.horario.length > 0) {
+                    noDataMessage.hide();
+                    let tablaHTML = '';
+                    
                     response.horario.forEach(hora => {
                         tablaHTML += `
                             <tr>
-                                <td>${hora.hora}</td>
-                                <td>${hora.lunes || ""}</td>
-                                <td>${hora.martes || ""}</td>
-                                <td>${hora.miercoles || ""}</td>
-                                <td>${hora.jueves || ""}</td>
-                                <td>${hora.viernes || ""}</td>
+                                <td>${hora.hora || '-'}</td>
+                                <td>${hora.lunes || '-'}</td>
+                                <td>${hora.martes || '-'}</td>
+                                <td>${hora.miercoles || '-'}</td>
+                                <td>${hora.jueves || '-'}</td>
+                                <td>${hora.viernes || '-'}</td>
                             </tr>`;
                     });
-
-                    tablaHTML += `</tbody>`;
-                    horarioTabla.html(tablaHTML);
+                    
+                    $('#tablaHorario tbody').html(tablaHTML);
+                    
+                    // Actualizar resumen de horas
+                    actualizarResumenHoras(
+                        response.horas_tutorias || 0,
+                        response.horas_apoyo || 0,
+                        response.horas_frente_grupo || 0
+                    );
                 } else {
-                    // Mostrar mensaje si no hay horario disponible
-                    horarioTabla.html("<tr><td colspan='6' class='text-center text-danger'>No hay horario disponible</td></tr>");
+                    noDataMessage.show();
+                    $('#tablaHorario tbody').html('');
                 }
-
-                // Actualizar desglose de horas
-                barChartDiv.attr("data-docente", response.docente_nombre);
-                barChartDiv.attr("data-tutorias", response.horas_tutorias);
-                barChartDiv.attr("data-apoyo", response.horas_apoyo);
-                barChartDiv.attr("data-frente", response.horas_frente_grupo);
-
-                actualizarGraficoHoras(response.horas_tutorias, response.horas_apoyo, response.horas_frente_grupo);
-            } else {
-                console.error("Error al cargar el horario: " + response.message);
+            },
+            error: function(xhr, status, error) {
+                clearTimeout(timeoutHandle);
+                loadingMessage.hide();
+                initialMessage.hide();
+                noDataMessage.show();
+                $('#tablaHorario tbody').html('');
+                console.error("Error al cargar el horario:", error);
             }
-        },
-        error: function (xhr, status, error) {
-            console.error("Error de conexión:", error);
+        });
+    }
+    
+    // Función para actualizar el resumen de horas
+    function actualizarResumenHoras(tutorias, apoyo, frenteGrupo) {
+        const totalHoras = parseInt(tutorias) + parseInt(apoyo) + parseInt(frenteGrupo);
+        $('#total-horas').html(`Total de horas: ${totalHoras}`);
+        
+        // Actualizar gráfica si existe
+        if (typeof actualizarGraficaHoras === 'function') {
+            actualizarGraficaHoras(tutorias, apoyo, frenteGrupo);
         }
-    });
-}
-
-// Función para actualizar el gráfico de desglose de horas
-function actualizarGraficoHoras(tutorias, apoyo, frenteGrupo) {
-    const totalHorasDiv = $("#total-horas");
-    totalHorasDiv.html(`Total de horas: ${parseInt(tutorias) + parseInt(apoyo) + parseInt(frenteGrupo)}`);
-
-    // Aquí podrías actualizar un gráfico si usas Chart.js u otra librería
-}
-
+    }
+    
+    // Función para generar PDF
+    function generatePDF() {
+        const docenteSeleccionado = $('#usuario_usuario_id option:selected').text().trim();
+        
+        // Verificar si hay un docente seleccionado
+        if ($('#usuario_usuario_id').val() === "") {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor selecciona un docente primero',
+                icon: 'error',
+                confirmButtonText: 'Entendido'
+            });
+            return;
+        }
+        
+        // Verificar si hay horario para descargar
+        if ($('#tablaHorario tbody').html().trim() === '' || noDataMessage.is(':visible')) {
+            Swal.fire({
+                title: 'Error',
+                text: 'No hay horario disponible para descargar',
+                icon: 'error',
+                confirmButtonText: 'Entendido'
+            });
+            return;
+        }
+        
+        // Ocultar elementos no deseados en el PDF
+        $('.no-print').hide();
+        
+        const element = document.getElementById('contenedor');
+        const opt = {
+            margin: 10,
+            filename: 'horario_' + docenteSeleccionado.replace(/\s+/g, '_') + '.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { 
+                scale: 2,
+                ignoreElements: function(element) {
+                    return element.classList.contains('no-print');
+                }
+            },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        
+        html2pdf().set(opt).from(element).save().then(function() {
+            // Volver a mostrar los elementos ocultos
+            $('.no-print').show();
+        });
+    }
+});
 </script>
 
 
