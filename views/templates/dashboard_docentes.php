@@ -1287,57 +1287,55 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
 </div>
               </div>
               </div>
-
-              <!--------Inicio de la tabla ---------->
-              <div class="col-lg-6">
+<!--------Inicio de la tabla ---------->
+<div class="col-lg-6">
     <div class="card box-shadow-div text-center border-5 mt-1">
         <div class="card-body">
-              <div class="d-flex justify-content-center align-items-center mb-3">
+            <div class="d-flex justify-content-center align-items-center mb-3">
                 <p class="titulo-grande"><strong>Capacitación disciplinaria</strong></p>
-              </div>
-              <div class="table-responsive">
-                <table class="table datatables" id="dataTable-certificaciones">
-                  <thead>
-                    <tr>
-                      <th>Certificación</th>
-                      <th>Nombre del Certificado</th>
-                      <th>Mes</th> <!-- Nueva columna para los meses -->
-                      <th>Certificado</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php foreach ($certificacionesusuarios as $certificacionusuario): ?>
-                      <tr>
-                        <td class="cert-text"><?php echo htmlspecialchars($certificacionusuario['certificacion_descripcion']); ?></td>
-                        <td class="cert-text"><?php echo htmlspecialchars($certificacionusuario['nombre_certificado']); ?></td>
-                        <td class="cert-text"><?php echo htmlspecialchars($certificacionusuario['nombre_mes']); ?></td>
-                        <!-- Mostrar el mes -->
-                        <td class="text-center">
-                          <?php if (!empty($certificacionusuario['url'])): ?>
-                            <?php
-                            $correctFilePath = str_replace('views/', '', $certificacionusuario['url']);
-                            ?>
-                            <a href="<?php echo $correctFilePath; ?>" target="_blank" class="btn btn-sm btn-primary">Ver
-                              Certificado</a>
-                          <?php else: ?>
-                            No disponible
-                          <?php endif; ?>
-                        </td>
-                        <td class="text-center">
-                          <div class="d-flex justify-content-center">
-                          </div>
-                        </td>
-
-                      </tr>
-                    <?php endforeach; ?>
-                  </tbody>
-                </table>
-              </div>
             </div>
-          </div>
-
+            <div class="table-responsive">
+                <table class="table datatables" id="dataTable-certificaciones">
+                    <thead>
+                        <tr>
+                            <th>Certificación</th>
+                            <th>Nombre del Certificado</th>
+                            <th>Mes</th> <!-- Nueva columna para los meses -->
+                            <th>Certificado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($certificacionesusuarios)): ?>
+                            <?php foreach ($certificacionesusuarios as $certificacionusuario): ?>
+                                <tr>
+                                    <td class="cert-text"><?php echo htmlspecialchars($certificacionusuario['certificacion_descripcion']); ?></td>
+                                    <td class="cert-text"><?php echo htmlspecialchars($certificacionusuario['nombre_certificado']); ?></td>
+                                    <td class="cert-text"><?php echo htmlspecialchars($certificacionusuario['nombre_mes']); ?></td>
+                                    <td class="text-center">
+                                        <?php if (!empty($certificacionusuario['url'])): ?>
+                                            <?php
+                                            $correctFilePath = str_replace('views/', '', $certificacionusuario['url']);
+                                            ?>
+                                            <a href="<?php echo $correctFilePath; ?>" target="_blank" class="btn btn-sm btn-primary">Ver Certificado</a>
+                                        <?php else: ?>
+                                            No disponible
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">No hay certificaciones disponibles</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
-      </div> <!---- fin de la card principál------>
+    </div>
+</div>
+<!---- fin de la card principal------>
+
       
       
       <div class="container-fluid">
@@ -1664,9 +1662,9 @@ $(document).ready(function() {
           </div> <!-- /. col -->
         <!---------------- Termina la parte de direccion academica -------------->
 
-        <div class="row mb-3">
+        <div class="row mb-3 w-100">
           <!-- Card de Días Económicos Totales y Tomados -->
-          <div class="col-lg-12 mb-3">
+          <div class="col-lg-12 mb-3" >
         <div class="card box-shadow-div text-center border-9">
             <div class="card-body">
                 <h3 class="font-weight-bold mb-0">CUERPO COLEGIADO</h3>
