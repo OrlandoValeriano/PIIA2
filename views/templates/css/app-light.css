@@ -13746,7 +13746,7 @@ form.was-validated select:valid~.select2-container--bootstrap4 .select2-selectio
 }
 
 .wizard>.steps>ul>li {
-  width: 25%;
+  width: 50%;
   float: left;
 }
 
@@ -19275,6 +19275,7 @@ a.uppy-Dashboard-poweredBy {
 .table {
   width: 100%; /* Asegura que la tabla ocupe el ancho completo */
   margin-top: 20px; /* Margen superior entre la tabla y otros elementos */
+  height: 100%;
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
@@ -19915,5 +19916,16 @@ button#downloadPDF:hover {
   .container_form-horario>h1 {
     font-size: 1.2rem;
     margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 1270px) {
+  .tablas_form_materias {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tbls{
+    max-width: 100%;
   }
 }

@@ -12597,7 +12597,7 @@ form.was-validated select:valid~.select2-container--bootstrap4 .select2-selectio
 }
 
 .wizard>.steps>ul>li {
-  width: 25%;
+  width: 50%;
   float: left;
 }
 
