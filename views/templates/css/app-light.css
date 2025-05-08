@@ -2227,6 +2227,7 @@ pre code {
   border: 0;
 }
 
+
 /* Estilo general para el select */
 .form-control {
   display: block;
@@ -19539,7 +19540,6 @@ body {
   text-align: center;
   font-size: 1.2rem;
 }
-
 /* Estilo del horario */
 .schedule-container {
   background-color: #ffffff;
@@ -19548,13 +19548,13 @@ body {
   padding: 20px;
   margin: 20px auto;
   border: 1px solid #dcdcdc;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .schedule-container table {
   width: 100%;
   border-collapse: collapse;
-  overflow: hidden;
+  overflow: auto;
   border-radius: 10px;
 }
 
