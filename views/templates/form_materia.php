@@ -193,9 +193,6 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
           <h2 class="page-title">Alta de materias</h2>
 
           <div class="card my-4">
-            <div class="card-header">
-              <!-- Puedes agregar aquí un título o dejarlo vacío -->
-            </div>
 
             <div class="card-body">
               <div id="example-basic">
@@ -411,15 +408,15 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     </div>
 
     <div class="container-fluid">
-      <div class="row">
+      <div class="row tablas_form_materias">
         <!-- Primera tabla -->
-        <div class="col-6">
+        <div class="col-6 tbls">
           <h2 class="mb-2 page-title">Materias registradas</h2>
           <div class="row my-4">
             <!-- Table -->
             <div class="col-md-12">
               <div class="card shadow">
-                <div class="card-body">
+                <div class="card-body" style="height: 300px;">
                   <!-- Table -->
                   <table class="table datatables" id="tabla-materias-1">
                     <thead class="thead-dark">
@@ -456,13 +453,13 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
         </div> <!-- End .col-6 -->
 
         <!-- Segunda tabla -->
-        <div class="col-6">
+        <div class="col-6 tbls">
           <h2 class="mb-2 page-title">Materias asignadas a grupos</h2>
           <div class="row my-4">
             <!-- Table -->
             <div class="col-md-12">
               <div class="card shadow">
-                <div class="card-body">
+                <div class="card-body" style="height: 300px;">
                   <!-- Table -->
                   <table class="table datatables" id="tabla-materias-2">
                     <thead class="thead-dark">

@@ -255,9 +255,8 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   </div>
   <!-- Div de imagen de perfil (con espacio debajo del botón para separarlo) -->
   <div class="card text-center">
-    <div class="card-body">
+    <div class="card-body mt-5">
       <h5 class="card-title">Filtrado por División</h5>
-
       <div class="d-flex flex-column align-items-center">
         <div class="d-flex justify-content-center mb-3">
           <button id="filterBtn" class="btn btn-primary">Seleccionar División</button>
