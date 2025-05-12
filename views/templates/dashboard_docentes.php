@@ -1424,7 +1424,7 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
           <div class="schedule-container">
             <div class="table-responsive">
               <table class="table table-borderless table-striped" id="tablaHorario">
-                <thead>
+                <thead class="table-light text-center">
                   <tr>
                     <th>Hora</th>
                     <th>Lunes</th>

@@ -200,39 +200,200 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 
-document.getElementById("downloadPDF").addEventListener("click", () => {
+document.getElementById("downloadPDF").addEventListener("click", function() {
+    // Configuración inicial (indicador de carga, etc.)
     const button = document.querySelector('.pdf-container');
+    const loadingIndicator = document.createElement('div');
+    loadingIndicator.style.position = 'fixed';
+    loadingIndicator.style.top = '50%';
+    loadingIndicator.style.left = '50%';
+    loadingIndicator.style.transform = 'translate(-50%, -50%)';
+    loadingIndicator.style.padding = '15px';
+    loadingIndicator.style.backgroundColor = 'rgba(0,0,0,0.7)';
+    loadingIndicator.style.color = 'white';
+    loadingIndicator.style.borderRadius = '5px';
+    loadingIndicator.style.zIndex = '9999';
+    loadingIndicator.textContent = 'Generando PDF para móviles...';
+    document.body.appendChild(loadingIndicator);
     
-    // Ocultar el botón mientras se genera el PDF
     button.style.display = 'none';
-  
+    
     const element = document.getElementById("contenedor");
-  
-    // Configuración del PDF
-    const options = {
-      margin: 0.5,
-      filename: 'horario_isc.pdf',
-      image: { type: 'jpeg', quality: 1 },
-      html2canvas: {
-        scale: 3, // Alta resolución
-        scrollY: 0,
-        useCORS: true, // Permitir imágenes externas
-      },
-      jsPDF: {
-        unit: 'px', // Usar píxeles para precisión
-        format: [element.scrollWidth, element.scrollHeight], // Tamaño dinámico basado en el contenido
-        orientation: 'portrait', // Orientación vertical
-      },
+    const originalStyles = {
+        overflow: element.style.overflow,
+        width: element.style.width,
+        margin: element.style.margin,
+        display: element.style.display,
+        fontSize: element.style.fontSize
     };
-  
-    // Generar el PDF
-    html2pdf()
-      .set(options)
-      .from(element)
-      .save()
-      .finally(() => {
-        // Restaurar la visibilidad del botón después de generar el PDF
-        button.style.display = 'block';
-      });
-  });
-  
+    
+    // Aplicar estilos temporales para móviles
+    element.style.overflow = 'visible';
+    element.style.width = '100%';
+    element.style.margin = '0 auto';
+    element.style.display = 'flex';
+    element.style.justifyContent = 'center';
+    element.style.flexDirection = 'column';
+    element.style.alignItems = 'center';
+    element.style.fontSize = '18px'; // Tamaño de fuente aumentado
+
+    // Configuración optimizada para móviles
+    const options = {
+        margin: [5, 5, 5, 5],
+        filename: 'horario_isc.pdf',
+        image: { 
+            type: 'jpeg', 
+            quality: 1.0
+        },
+        html2canvas: {
+            scale: window.innerWidth < 768 ? 1.5 : 1, // Escala mayor para móviles
+            scrollX: 0,
+            scrollY: 0,
+            useCORS: true,
+            allowTaint: true,
+            letterRendering: true,
+            windowWidth: window.innerWidth < 768 ? document.documentElement.scrollWidth * 1.5 : document.documentElement.scrollWidth,
+            windowHeight: document.documentElement.scrollHeight,
+            onclone: function(clonedDoc) {
+                // Estilos específicos para móviles en el clon
+                const container = clonedDoc.getElementById("contenedor");
+                container.style.width = '100%';
+                container.style.padding = '10px';
+                
+                // Ajustar tabla para móviles
+                const table = clonedDoc.querySelector('table');
+                table.style.width = '95%'; // Casi ancho completo
+                table.style.margin = '0 auto';
+                table.style.fontSize = window.innerWidth < 768 ? '16px' : '14px';
+                table.style.borderCollapse = 'collapse';
+                
+                // Ajustar celdas
+                const cells = clonedDoc.querySelectorAll('th, td');
+                cells.forEach(cell => {
+                    cell.style.padding = window.innerWidth < 768 ? '12px 8px' : '8px';
+                    cell.style.border = '1px solid #000';
+                    cell.style.textAlign = 'center';
+                });
+                
+                // Ajustar encabezados
+                const headers = clonedDoc.querySelectorAll('th');
+                headers.forEach(header => {
+                    header.style.fontSize = window.innerWidth < 768 ? '18px' : '16px';
+                    header.style.padding = '12px 8px';
+                });
+                
+                // Formatear horas
+                const timeCells = clonedDoc.querySelectorAll('td:first-child');
+                timeCells.forEach(cell => {
+                    cell.style.fontWeight = 'bold';
+                    cell.style.fontSize = window.innerWidth < 768 ? '16px' : '14px';
+                });
+            }
+        },
+        jsPDF: {
+            unit: 'mm',
+            format: 'a4',
+            orientation: 'landscape',
+            compress: false
+        }
+    };
+
+    setTimeout(function() {
+        html2pdf()
+            .set(options)
+            .from(element)
+            .save()
+            .then(function() {
+                // Restaurar estilos originales
+                Object.keys(originalStyles).forEach(prop => {
+                    element.style[prop] = originalStyles[prop];
+                });
+                button.style.display = 'block';
+                document.body.removeChild(loadingIndicator);
+            })
+            .catch(function(error) {
+                console.error('Error al generar PDF:', error);
+                Object.keys(originalStyles).forEach(prop => {
+                    element.style[prop] = originalStyles[prop];
+                });
+                button.style.display = 'block';
+                document.body.removeChild(loadingIndicator);
+                Swal.fire('Error', 'No se pudo generar el PDF', 'error');
+            });
+    }, 1000);
+});
+
+// CSS adicional específico para móviles
+const mobileStyles = document.createElement('style');
+mobileStyles.textContent = `
+    @media print {
+        body {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            zoom: 100% !important;
+        }
+        #contenedor {
+            width: 100% !important;
+            margin: 0 auto !important;
+            padding: 10px !important;
+        }
+        table {
+            width: 95% !important;
+            margin: 0 auto !important;
+            font-size: 16px !important;
+            border-collapse: collapse !important;
+        }
+        th {
+            font-size: 18px !important;
+            padding: 12px 8px !important;
+        }
+        td {
+            padding: 12px 8px !important;
+            text-align: center !important;
+        }
+        td:first-child {
+            font-weight: bold !important;
+            font-size: 16px !important;
+        }
+    }
+    
+    @media screen and (max-width: 768px) {
+        body {
+            font-size: 18px !important;
+        }
+        .table-responsive {
+            width: 100% !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+        table {
+            width: 95% !important;
+            margin: 20px auto !important;
+            font-size: 16px !important;
+        }
+        th {
+            font-size: 18px !important;
+            padding: 12px 8px !important;
+        }
+        td {
+            padding: 12px 8px !important;
+            min-width: 80px !important;
+        }
+    }
+    
+    /* Estilos base mejorados */
+    table {
+        width: 95%;
+        margin: 20px auto;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #000;
+        text-align: center;
+    }
+    th {
+        font-weight: bold;
+    }
+`;
+document.head.appendChild(mobileStyles);
