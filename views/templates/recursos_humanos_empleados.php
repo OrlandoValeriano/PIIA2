@@ -906,9 +906,6 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   </div> <!-- /.container-fluid -->
 
 
-
-
-
   <script src="js/jquery.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/moment.min.js"></script>
