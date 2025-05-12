@@ -18554,3 +18554,7 @@ button#downloadPDF {
     margin: 0 auto; /* Centra el texto */
   }
 }
+
+.tbl_incidencias {
+  height: auto;
+}

@@ -19929,3 +19929,7 @@ button#downloadPDF:hover {
     max-width: 100%;
   }
 }
+
+.tbl_incidencias {
+  height: auto;
+}

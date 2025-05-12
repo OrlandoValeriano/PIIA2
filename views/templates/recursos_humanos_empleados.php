@@ -699,6 +699,58 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
             }
           </script>
 
+          <div class="row w-100">
+            <div class="col-12">
+              <div class="card shadow mb-4 box-shadow-div h-100 carta_Informacion">
+                <!-- Encabezado de la Tarjeta -->
+                <div class="card-header">
+                  <strong class="card-title text-green mb-0">Tabla de Incidencias</strong>
+                </div>
+
+                <!-- Tabla de Incidencias -->
+                <div class="card-body">
+                  <table class="table table-striped mt-3">
+                    <thead>
+                      <tr>
+                        <th>ID Incidencia</th>
+                        <th>Motivo</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php foreach ($datosIncidencias as $incidencia): ?>
+                        <tr>
+                          <td><?php echo $incidencia['incidencia_has_usuario_id']; ?></td>
+                          <td><?php echo $incidencia['motivo']; ?></td>
+                          <td><?php echo $incidencia['dia_incidencia']; ?></td>
+                          <td>
+                            <?php
+                            switch ($incidencia['status_incidencia_id']) {
+                              case 1:
+                                echo 'Pendiente';
+                                break;
+                              case 2:
+                                echo 'Resuelta';
+                                break;
+                              case 3:
+                                echo 'En proceso';
+                                break;
+                              default:
+                                echo 'Desconocido';
+                                break;
+                            }
+                            ?>
+                          </td>
+                        </tr>
+                      <?php endforeach; ?>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="container-fluid mt-5 box-shadow-div p-5">
             <!-- Título de Incidencias -->
             <div class="mb-3 font-weight-bold bg-success text-white rounded p-3 box-shadow-div-profile cont-div">
@@ -707,93 +759,42 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
 
             <!-- Contenedor de la Tarjeta de Incidencias -->
             <div class="container-fluid p-3">
-              <div class="row">
-                <div class="col-12">
-                  <div class="card shadow mb-4 box-shadow-div h-100 carta_Informacion">
-                    <!-- Encabezado de la Tarjeta -->
-                    <div class="card-header">
-                      <strong class="card-title text-green mb-0">Resumen de Incidencias</strong>
-                    </div>
-
-                    <!-- Tabla de Incidencias -->
-                    <div class="card-body">
-                      <table class="table table-striped mt-3">
-                        <thead>
-                          <tr>
-                            <th>ID Incidencia</th>
-                            <th>Motivo</th>
-                            <th>Fecha</th>
-                            <th>Estado</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <?php foreach ($datosIncidencias as $incidencia): ?>
-                            <tr>
-                              <td><?php echo $incidencia['incidencia_has_usuario_id']; ?></td>
-                              <td><?php echo $incidencia['motivo']; ?></td>
-                              <td><?php echo $incidencia['dia_incidencia']; ?></td>
-                              <td>
-                                <?php
-                                switch ($incidencia['status_incidencia_id']) {
-                                  case 1:
-                                    echo 'Pendiente';
-                                    break;
-                                  case 2:
-                                    echo 'Resuelta';
-                                    break;
-                                  case 3:
-                                    echo 'En proceso';
-                                    break;
-                                  default:
-                                    echo 'Desconocido';
-                                    break;
-                                }
-                                ?>
-                              </td>
-                            </tr>
-                          <?php endforeach; ?>
-                        </tbody>
-                      </table>
-                      <div id="donutChart4"></div>
-                      <div id="incidencias-container" style="overflow-y: auto;">
-                        <table class="table table-striped table-bordered" id="tabla-incidencias">
-                          <thead class="thead-dark" style="position: sticky; top: 0; background-color: #343a40; color: white; z-index: 2;">
-                            <tr>
-                              <th>Número de incidencia</th>
-                              <th>Usuario</th>
-                              <th>Fecha solicitada</th>
-                              <th>Motivo</th>
-                              <th>Hora de inicio</th>
-                              <th>Hora de término</th>
-                              <th>Horario de incidencia</th>
-                              <th>Día de la incidencia</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <?php if (!empty($incidenciasUsuarios)): ?>
-                              <?php foreach ($incidenciasUsuarios as $incidencia): ?>
-                                <tr>
-                                  <td><?php echo htmlspecialchars($incidencia['numero_incidencia']); ?></td>
-                                  <td><?php echo htmlspecialchars($incidencia['usuario']); ?></td>
-                                  <td><?php echo htmlspecialchars($incidencia['fecha_solicitada']); ?></td>
-                                  <td><?php echo htmlspecialchars($incidencia['motivo']); ?></td>
-                                  <td><?php echo htmlspecialchars($incidencia['hora_inicio']); ?></td>
-                                  <td><?php echo htmlspecialchars($incidencia['hora_termino']); ?></td>
-                                  <td><?php echo htmlspecialchars($incidencia['horario_incidencia']); ?></td>
-                                  <td><?php echo htmlspecialchars($incidencia['dia_incidencia']); ?></td>
-                                </tr>
-                              <?php endforeach; ?>
-                            <?php else: ?>
-                              <tr>
-                                <td colspan="8" class="text-center">No hay incidencias registradas.</td>
-                              </tr>
-                            <?php endif; ?>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div id="donutChart4"></div>
+              <div id="incidencias-container" style="overflow-y: auto;">
+                <table class="table table-striped table-bordered tbl_incidencias" id="tabla-incidencias">
+                  <thead class="thead-dark" style="position: sticky; top: 0; background-color: #343a40; color: white; z-index: 2;">
+                    <tr>
+                      <th>Número de incidencia</th>
+                      <th>Usuario</th>
+                      <th>Fecha solicitada</th>
+                      <th>Motivo</th>
+                      <th>Hora de inicio</th>
+                      <th>Hora de término</th>
+                      <th>Horario de incidencia</th>
+                      <th>Día de la incidencia</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php if (!empty($incidenciasUsuarios)): ?>
+                      <?php foreach ($incidenciasUsuarios as $incidencia): ?>
+                        <tr>
+                          <td><?php echo htmlspecialchars($incidencia['numero_incidencia']); ?></td>
+                          <td><?php echo htmlspecialchars($incidencia['usuario']); ?></td>
+                          <td><?php echo htmlspecialchars($incidencia['fecha_solicitada']); ?></td>
+                          <td><?php echo htmlspecialchars($incidencia['motivo']); ?></td>
+                          <td><?php echo htmlspecialchars($incidencia['hora_inicio']); ?></td>
+                          <td><?php echo htmlspecialchars($incidencia['hora_termino']); ?></td>
+                          <td><?php echo htmlspecialchars($incidencia['horario_incidencia']); ?></td>
+                          <td><?php echo htmlspecialchars($incidencia['dia_incidencia']); ?></td>
+                        </tr>
+                      <?php endforeach; ?>
+                    <?php else: ?>
+                      <tr>
+                        <td colspan="8" class="text-center">No hay incidencias registradas.</td>
+                      </tr>
+                    <?php endif; ?>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
