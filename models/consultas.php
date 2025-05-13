@@ -2000,6 +2000,7 @@ class IncidenciaUsuario {
 
         try {
             $stmt->execute();
+            
             header("Location: ../views/templates/form_incidencias.php?success=true");
             exit(); // Detiene el script después de la redirección
         } catch (PDOException $e) {
