@@ -19918,8 +19918,6 @@ button#downloadPDF:hover {
     margin: 0 auto;
   }
 }
-<<<<<<< HEAD
-=======
 
 @media screen and (max-width: 1270px) {
   .tablas_form_materias {
@@ -19931,4 +19929,8 @@ button#downloadPDF:hover {
     max-width: 100%;
   }
 }
->>>>>>> e79bb9ca3ff23c26d4187f979f7f4b71e0a5a0d7
+
+
+.tbl_incidencias {
+  height: auto;
+}

@@ -18554,3 +18554,18 @@ button#downloadPDF {
     margin: 0 auto; /* Centra el texto */
   }
 }
+
+@media screen and (max-width: 1270px) {
+  .tablas_form_materias {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tbls{
+    max-width: 100%;
+  }
+}
+
+.tbl_incidencias {
+  height: auto;
+}

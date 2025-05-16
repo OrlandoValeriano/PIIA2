@@ -206,7 +206,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
       <div class="row">
         <!-- Formulario del lado izquierdo -->
         <div class="col-6">
-          <div class="card shadow mb-4">
+          <div class="card shadow h-100">
             <div class="card-body">
               <div class="d-flex justify-content-center align-items-center mb-3 col">
                 <p class="titulo-grande"><strong>Registro de Edificios</strong></p>
@@ -235,7 +235,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
         <!-- Tabla del lado derecho -->
         <div class="col-6">
           <div class="card shadow">
-            <div class="card-body">
+            <div class="card-body d-flex flex-column align-items-center justify-content-center">
               <div class="d-flex justify-content-center align-items-center mb-3 col">
                 <p class="titulo-grande"><strong>Edificios</strong></p>
               </div>

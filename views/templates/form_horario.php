@@ -452,7 +452,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     </div>
   </main>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
 
 
@@ -570,7 +570,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   <script src='js/select2.min.js'></script>
   <script src='js/jquery.steps.min.js'></script>
   <script src='js/jquery.validate.min.js'></script>
-  <script src='js/jquery.timepicker.js'></script>|
+  <script src='js/jquery.timepicker.js'></script>
   <script src='js/dropzone.min.js'></script>
   <script src='js/uppy.min.js'></script>
   <script src='js/quill.min.js'></script>
