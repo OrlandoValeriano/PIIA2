@@ -16,7 +16,7 @@ $carreras = $consultas->obtenerCarreras();
 $incidencias = $consultas->obtenerIncidencias();
 
 $idusuario = $_SESSION['user_id']; // Asumimos que el ID ya está en la sesión
-
+$notificacion_user = $_SESSION['user_id'];
 $imgUser  = $consultas->obtenerImagen($idusuario);
 
 // Crear instancia de CarreraManager y obtener el ID de usuario
@@ -103,6 +103,12 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   ];
 }
 ?>
+
+<script>
+  const notificacion_user = <?php echo json_encode($notificacion_user); ?>;
+  console.log("ID del usuario en sesión:", notificacion_user);
+</script>
+
 <!-- Aquí sigue tu código HTML para el formulario -->
 
 <!doctype html>
@@ -226,7 +232,6 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
                         </select>
                         <div class="invalid-feedback">Este campo no puede estar vacío.</div>
                       </div>
-
                       <!-- Campo de Fecha alineado a la derecha -->
                       <div class="col-md-6">
                         <label for="fecha" class="form-label">Fecha:</label>
@@ -240,9 +245,24 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
             </div>
           </div>
         </div>
+        
+        <script>
+          // Espera que el DOM esté completamente cargado
+          document.addEventListener('DOMContentLoaded', function() {
+            const areaSelect = document.getElementById('area');
 
+            // Escuchar el evento de cambio (cuando se selecciona otra opción)
+            areaSelect.addEventListener('change', function() {
+              const selectedCarreraId = areaSelect.value;
+              console.log('ID de la carrera seleccionada:', selectedCarreraId);
+            });
 
-
+            // Si quieres mostrarlo inmediatamente al cargar la página:
+            if (areaSelect.value) {
+              console.log('ID de la carrera precargada:', areaSelect.value);
+            }
+          });
+        </script>
 
         <div class="card p-4 mb-4 box-shadow-div form-group mb-3">
           <div class="row">
@@ -356,6 +376,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
       </form>
     </div>
   </main>
+
 
   <script>
     function toggleCampos() {
@@ -491,6 +512,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     </div>
   </div>
   </main> <!-- main -->
+
   </div> <!-- .wrapper -->
 
   <script src="js/jquery.min.js"></script>
