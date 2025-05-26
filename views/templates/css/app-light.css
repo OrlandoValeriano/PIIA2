@@ -19276,7 +19276,6 @@ a.uppy-Dashboard-poweredBy {
 .table {
   width: 100%; /* Asegura que la tabla ocupe el ancho completo */
   margin-top: 20px; /* Margen superior entre la tabla y otros elementos */
-  height: 100%;
 }
 
 .table-striped tbody tr:nth-of-type(odd) {

@@ -344,7 +344,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   <?php if ($tipoUsuarioId === 3 || $tipoUsuarioId === 4 || $tipoUsuarioId === 5): ?>
     <!-- Filtro de carreras -->
     <div class="card text-center">
-        <div class="card-body">
+        <div class="card-body mt-5">
             <h5 class="card-title">Filtrado por división</h5>
             <div class="filter-container">
                 <select id="carreraSelect" class="form-control" style="max-width: 300px; margin: auto;">
