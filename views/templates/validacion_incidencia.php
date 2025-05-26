@@ -15,11 +15,24 @@ $consultas = new Consultas($conn);
 // Obtener el ID del usuario actual y su tipo
 $idusuario = (int) $_SESSION['user_id'];
 // Obtener el tipo de usuario
-// Obtener el tipo de usuario
 $usuario_tipo = $consultas->obtenerTipoUsuarioPorId($idusuario);
 
 // Obtener la carrera del usuario (asegúrate de que esté en la sesión o consulta si no está)
 $carreraId = $_SESSION['carrera_id'] ?? $consultas->obtenerCarreraPorUsuarioId($idusuario);
+
+// Si la carrera viene de la sesión, la tomamos directamente; si no, la consultamos.
+$carreraData = $_SESSION['carrera_id'] ?? $consultas->obtenerCarreraPorUsuarioId($idusuario);
+
+// Si se obtuvo desde la base de datos, extraer el ID del arreglo
+if (is_array($carreraData)) {
+  $carreraId = $carreraData['carrera_id'];
+} else {
+  $carreraId = $carreraData; // Ya es un ID numérico directo desde sesión
+}
+
+// Mostrarlo en consola
+echo "<script>console.log('Carrera ID: " . $carreraId . "');</script>";
+
 
 if (!$usuario_tipo) {
   die("Error: Tipo de usuario no encontrado para el ID proporcionado.");
@@ -324,27 +337,27 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
                                 <td class="text-center">
                                   <?php $statusClass = getStatusClass($incidencia['validacion_division_academica']); ?>
                                   <span class="status-color <?= $statusClass; ?>" <?php if ($usuario_tipo == 2): ?>
-                                      onclick="validarIncidencia(this)"
-                                      data-incidencia-id="<?= $incidencia['incidencia_has_usuario_id']; ?>"
-                                      data-validacion="division" <?php endif; ?>>
+                                    onclick="validarIncidencia(this)"
+                                    data-incidencia-id="<?= $incidencia['incidencia_has_usuario_id']; ?>"
+                                    data-validacion="division" <?php endif; ?>>
                                   </span>
                                 </td>
 
                                 <td class="text-center">
                                   <?php $statusClass = getStatusClass($incidencia['validacion_subdireccion']); ?>
                                   <span class="status-color <?= $statusClass; ?>" <?php if ($usuario_tipo == 7): ?>
-                                      onclick="validarIncidencia(this)"
-                                      data-incidencia-id="<?= $incidencia['id_incidencia_has_usuario']; ?>"
-                                      data-validacion="subdireccion" <?php endif; ?>>
+                                    onclick="validarIncidencia(this)"
+                                    data-incidencia-id="<?= $incidencia['id_incidencia_has_usuario']; ?>"
+                                    data-validacion="subdireccion" <?php endif; ?>>
                                   </span>
                                 </td>
 
                                 <td class="text-center">
                                   <?php $statusClass = getStatusClass($incidencia['validacion_rh']); ?>
                                   <span class="status-color <?= $statusClass; ?>" <?php if ($usuario_tipo == 3): ?>
-                                      onclick="validarIncidencia(this)"
-                                      data-incidencia-id="<?= $incidencia['id_incidencia_has_usuario']; ?>"
-                                      data-validacion="rh" <?php endif; ?>>
+                                    onclick="validarIncidencia(this)"
+                                    data-incidencia-id="<?= $incidencia['id_incidencia_has_usuario']; ?>"
+                                    data-validacion="rh" <?php endif; ?>>
                                   </span>
                                 </td>
 
@@ -386,8 +399,45 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   </div>
 
   <!-- MODAL DE NOTIFICACIONES -->
-  <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel"
-    aria-hidden="true">
+  <?php
+  $usuario_id = $_SESSION['user_id'];
+
+  // Obtener carrera y tipo del usuario actual
+  $queryUsuario = "
+  SELECT carrera_carrera_id, tipo_usuario_tipo_usuario_id
+  FROM usuario
+  WHERE usuario_id = :usuario_id
+";
+  $stmtUsuario = $conn->prepare($queryUsuario);
+  $stmtUsuario->bindParam(':usuario_id', $usuario_id);
+  $stmtUsuario->execute();
+  $usuario = $stmtUsuario->fetch(PDO::FETCH_ASSOC);
+
+  $carrera_id = $usuario['carrera_carrera_id'];
+  $tipo_usuario = $usuario['tipo_usuario_tipo_usuario_id'];
+
+  $notificaciones = [];
+
+  if ($tipo_usuario == 2) {
+    $queryNotificaciones = "
+    SELECT n.id_notificacion, n.mensaje, n.fecha, n.vista, u.nombre_usuario, u.apellido_p, u.apellido_m
+FROM notificaciones n
+JOIN usuario u ON n.usuario_id = u.usuario_id
+WHERE n.carrera_id = :carrera_id
+ORDER BY n.fecha DESC
+
+  ";
+    $stmtNotif = $conn->prepare($queryNotificaciones);
+    $stmtNotif->bindParam(':carrera_id', $carrera_id);
+    $stmtNotif->execute();
+    $notificaciones = $stmtNotif->fetchAll(PDO::FETCH_ASSOC);
+  }
+  ?>
+
+
+
+  <!-- Modal de notificaciones -->
+  <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -398,25 +448,48 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
         </div>
         <div class="modal-body">
           <div class="list-group list-group-flush my-n3">
-            <div class="list-group-item bg-transparent">
-              <div class="row align-items-center">
-                <div class="col-auto"><span class="fe fe-box fe-24"></span></div>
-                <div class="col">
-                  <small><strong>Package has uploaded successfully</strong></small>
-                  <div class="my-0 text-muted small">Package is zipped and uploaded</div>
-                  <small class="badge badge-pill badge-light text-muted">1m ago</small>
+            <?php foreach ($notificaciones as $notificacion): ?>
+              <?php
+              $fondo = $notificacion['vista'] == 0 ? 'background-color: #CAE1C9' : '';
+              ?>
+              <a href="javascript:void(0);"
+                class="list-group-item text-reset text-decoration-none"
+                style="<?php echo $fondo; ?>"
+                data-id="<?php echo $notificacion['id_notificacion']; ?>">
+                <div class="row align-items-center">
+                  <div class="col-auto"><span class="fe fe-box fe-24"></span></div>
+                  <div class="col">
+                    <small>
+                      <strong>
+                        <?php
+                        echo htmlspecialchars(
+                          $notificacion['nombre_usuario'] . ' ' .
+                            $notificacion['apellido_p'] . ' ' .
+                            $notificacion['apellido_m']
+                        );
+                        ?>
+                      </strong>
+                    </small>
+                    <div class="my-0 text-muted small"><?php echo htmlspecialchars($notificacion['mensaje']); ?></div>
+                    <small class="badge badge-pill badge-light text-muted">
+                      <?php echo date('g:i A - d M Y', strtotime($notificacion['fecha'])); ?>
+                    </small>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <!-- Más notificaciones... -->
+              </a>
+
+            <?php endforeach; ?>
           </div>
         </div>
+
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
         </div>
       </div>
     </div>
   </div>
+
   <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -465,7 +538,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   <!-- Incluir SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-    document.getElementById('statusFilter').addEventListener('change', function () {
+    document.getElementById('statusFilter').addEventListener('change', function() {
       const selectedStatus = this.value; // Valor seleccionado en el filtro
       const rows = document.querySelectorAll('#dataTable-1 tbody tr'); // Filas de la tabla
 
@@ -486,7 +559,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     });
 
     // Aplicar el filtro por defecto (Pendientes) al cargar la página
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
       // Establecer el valor predeterminado como '3' (Pendientes)
       document.getElementById('statusFilter').value = '3';
       // Activar el filtro para aplicar la acción
@@ -524,9 +597,9 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
       formData.append("estado", estado); // Estado (1, 2, o 3)
 
       fetch('../../models/insert.php', {
-        method: 'POST',
-        body: formData,
-      })
+          method: 'POST',
+          body: formData,
+        })
         .then((response) => response.text())
         .then((data) => {
           console.log("Respuesta del servidor:", data); // Depuración
@@ -567,7 +640,6 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
           Swal.fire('Error', 'Ocurrió un error en el servidor. Por favor, inténtalo más tarde.', 'error');
         });
     }
-
   </script>
 
 
@@ -718,42 +790,42 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
         ['bold', 'italic', 'underline', 'strike'],
         ['blockquote', 'code-block'],
         [{
-          'header': 1
-        },
-        {
-          'header': 2
-        }
+            'header': 1
+          },
+          {
+            'header': 2
+          }
         ],
         [{
-          'list': 'ordered'
-        },
-        {
-          'list': 'bullet'
-        }
+            'list': 'ordered'
+          },
+          {
+            'list': 'bullet'
+          }
         ],
         [{
-          'script': 'sub'
-        },
-        {
-          'script': 'super'
-        }
+            'script': 'sub'
+          },
+          {
+            'script': 'super'
+          }
         ],
         [{
-          'indent': '-1'
-        },
-        {
-          'indent': '+1'
-        }
+            'indent': '-1'
+          },
+          {
+            'indent': '+1'
+          }
         ], // outdent/indent
         [{
           'direction': 'rtl'
         }], // text direction
         [{
-          'color': []
-        },
-        {
-          'background': []
-        }
+            'color': []
+          },
+          {
+            'background': []
+          }
         ], // dropdown with defaults from theme
         [{
           'align': []
@@ -768,14 +840,14 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
       });
     }
     // Example starter JavaScript for disabling form submissions if there are invalid fields
-    (function () {
+    (function() {
       'use strict';
-      window.addEventListener('load', function () {
+      window.addEventListener('load', function() {
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
         var forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
-        var validation = Array.prototype.filter.call(forms, function (form) {
-          form.addEventListener('submit', function (event) {
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
             if (form.checkValidity() === false) {
               event.preventDefault();
               event.stopPropagation();

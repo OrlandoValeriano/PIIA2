@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 include('../../models/session.php');
 include('../../controllers/db.php'); // Conexión a la base de datos
@@ -2096,3 +2097,5 @@ $(document).ready(function() {
 </body>
 
 </html>
+=======
+>>>>>>> 636ed2bacc01e3e8200485dc6a00018f8a3f3cc6
