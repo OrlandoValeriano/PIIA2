@@ -109,6 +109,23 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   $atajos = [
     ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
   ];
+} elseif ($tipoUsuarioId === 8) { // Usuario tipo 8
+  $atajos = [
+    ['icon' => 'fe-home', 'color' => 'bg-primary', 'text' => 'Inicio', 'url' => 'index.php'],
+    ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
+    ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
+    ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
+    ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php'],
+    ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php'],
+    ['icon' => 'fe-user', 'color' => 'bg-primary', 'text' => 'Registro de usuarios', 'url' => 'formulario_usuario.php'],
+    ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
+    ['icon' => 'fe-edit', 'color' => 'bg-primary', 'text' => 'Registro de materias', 'url' => 'form_materia.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de carreras', 'url' => 'form_carrera.php'],
+    ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Registro de grupos', 'url' => 'formulario_grupo.php'],
+    ['icon' => 'fe-folder-plus', 'color' => 'bg-primary', 'text' => 'Asignacion de carreras', 'url' => 'form_usuarios-carreras.php'],
+    ['icon' => 'fe-briefcase', 'color' => 'bg-primary', 'text' => 'Registro de escenario', 'url' => 'form_edificio.php']
+  ];
 } else { // Otro tipo de usuario
   $atajos = [
     ['icon' => 'fe-home', 'color' => 'bg-primary', 'text' => 'Inicio', 'url' => 'index.php']
@@ -154,13 +171,14 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   <!-- Luego incluye SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="js/navbar-animation.js" defer></script>
 
 </head>
 
 <body class="vertical  light  ">
   <div class="wrapper">
-    <nav class="topnav navbar navbar-light">
+    <nav class="topnav navbar navbar-light" id="nav-bar">
       <button type="button" class="navbar-toggler text-muted mt-2 p-0 mr-3 collapseSidebar">
         <i class="fe fe-menu navbar-toggler-icon"></i>
       </button>
@@ -191,7 +209,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
             </span>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#"><i class="fas fa-user"></i> Profile</a>
+            <a a class="dropdown-item" href="Perfil.php"><i class="fas fa-user"></i> Profile</a>
             <a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Settings</a>
             <a class="dropdown-item" href="#"><i class="fas fa-tasks"></i> Activities</a>
             <form method="POST" action="" id="logoutForm">
@@ -202,30 +220,25 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
       </ul>
     </nav>
     <main role="main" class="main-content mt-5">
-
-      evaluación docente
-
-      <!-- Contenedor de Promedio de Calificaciones -->
-
       <div class="container-fluid mt-5  box-shadow-div p-5">
-        <div class="mb-3 font-weight-bold bg-success text-white rounded p-3 box-shadow-div-profile cont-div">
-          Promedio de Calificaciones
-        </div>
-        <div class="container-fluid p-3">
-          <div class="row">
-            <!-- Tabla de Promedio de Calificaciones -->
-            <div class="col-md-12 carta_Informacion">
-              <div class="form-group">
-                <label for="carrera_carrera_id">Selecciona una carrera:</label>
-                <select class="form-control" id="carrera_carrera_id" name="carrera_carrera_id" onchange="filtrarUsuariosPorCarrera()" required>
-                  <option value="">Seleccione una carrera</option>
-                  <?php foreach ($carreras as $carrera): ?>
-                    <option value="<?php echo $carrera['carrera_id']; ?>">
-                      <?php echo $carrera['nombre_carrera']; ?>
-                    </option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
+            <div class="mb-3 font-weight-bold bg-success text-white rounded p-3 box-shadow-div-profile cont-div">
+              Promedio de Calificaciones
+            </div>
+            <div class="container-fluid p-3">
+              <div class="row">
+                <!-- Tabla de Promedio de Calificaciones -->
+                <div class="col-md-12 carta_Informacion">
+                    <div class="form-group">
+                        <label for="carrera_carrera_id">Selecciona una carrera:</label>
+                        <select class="form-control" id="carrera_carrera_id" name="carrera_carrera_id" onchange="filtrarUsuariosPorCarrera()" required>
+                            <option value="">Seleccione una carrera</option>
+                            <?php foreach ($carreras as $carrera): ?>
+                                <option value="<?php echo $carrera['carrera_id']; ?>">
+                                    <?php echo $carrera['nombre_carrera']; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
               <div class="form-group">
                 <label for="periodo_periodo_id" class="form-label-custom">Periodo:</label>
@@ -238,29 +251,34 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
               </div>
 
 
-              <div class="table-responsive">
-                <table class="table table-bordered" id="docentes-table">
-                  <thead>
-                    <tr>
-                      <th>Nombre del Docente</th>
-                      <th>Evaluación TECNM</th>
-                      <th>Evaluación Estudiantil</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody id="docentes-table-body">
-                    <!-- Las filas se llenan dinámicamente -->
-                  </tbody>
-                </table>
-              </div>
-            </div> <!-- /.col -->
-          </div> <!-- /.row -->
-        </div> <!-- /.container-fluid -->
-      </div> <!-- /.container-fluid -->
-      <script>
-        function filtrarUsuariosPorCarrera() {
-          var carrera_id = document.getElementById("carrera_carrera_id").value;
-          var periodo_id = document.getElementById("periodo_periodo_id").value; // Obtener el valor del periodo
+                    <div class="table-responsive">
+                    <table class="table table-bordered" id="docentes-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre del Docente</th>
+                                <th>Evaluación TECNM</th>
+                                <th>Evaluación Estudiantil</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="docentes-table-body">
+                        <!-- Las filas se llenan dinámicamente -->
+                        </tbody>
+                            </table>
+                        </div>
+                    </div> <!-- /.col -->
+                </div> <!-- /.row -->
+                </div> <!-- /.container-fluid -->
+            </div> <!-- /.container-fluid -->
+    </main>
+
+<!-- Contenedor de Promedio de Calificaciones -->
+
+          
+          <script>
+function filtrarUsuariosPorCarrera() {
+    var carrera_id = document.getElementById("carrera_carrera_id").value;
+    var periodo_id = document.getElementById("periodo_periodo_id").value; // Obtener el valor del periodo
 
           if (carrera_id === "" || periodo_id === "") {
             document.querySelector("#docentes-table-body").innerHTML = ""; // Vacía la tabla si no hay selección

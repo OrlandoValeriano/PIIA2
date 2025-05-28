@@ -52,7 +52,8 @@ class ControlAcceso {
             4 => ['desarrollo_academico_docentes.php', 'form_materia.php', 'form_carrera.php', 'formulario_grupo.php', 'form_usuarios-carreras.php', 'form_edificio.php', 'form_horario.php'],
             5 => ['dashboard_docentes.php', 'dashboard_carreras.php', 'desarrollo_academico_docentes.php', 'recursos_humanos_empleados.php'],
             6 => ['index.php'],
-            7 => ['validacion_incidencia.php']
+            7 => ['validacion_incidencia.php'],
+            8 => ['index.php','validacion_incidencia.php', 'dashboard_docentes.php','form_incidencias.php', 'dashboard_carreras.php','form_horario.php','recursos_humanos_empleados.php','formulario_usuario.php','desarrollo_academico_docentes.php','form_materia.php','form_carrera.php','formulario_grupo.php','form_usuarios-carreras.php', 'form_edificio.php','form_evaluacion.php']
         ];
         
         // 4. Verificación de acceso
