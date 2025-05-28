@@ -5,7 +5,6 @@ include('../../models/consultas.php'); // Incluir la clase de consultas
 include('../../models/accesso_restringido.php');
 include('aside.php');
 
-
 $idusuario = $_SESSION['user_id']; // Asumimos que el ID ya está en la sesión
 
 $imgUser  = $consultas->obtenerImagen($idusuario);
@@ -15,10 +14,8 @@ $consultas = new Consultas($conn);
 
 // Obtenemos el idusuario actual (si no está definido, iniciamos en 1)
 $idusuario = isset($_GET['idusuario']) ? intval($_GET['idusuario']) : 1;
-
 // Llamamos al método para obtener el usuario actual
 $usuario = $consultas->obtenerUsuarioPorId($idusuario);
-
 // Llamamos al método para obtener la carrera del usuario
 $carrera = $consultas->obtenerCarreraPorUsuarioId($idusuario);
 $carreras = $consultas->obtenerCarreras();

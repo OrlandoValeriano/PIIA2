@@ -11,6 +11,10 @@ $imgUser  = $consultas->obtenerImagen($idusuario);
 
 // Inicializa la respuesta por defecto
 $response = ['status' => 'error', 'message' => ''];
+// Obtener notificaciones segun el tipo de usuario
+$notificaciones = obtenerNotificaciones($conn, $idusuario);
+// Obtener el tipo de usuario
+$usuario_tipo = $consultas->obtenerTipoUsuarioPorId($idusuario);
 
 // Intenta conectar a la base de datos
 try {

@@ -11,6 +11,10 @@ $imgUser  = $consultas->obtenerImagen($idusuario);
 
 // Inicializa la respuesta por defecto
 $response = ['status' => 'error', 'message' => ''];
+// Obtener notificaciones segun el tipo de usuario
+$notificaciones = obtenerNotificaciones($conn, $idusuario);
+// Obtener el tipo de usuario
+$usuario_tipo = $consultas->obtenerTipoUsuarioPorId($idusuario);
 
 // Intenta conectar a la base de datos
 try {
@@ -53,49 +57,49 @@ $tipoUsuarioId = $consultas->obtenerTipoUsuarioPorId($idusuario);
 
 // Validar tipo de usuario
 if (!$tipoUsuarioId) {
-    die("Error: Tipo de usuario no encontrado.");
+  die("Error: Tipo de usuario no encontrado.");
 }
 
 // Definir atajos según el tipo de usuario
 $atajos = [];
 if ($tipoUsuarioId === 1) { // Usuario tipo 1 
-    $atajos = [
-        ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
-        ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
-        ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
-    ];
+  $atajos = [
+    ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
+    ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
+  ];
 } elseif ($tipoUsuarioId === 2) { // Usuario tipo 2 
-    $atajos = [
-      ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
-        ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
-        ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
-        ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php'],
-        ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php']
+  $atajos = [
+    ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
+    ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
+    ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php'],
+    ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php']
 
-    ];
+  ];
 } elseif ($tipoUsuarioId === 3) { // Usuario tipo 3 
-    $atajos = [
-      ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php'],
-        ['icon' => 'fe-user', 'color' => 'bg-primary', 'text' => 'Registro de usuarios', 'url' => 'formulario_usuario.php'],
-        ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de incidencias', 'url' => 'form_incidencias.php'],
-        ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
-    ];
+  $atajos = [
+    ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php'],
+    ['icon' => 'fe-user', 'color' => 'bg-primary', 'text' => 'Registro de usuarios', 'url' => 'formulario_usuario.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de incidencias', 'url' => 'form_incidencias.php'],
+    ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
+  ];
 } elseif ($tipoUsuarioId === 4) { // Usuario tipo 4 
-    $atajos = [
-      ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
-        ['icon' => 'fe-edit', 'color' => 'bg-primary', 'text' => 'Registro de materias', 'url' => 'form_materia.php'],
-        ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de carreras', 'url' => 'form_carrera.php'],
-        ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Registro de grupos', 'url' => 'formulario_grupo.php'],
-        ['icon' => 'fe-folder-plus', 'color' => 'bg-primary', 'text' => 'Asignacion de carreras', 'url' => 'form_usuarios-carreras.php'],
-        ['icon' => 'fe-briefcase', 'color' => 'bg-primary', 'text' => 'Registro de escenario', 'url' => 'form_edificio.php'],
-        ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php']
-    ];
+  $atajos = [
+    ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
+    ['icon' => 'fe-edit', 'color' => 'bg-primary', 'text' => 'Registro de materias', 'url' => 'form_materia.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de carreras', 'url' => 'form_carrera.php'],
+    ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Registro de grupos', 'url' => 'formulario_grupo.php'],
+    ['icon' => 'fe-folder-plus', 'color' => 'bg-primary', 'text' => 'Asignacion de carreras', 'url' => 'form_usuarios-carreras.php'],
+    ['icon' => 'fe-briefcase', 'color' => 'bg-primary', 'text' => 'Registro de escenario', 'url' => 'form_edificio.php'],
+    ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php']
+  ];
 } elseif ($tipoUsuarioId === 5) { // Usuario tipo 5
-    $atajos = [
-      ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
-      ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
-      ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
-      ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php']
+  $atajos = [
+    ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
+    ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
+    ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
+    ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php']
   ];
 } elseif ($tipoUsuarioId === 6) { // Usuario tipo 6
   $atajos = [
@@ -123,9 +127,9 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     ['icon' => 'fe-briefcase', 'color' => 'bg-primary', 'text' => 'Registro de escenario', 'url' => 'form_edificio.php']
   ];
 } else { // Otro tipo de usuario
-    $atajos = [
-      ['icon' => 'fe-home', 'color' => 'bg-primary', 'text' => 'Inicio', 'url' => 'index.php']
-    ];
+  $atajos = [
+    ['icon' => 'fe-home', 'color' => 'bg-primary', 'text' => 'Inicio', 'url' => 'index.php']
+  ];
 }
 ?>
 <!doctype html>
@@ -153,8 +157,8 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   <link rel="stylesheet" href="css/dataTables.bootstrap4.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    <!-- Incluir SweetAlert CSS y JS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <!-- Incluir SweetAlert CSS y JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- Date Range Picker CSS -->
@@ -164,8 +168,8 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   <link rel="stylesheet" href="css/app-dark.css" id="darkTheme" disabled>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Luego incluye SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Luego incluye SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="js/navbar-animation.js" defer></script>
@@ -198,10 +202,10 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle text-muted pr-0" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span class="avatar avatar-sm mt-2">
-                <img src="<?= htmlspecialchars($imgUser['imagen_url'] ?? './assets/avatars/default.jpg') ?>" 
-                    alt="Avatar del usuario" 
-                    class="avatar-img rounded-circle" 
-                    style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
+              <img src="<?= htmlspecialchars($imgUser['imagen_url'] ?? './assets/avatars/default.jpg') ?>"
+                alt="Avatar del usuario"
+                class="avatar-img rounded-circle"
+                style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
             </span>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
@@ -236,16 +240,16 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="periodo_periodo_id" class="form-label-custom">Periodo:</label>
-                        <select class="form-control" id="periodo_periodo_id" name="periodo_periodo_id" required onchange="filtrarUsuariosPorCarrera()">
-                            <option value="">Selecciona un periodo</option>
-                            <?php foreach ($periodos as $periodo): ?>
-                                <option value="<?php echo $periodo['periodo_id']; ?>"><?php echo htmlspecialchars($periodo['descripcion']); ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    
+              <div class="form-group">
+                <label for="periodo_periodo_id" class="form-label-custom">Periodo:</label>
+                <select class="form-control" id="periodo_periodo_id" name="periodo_periodo_id" required onchange="filtrarUsuariosPorCarrera()">
+                  <option value="">Selecciona un periodo</option>
+                  <?php foreach ($periodos as $periodo): ?>
+                    <option value="<?php echo $periodo['periodo_id']; ?>"><?php echo htmlspecialchars($periodo['descripcion']); ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+
 
                     <div class="table-responsive">
                     <table class="table table-bordered" id="docentes-table">
@@ -276,34 +280,34 @@ function filtrarUsuariosPorCarrera() {
     var carrera_id = document.getElementById("carrera_carrera_id").value;
     var periodo_id = document.getElementById("periodo_periodo_id").value; // Obtener el valor del periodo
 
-    if (carrera_id === "" || periodo_id === "") {
-        document.querySelector("#docentes-table-body").innerHTML = ""; // Vacía la tabla si no hay selección
-        return;
-    }
-
-    fetch('../../models/obtener_docentes.php', {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: `carrera_id=${carrera_id}&periodo_id=${periodo_id}` // Incluye el periodo en la solicitud
-    })
-    .then(response => response.json())
-    .then(data => {
-        var tbody = document.querySelector("#docentes-table-body");
-        tbody.innerHTML = ""; // Limpiar tabla antes de agregar nuevas filas
-
-        if (data.error) {
-            tbody.innerHTML = `<tr><td colspan="4">${data.error}</td></tr>`;
+          if (carrera_id === "" || periodo_id === "") {
+            document.querySelector("#docentes-table-body").innerHTML = ""; // Vacía la tabla si no hay selección
             return;
-        }
+          }
 
-        data.forEach(docente => {
-            // Obtener las evaluaciones previas (si existen)
-            var evaluacionTecnm = docente.evaluacion_tecnm || "00.0";
-            var evaluacionEstudiantil = docente.evaluacion_estudiantil || "00.0";
+          fetch('../../models/obtener_docentes.php', {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+              },
+              body: `carrera_id=${carrera_id}&periodo_id=${periodo_id}` // Incluye el periodo en la solicitud
+            })
+            .then(response => response.json())
+            .then(data => {
+              var tbody = document.querySelector("#docentes-table-body");
+              tbody.innerHTML = ""; // Limpiar tabla antes de agregar nuevas filas
 
-            var row = `
+              if (data.error) {
+                tbody.innerHTML = `<tr><td colspan="4">${data.error}</td></tr>`;
+                return;
+              }
+
+              data.forEach(docente => {
+                // Obtener las evaluaciones previas (si existen)
+                var evaluacionTecnm = docente.evaluacion_tecnm || "00.0";
+                var evaluacionEstudiantil = docente.evaluacion_estudiantil || "00.0";
+
+                var row = `
 <tr>
     <td>${docente.nombre_completo}</td>
     <td>
@@ -324,222 +328,195 @@ function filtrarUsuariosPorCarrera() {
     </td>
 </tr>
 `;
-            tbody.innerHTML += row;
-        });
-    })
-    .catch(error => console.error("Error al obtener docentes:", error));
-}
+                tbody.innerHTML += row;
+              });
+            })
+            .catch(error => console.error("Error al obtener docentes:", error));
+        }
 
 
 
-function actualizarInputs(btn) {
-    // Previene el envío del formulario
-    event.preventDefault();
+        function actualizarInputs(btn) {
+          // Previene el envío del formulario
+          event.preventDefault();
 
-    var row = btn.closest("tr");
-    var periodoValue = document.getElementById("periodo_periodo_id").value;
-    row.querySelector("#periodo_periodo_id_value").value = periodoValue;
-    row.querySelector(".input-tecnm").value = row.querySelector(".evaluacionTECNM").value;
-    row.querySelector(".input-estudiantil").value = row.querySelector(".evaluacionEstudiantil").value;
+          var row = btn.closest("tr");
+          var periodoValue = document.getElementById("periodo_periodo_id").value;
+          row.querySelector("#periodo_periodo_id_value").value = periodoValue;
+          row.querySelector(".input-tecnm").value = row.querySelector(".evaluacionTECNM").value;
+          row.querySelector(".input-estudiantil").value = row.querySelector(".evaluacionEstudiantil").value;
 
-    // Validación opcional
-    if (row.querySelector(".evaluacionTECNM").value === "00.0" || 
-        row.querySelector(".evaluacionEstudiantil").value === "00.0") {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Advertencia',
-            text: 'Asegúrate de ingresar una evaluación válida antes de guardar.',
+          // Validación opcional
+          if (row.querySelector(".evaluacionTECNM").value === "00.0" ||
+            row.querySelector(".evaluacionEstudiantil").value === "00.0") {
+            Swal.fire({
+              icon: 'warning',
+              title: 'Advertencia',
+              text: 'Asegúrate de ingresar una evaluación válida antes de guardar.',
+              allowOutsideClick: false,
+            });
+            return false;
+          }
+
+          // Muestra el SweetAlert que el usuario cierra manualmente
+          Swal.fire({
+            icon: 'success',
+            title: '¡Registro exitoso!',
+            text: 'Se ha registrado con éxito.',
             allowOutsideClick: false,
-        });
-        return false;
-    }
+            confirmButtonText: 'Cerrar',
+          }).then(() => {
+            // Enviar formulario después de mostrar SweetAlert
+            btn.closest("form").submit();
+          });
 
-    // Muestra el SweetAlert que el usuario cierra manualmente
-    Swal.fire({
-        icon: 'success',
-        title: '¡Registro exitoso!',
-        text: 'Se ha registrado con éxito.',
-        allowOutsideClick: false,
-        confirmButtonText: 'Cerrar',
-    }).then(() => {
-        // Enviar formulario después de mostrar SweetAlert
-        btn.closest("form").submit();
-    });
-
-    return false; // Impide envío automático
-}
+          return false; // Impide envío automático
+        }
+      </script>
 
 
-</script>
-
-        
-        <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel"
-          aria-hidden="true">
-          <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="defaultModalLabel">Notifications</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
+      <!-- Modal de notificaciones -->
+      <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="defaultModalLabel">Notifications</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="list-group list-group-flush my-n3">
+                <?php foreach ($notificaciones as $notificacion): ?>
+                  <?php
+                  $fondo = $notificacion['vista'] == 0 ? 'background-color: #CAE1C9' : '';
+                  ?>
+                  <a href="marcar_vista.php?id=<?php echo $notificacion['id_notificacion']; ?>"
+                    class="list-group-item text-reset text-decoration-none"
+                    style="<?php echo $fondo; ?>"
+                    data-id="<?php echo $notificacion['id_notificacion']; ?>">
+                    <div class="row align-items-center">
+                      <div class="col-auto"><span class="fe fe-box fe-24"></span></div>
+                      <div class="col">
+                        <small>
+                          <strong><?php echo formatearNombreCompleto($notificacion, $usuario_tipo); ?></strong>
+                          </strong>
+                        </small>
+                        <div class="my-0 text-muted small"><?php echo htmlspecialchars($notificacion['mensaje']); ?></div>
+                        <small class="badge badge-pill badge-light text-muted">
+                          <?php echo date('g:i A - d M Y', strtotime($notificacion['fecha'])); ?>
+                        </small>
+                      </div>
+                    </div>
+                  </a>
+                <?php endforeach; ?>
               </div>
-              <div class="modal-body">
-                <div class="list-group list-group-flush my-n3">
-                  <div class="list-group-item bg-transparent">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="fe fe-box fe-24"></span>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body px-5">
+              <div class="row align-items-center justify-content-start">
+                <?php foreach ($atajos as $atajo): ?>
+                  <div class="col-6 text-center">
+                    <a href="<?= $atajo['url'] ?>" class="text-decoration-none">
+                      <div class="squircle justify-content-center">
+                        <i class="fe <?= $atajo['icon'] ?> fe-32 align-self-center text-white"></i>
                       </div>
-                      <div class="col">
-                        <small><strong>Package has uploaded successfull</strong></small>
-                        <div class="my-0 text-muted small">Package is zipped and uploaded</div>
-                        <small class="badge badge-pill badge-light text-muted">1m ago</small>
-                      </div>
-                    </div>
+                      <p class="letra-atajo"><?= htmlspecialchars($atajo['text']) ?></p>
+                    </a>
                   </div>
-                  <div class="list-group-item bg-transparent">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="fe fe-download fe-24"></span>
-                      </div>
-                      <div class="col">
-                        <small><strong>Widgets are updated successfull</strong></small>
-                        <div class="my-0 text-muted small">Just create new layout Index, form, table</div>
-                        <small class="badge badge-pill badge-light text-muted">2m ago</small>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="list-group-item bg-transparent">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="fe fe-inbox fe-24"></span>
-                      </div>
-                      <div class="col">
-                        <small><strong>Notifications have been sent</strong></small>
-                        <div class="my-0 text-muted small">Fusce dapibus, tellus ac cursus commodo</div>
-                        <small class="badge badge-pill badge-light text-muted">30m ago</small>
-                      </div>
-                    </div> <!-- / .row -->
-                  </div>
-                  <div class="list-group-item bg-transparent">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="fe fe-link fe-24"></span>
-                      </div>
-                      <div class="col">
-                        <small><strong>Link was attached to menu</strong></small>
-                        <div class="my-0 text-muted small">New layout has been attached to the menu</div>
-                        <small class="badge badge-pill badge-light text-muted">1h ago</small>
-                      </div>
-                    </div>
-                  </div> <!-- / .row -->
-                </div> <!-- / .list-group -->
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
+                <?php endforeach; ?>
               </div>
             </div>
           </div>
         </div>
-        <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body px-5">
-                <div class="row align-items-center justify-content-start">
-                    <?php foreach ($atajos as $atajo): ?>
-                        <div class="col-6 text-center">
-                            <a href="<?= $atajo['url'] ?>" class="text-decoration-none">
-                                <div class="squircle justify-content-center">
-                                    <i class="fe <?= $atajo['icon'] ?> fe-32 align-self-center text-white"></i>
-                                </div>
-                                <p class="letra-atajo"><?= htmlspecialchars($atajo['text']) ?></p>
-                            </a>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-        </div>
-        </div>
-    </div>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      </div>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- DataTables JS -->
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+      <!-- DataTables JS -->
+      <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
-<!-- DataTables Bootstrap4 JS -->
-<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+      <!-- DataTables Bootstrap4 JS -->
+      <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 
-  <!-- SmartWizard JS -->
-  <script src="js/form_usuario.js"></script>
-  <script src="js/jquery.smartWizard.min.js"></script>
+      <!-- SmartWizard JS -->
+      <script src="js/form_usuario.js"></script>
+      <script src="js/jquery.smartWizard.min.js"></script>
 
-<!-- Otros scripts -->
-<script src="js/bootstrap.bundle.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/moment.min.js"></script>
-<script src="js/simplebar.min.js"></script>
-<script src='js/daterangepicker.js'></script>
-<script src='js/jquery.stickOnScroll.js'></script>
-<script src="js/tinycolor-min.js"></script>
-<script src="js/config.js"></script>
-<script src='js/jquery.mask.min.js'></script>
-<script src='js/select2.min.js'></script>
-<script src='js/jquery.steps.min.js'></script>
-<script src='js/jquery.validate.min.js'></script>
-<script src='js/jquery.timepicker.js'></script>|
-<script src='js/dropzone.min.js'></script>
-<script src='js/uppy.min.js'></script>
-<script src='js/quill.min.js'></script>
-<script src='js/apps.js'></script>
-  
-  <script>
-    $(function() {
-      $('#dataTable-1').DataTable({
-        "responsive": true,
-        "autoWidth": false,
-        "pageLength": 10,
-        "language": {
-          "decimal": "",
-          "emptyTable": "No hay usuarios",
-          "info": "Mostrando _START_ a _END_ de _TOTAL_ usuarios",
-          "infoEmpty": "Mostrando 0 a 0 de 0 Saldos",
-          "thousands": ",",
-          "lengthMenu": "Mostrar  _MENU_ usuarios",
-          "loadingRecords": "Cargando...",
-          "processing": "Procesando...",
-          "search": "Buscador de usuarios",
-          "zeroRecords": "Sin resultados encontrados",
-          "paginate": {
-            "first": "Primero",
-            "last": "Último",
-            "next": "Siguiente",
-            "previous": "Anterior"
-          }
-        },
-        // Define la opción lengthMenu
-        "lengthMenu": [
-          [16, 32, 64, -1],
-          [16, 32, 64, "Todos"]
-        ]
-      });
-    });
-  </script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
+      <!-- Otros scripts -->
+      <script src="js/bootstrap.bundle.min.js"></script>
+      <script src="js/popper.min.js"></script>
+      <script src="js/moment.min.js"></script>
+      <script src="js/simplebar.min.js"></script>
+      <script src='js/daterangepicker.js'></script>
+      <script src='js/jquery.stickOnScroll.js'></script>
+      <script src="js/tinycolor-min.js"></script>
+      <script src="js/config.js"></script>
+      <script src='js/jquery.mask.min.js'></script>
+      <script src='js/select2.min.js'></script>
+      <script src='js/jquery.steps.min.js'></script>
+      <script src='js/jquery.validate.min.js'></script>
+      <script src='js/jquery.timepicker.js'></script>|
+      <script src='js/dropzone.min.js'></script>
+      <script src='js/uppy.min.js'></script>
+      <script src='js/quill.min.js'></script>
+      <script src='js/apps.js'></script>
 
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag('js', new Date());
-    gtag('config', 'UA-56159088-1');
-  </script>
-  
+      <script>
+        $(function() {
+          $('#dataTable-1').DataTable({
+            "responsive": true,
+            "autoWidth": false,
+            "pageLength": 10,
+            "language": {
+              "decimal": "",
+              "emptyTable": "No hay usuarios",
+              "info": "Mostrando _START_ a _END_ de _TOTAL_ usuarios",
+              "infoEmpty": "Mostrando 0 a 0 de 0 Saldos",
+              "thousands": ",",
+              "lengthMenu": "Mostrar  _MENU_ usuarios",
+              "loadingRecords": "Cargando...",
+              "processing": "Procesando...",
+              "search": "Buscador de usuarios",
+              "zeroRecords": "Sin resultados encontrados",
+              "paginate": {
+                "first": "Primero",
+                "last": "Último",
+                "next": "Siguiente",
+                "previous": "Anterior"
+              }
+            },
+            // Define la opción lengthMenu
+            "lengthMenu": [
+              [16, 32, 64, -1],
+              [16, 32, 64, "Todos"]
+            ]
+          });
+        });
+      </script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'UA-56159088-1');
+      </script>
+
 </body>
 
 </html>

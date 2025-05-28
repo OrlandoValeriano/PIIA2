@@ -4,13 +4,17 @@ include('../../models/session.php');
 include('../../controllers/db.php'); // Conexión a la base de datos
 include('../../models/consultas.php'); // Incluir la clase de consultas
 include('aside.php');
-
+require_once '../../views/templates/notificaciones.php';
 // Crear una instancia de la clase Consultas pasando la conexión
 $consultas = new Consultas($conn);
 
 // Obtener la imagen del usuario actual
 $idusuario = $_SESSION['user_id'];
 $imgUser = $consultas->obtenerImagen($idusuario);
+// Obtener notificaciones segun el tipo de usuario
+$notificaciones = obtenerNotificaciones($conn, $idusuario);
+// Obtener el tipo de usuario
+$usuario_tipo = $consultas->obtenerTipoUsuarioPorId($idusuario);
 
 // Obtener datos de la carrera
 $carreraData = $consultas->datosCarreraPorId($idusuario);
@@ -1007,8 +1011,9 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     </div>
   </main>
 
-  <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel"
-    aria-hidden="true">
+  
+  <!-- Modal de notificaciones -->
+  <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -1019,54 +1024,29 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
         </div>
         <div class="modal-body">
           <div class="list-group list-group-flush my-n3">
-            <div class="list-group-item bg-transparent">
-              <div class="row align-items-center">
-                <div class="col-auto">
-                  <span class="fe fe-box fe-24"></span>
+            <?php foreach ($notificaciones as $notificacion): ?>
+              <?php
+              $fondo = $notificacion['vista'] == 0 ? 'background-color: #CAE1C9' : '';
+              ?>
+              <a href="marcar_vista.php?id=<?php echo $notificacion['id_notificacion']; ?>"
+                class="list-group-item text-reset text-decoration-none"
+                style="<?php echo $fondo; ?>"
+                data-id="<?php echo $notificacion['id_notificacion']; ?>">
+                <div class="row align-items-center">
+                  <div class="col-auto"><span class="fe fe-box fe-24"></span></div>
+                  <div class="col">
+                    <small>
+                      <strong><?php echo formatearNombreCompleto($notificacion, $usuario_tipo); ?></strong>
+                      </strong>
+                    </small>
+                    <div class="my-0 text-muted small"><?php echo htmlspecialchars($notificacion['mensaje']); ?></div>
+                    <small class="badge badge-pill badge-light text-muted">
+                      <?php echo date('g:i A - d M Y', strtotime($notificacion['fecha'])); ?>
+                    </small>
+                  </div>
                 </div>
-                <div class="col">
-                  <small><strong>Package has uploaded successfull</strong></small>
-                  <div class="my-0 text-muted small">Package is zipped and uploaded</div>
-                  <small class="badge badge-pill badge-light text-muted">1m ago</small>
-                </div>
-              </div>
-            </div>
-            <div class="list-group-item bg-transparent">
-              <div class="row align-items-center">
-                <div class="col-auto">
-                  <span class="fe fe-download fe-24"></span>
-                </div>
-                <div class="col">
-                  <small><strong>Widgets are updated successfull</strong></small>
-                  <div class="my-0 text-muted small">Just create new layout Index, form, table</div>
-                  <small class="badge badge-pill badge-light text-muted">2m ago</small>
-                </div>
-              </div>
-            </div>
-            <div class="list-group-item bg-transparent">
-              <div class="row align-items-center">
-                <div class="col-auto">
-                  <span class="fe fe-inbox fe-24"></span>
-                </div>
-                <div class="col">
-                  <small><strong>Notifications have been sent</strong></small>
-                  <div class="my-0 text-muted small">Fusce dapibus, tellus ac cursus commodo</div>
-                  <small class="badge badge-pill badge-light text-muted">30m ago</small>
-                </div>
-              </div>
-            </div>
-            <div class="list-group-item bg-transparent">
-              <div class="row align-items-center">
-                <div class="col-auto">
-                  <span class="fe fe-link fe-24"></span>
-                </div>
-                <div class="col">
-                  <small><strong>Link was attached to menu</strong></small>
-                  <div class="my-0 text-muted small">New layout has been attached to the menu</div>
-                  <small class="badge badge-pill badge-light text-muted">1h ago</small>
-                </div>
-              </div>
-            </div>
+              </a>
+            <?php endforeach; ?>
           </div>
         </div>
         <div class="modal-footer">
