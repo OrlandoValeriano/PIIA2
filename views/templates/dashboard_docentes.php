@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 include('../../models/session.php');
 include('../../controllers/db.php'); // Conexión a la base de datos
@@ -1399,12 +1398,12 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
         <div class="col-md-4">
           <div class="form-group mt-2">
             <label for="usuario_usuario_id">Docente:</label>
-            <select class="form-control" id="usuario_usuario_id" name="usuario_usuario_id" required <?php echo ($tipoUsuarioId != 2 && $tipoUsuarioId != 3 && $tipoUsuarioId != 4 && $tipoUsuarioId != 5) ? 'disabled' : ''; ?>>
+            <select class="form-control" id="usuario_usuario_id" name="usuario_usuario_id" required <?php echo ($tipoUsuarioId != 2 && $tipoUsuarioId != 3 && $tipoUsuarioId != 4 && $tipoUsuarioId != 5 && $tipoUsuarioId != 8) ? 'disabled' : ''; ?>>
               <option value="">Selecciona un docente</option>
               <?php 
               // Obtener lista de usuarios según el tipo de usuario
               $usuarios = [];
-              if ($tipoUsuarioId == 2 || $tipoUsuarioId == 5 ) { // Jefe de carrera o Dirección
+              if ($tipoUsuarioId == 2 || $tipoUsuarioId == 5 || $tipoUsuarioId == 8 ) { // Jefe de carrera o Dirección
                 $usuarios = $consultas->obtenerUsuariosPorCarrera($carreraId);
               } elseif ($tipoUsuarioId == 3 || $tipoUsuarioId == 4 ) { // RH o Desarrollo Académico
                 $usuarios = $consultas->obtenerTodosUsuariosDocentes();
@@ -1425,7 +1424,7 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
         <div class="col-md-4">
           <div class="form-group mt-2">
             <label for="carrera_carrera_id" class="form-label">Carrera:</label>
-            <select class="form-control" id="carrera_carrera_id" name="carrera_carrera_id" required <?php echo ($tipoUsuarioId != 3 && $tipoUsuarioId != 4 && $tipoUsuarioId != 5 ) ? 'disabled' : ''; ?>>
+            <select class="form-control" id="carrera_carrera_id" name="carrera_carrera_id" required <?php echo ($tipoUsuarioId != 3 && $tipoUsuarioId != 4 && $tipoUsuarioId != 5 && $tipoUsuarioId != 8) ? 'disabled' : ''; ?>>
               <option value="">Selecciona una carrera</option>
               <?php foreach ($carreras as $carrera): ?>
                 <option value="<?php echo $carrera['carrera_id']; ?>" <?= ($carrera['carrera_id'] == $carreraId) ? 'selected' : ''; ?>>
@@ -2115,5 +2114,3 @@ $(document).ready(function() {
 </body>
 
 </html>
-=======
->>>>>>> 636ed2bacc01e3e8200485dc6a00018f8a3f3cc6
