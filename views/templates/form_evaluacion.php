@@ -205,7 +205,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
             </span>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#"><i class="fas fa-user"></i> Profile</a>
+            <a a class="dropdown-item" href="Perfil.php"><i class="fas fa-user"></i> Profile</a>
             <a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Settings</a>
             <a class="dropdown-item" href="#"><i class="fas fa-tasks"></i> Activities</a>
             <form method="POST" action="" id="logoutForm">
@@ -216,12 +216,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
       </ul>
     </nav>
     <main role="main" class="main-content mt-5">
-
-    evaluación docente
-
-<!-- Contenedor de Promedio de Calificaciones -->
-
-          <div class="container-fluid mt-5  box-shadow-div p-5">
+      <div class="container-fluid mt-5  box-shadow-div p-5">
             <div class="mb-3 font-weight-bold bg-success text-white rounded p-3 box-shadow-div-profile cont-div">
               Promedio de Calificaciones
             </div>
@@ -271,6 +266,11 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
                 </div> <!-- /.row -->
                 </div> <!-- /.container-fluid -->
             </div> <!-- /.container-fluid -->
+    </main>
+
+<!-- Contenedor de Promedio de Calificaciones -->
+
+          
           <script>
 function filtrarUsuariosPorCarrera() {
     var carrera_id = document.getElementById("carrera_carrera_id").value;
