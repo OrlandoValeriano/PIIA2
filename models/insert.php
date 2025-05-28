@@ -1,5 +1,8 @@
 <?php
 // Incluir la conexión a la base de datos y las clases necesarias
+session_start();
+var_dump($_SESSION['usuario_id']);
+
 require_once '../controllers/db.php';
 require_once '../models/consultas.php';
 

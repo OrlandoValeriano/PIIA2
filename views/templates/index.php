@@ -3,6 +3,7 @@ include('../../models/session.php');
 include('../../controllers/db.php'); // Conexión a la base de datos
 include('../../models/consultas.php'); // Incluir la clase de consultas
 include('aside.php');
+require_once '../../views/templates/notificaciones.php';
 
 // Verificar si hay un mensaje de error en la sesión
 if (isset($_SESSION['error'])) {
@@ -31,7 +32,11 @@ $consultas = new Consultas($conn);
 
 // Obtener el ID del usuario actual y su tipo desde la sesión
 $idusuario = (int) $_SESSION['user_id'];
+// Obtener notificaciones segun el tipo de usuario
+$conn = $database->getConnection();
+$notificaciones = obtenerNotificaciones($conn, $idusuario);
 $tipoUsuarioId = $consultas->obtenerTipoUsuarioPorId($idusuario);
+
 
 // Validar tipo de usuario
 if (!$tipoUsuarioId) {
@@ -221,8 +226,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     </div>
   </main>
 
-  <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel"
-    aria-hidden="true">
+  <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -233,55 +237,31 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
         </div>
         <div class="modal-body">
           <div class="list-group list-group-flush my-n3">
-            <div class="list-group-item bg-transparent">
-              <div class="row align-items-center">
-                <div class="col-auto">
-                  <span class="fe fe-box fe-24"></span>
+            
+            <?php foreach ($notificaciones as $notificacion): ?>
+              <?php
+              $fondo = $notificacion['vista'] == 0 ? 'background-color: #CAE1C9' : '';
+              ?>
+              <a href="marcar_vista.php?id=<?php echo $notificacion['id_notificacion']; ?>"
+                class="list-group-item text-reset text-decoration-none"
+                style="<?php echo $fondo; ?>"
+                data-id="<?php echo $notificacion['id_notificacion']; ?>">
+                <div class="row align-items-center">
+                  <div class="col-auto"><span class="fe fe-box fe-24"></span></div>
+                  <div class="col">
+                    <small>
+                      <strong><?php echo formatearNombreCompleto($notificacion, $tipoUsuarioId); ?></strong>
+                      </strong>
+                    </small>
+                    <div class="my-0 text-muted small"><?php echo htmlspecialchars($notificacion['mensaje']); ?></div>
+                    <small class="badge badge-pill badge-light text-muted">
+                      <?php echo date('g:i A - d M Y', strtotime($notificacion['fecha'])); ?>
+                    </small>
+                  </div>
                 </div>
-                <div class="col">
-                  <small><strong>Package has uploaded successfull</strong></small>
-                  <div class="my-0 text-muted small">Package is zipped and uploaded</div>
-                  <small class="badge badge-pill badge-light text-muted">1m ago</small>
-                </div>
-              </div>
-            </div>
-            <div class="list-group-item bg-transparent">
-              <div class="row align-items-center">
-                <div class="col-auto">
-                  <span class="fe fe-download fe-24"></span>
-                </div>
-                <div class="col">
-                  <small><strong>Widgets are updated successfull</strong></small>
-                  <div class="my-0 text-muted small">Just create new layout Index, form, table</div>
-                  <small class="badge badge-pill badge-light text-muted">2m ago</small>
-                </div>
-              </div>
-            </div>
-            <div class="list-group-item bg-transparent">
-              <div class="row align-items-center">
-                <div class="col-auto">
-                  <span class="fe fe-inbox fe-24"></span>
-                </div>
-                <div class="col">
-                  <small><strong>Notifications have been sent</strong></small>
-                  <div class="my-0 text-muted small">Fusce dapibus, tellus ac cursus commodo</div>
-                  <small class="badge badge-pill badge-light text-muted">30m ago</small>
-                </div>
-              </div> <!-- / .row -->
-            </div>
-            <div class="list-group-item bg-transparent">
-              <div class="row align-items-center">
-                <div class="col-auto">
-                  <span class="fe fe-link fe-24"></span>
-                </div>
-                <div class="col">
-                  <small><strong>Link was attached to menu</strong></small>
-                  <div class="my-0 text-muted small">New layout has been attached to the menu</div>
-                  <small class="badge badge-pill badge-light text-muted">1h ago</small>
-                </div>
-              </div>
-            </div> <!-- / .row -->
-          </div> <!-- / .list-group -->
+              </a>
+            <?php endforeach; ?>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
