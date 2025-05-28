@@ -245,6 +245,24 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   $atajos = [
     ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php']
   ];
+} elseif ($tipoUsuarioId === 8) { // Usuario tipo 8
+  $atajos = [
+    ['icon' => 'fe-home', 'color' => 'bg-primary', 'text' => 'Inicio', 'url' => 'index.php'],
+    ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
+    ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
+    ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
+    ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php'],
+    ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php'],
+    ['icon' => 'fe-user', 'color' => 'bg-primary', 'text' => 'Registro de usuarios', 'url' => 'formulario_usuario.php'],
+    ['icon' => 'fe-trending-up', 'color' => 'bg-primary', 'text' => 'Desarrollo academico', 'url' => 'desarrollo_academico_docentes.php'],
+    ['icon' => 'fe-edit', 'color' => 'bg-primary', 'text' => 'Registro de materias', 'url' => 'form_materia.php'],
+    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de carreras', 'url' => 'form_carrera.php'],
+    ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Registro de grupos', 'url' => 'formulario_grupo.php'],
+    ['icon' => 'fe-folder-plus', 'color' => 'bg-primary', 'text' => 'Asignacion de carreras', 'url' => 'form_usuarios-carreras.php'],
+    ['icon' => 'fe-briefcase', 'color' => 'bg-primary', 'text' => 'Registro de escenario', 'url' => 'form_edificio.php'],
+    ['icon' => 'fe-check-square', 'color' => 'bg-primary', 'text' => 'Evaluacion docente', 'url' => 'form_evaluacion.php'],
+  ];
 } else { // Otro tipo de usuario
     $atajos = [
       ['icon' => 'fe-home', 'color' => 'bg-primary', 'text' => 'Inicio', 'url' => 'index.php']
@@ -344,7 +362,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   </div>
 
 
-  <?php if ($tipoUsuarioId === 3 || $tipoUsuarioId === 4 || $tipoUsuarioId === 5): ?>
+  <?php if ($tipoUsuarioId === 3 || $tipoUsuarioId === 4 || $tipoUsuarioId === 5 || $tipoUsuarioId === 8): ?>
     <!-- Filtro de carreras -->
     <div class="card text-center">
         <div class="card-body mt-5">
@@ -365,7 +383,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     <script>
 document.addEventListener("DOMContentLoaded", function() {
     // Solo inicializar el filtro si el usuario tiene permisos
-    <?php if ($tipoUsuarioId === 3 || $tipoUsuarioId === 4 || $tipoUsuarioId === 5): ?>
+    <?php if ($tipoUsuarioId === 3 || $tipoUsuarioId === 4 || $tipoUsuarioId === 5 || $tipoUsuarioId === 8): ?>
     
     const carreraSelect = document.getElementById('carreraSelect');
     const carouselContent = document.getElementById('carouselContent');
@@ -1383,12 +1401,12 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
         <div class="col-md-4">
           <div class="form-group mt-2">
             <label for="usuario_usuario_id">Docente:</label>
-            <select class="form-control" id="usuario_usuario_id" name="usuario_usuario_id" required <?php echo ($tipoUsuarioId != 2 && $tipoUsuarioId != 3 && $tipoUsuarioId != 4 && $tipoUsuarioId != 5) ? 'disabled' : ''; ?>>
+            <select class="form-control" id="usuario_usuario_id" name="usuario_usuario_id" required <?php echo ($tipoUsuarioId != 2 && $tipoUsuarioId != 3 && $tipoUsuarioId != 4 && $tipoUsuarioId != 5 && $tipoUsuarioId != 8) ? 'disabled' : ''; ?>>
               <option value="">Selecciona un docente</option>
               <?php 
               // Obtener lista de usuarios según el tipo de usuario
               $usuarios = [];
-              if ($tipoUsuarioId == 2 || $tipoUsuarioId == 5) { // Jefe de carrera o Dirección
+              if ($tipoUsuarioId == 2 || $tipoUsuarioId == 5 || $tipoUsuarioId == 8) { // Jefe de carrera o Dirección
                 $usuarios = $consultas->obtenerUsuariosPorCarrera($carreraId);
               } elseif ($tipoUsuarioId == 3 || $tipoUsuarioId == 4) { // RH o Desarrollo Académico
                 $usuarios = $consultas->obtenerTodosUsuariosDocentes();
@@ -1409,7 +1427,7 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
         <div class="col-md-4">
           <div class="form-group mt-2">
             <label for="carrera_carrera_id" class="form-label">Carrera:</label>
-            <select class="form-control" id="carrera_carrera_id" name="carrera_carrera_id" required <?php echo ($tipoUsuarioId != 3 && $tipoUsuarioId != 4 && $tipoUsuarioId != 5) ? 'disabled' : ''; ?>>
+            <select class="form-control" id="carrera_carrera_id" name="carrera_carrera_id" required <?php echo ($tipoUsuarioId != 3 && $tipoUsuarioId != 4 && $tipoUsuarioId != 5 && $tipoUsuarioId != 8) ? 'disabled' : ''; ?>>
               <option value="">Selecciona una carrera</option>
               <?php foreach ($carreras as $carrera): ?>
                 <option value="<?php echo $carrera['carrera_id']; ?>" <?= ($carrera['carrera_id'] == $carreraId) ? 'selected' : ''; ?>>
