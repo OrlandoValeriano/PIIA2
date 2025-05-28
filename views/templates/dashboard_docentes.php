@@ -1403,9 +1403,9 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
               <?php 
               // Obtener lista de usuarios según el tipo de usuario
               $usuarios = [];
-              if ($tipoUsuarioId == 2 || $tipoUsuarioId == 5) { // Jefe de carrera o Dirección
+              if ($tipoUsuarioId == 2 || $tipoUsuarioId == 5 ) { // Jefe de carrera o Dirección
                 $usuarios = $consultas->obtenerUsuariosPorCarrera($carreraId);
-              } elseif ($tipoUsuarioId == 3 || $tipoUsuarioId == 4) { // RH o Desarrollo Académico
+              } elseif ($tipoUsuarioId == 3 || $tipoUsuarioId == 4 ) { // RH o Desarrollo Académico
                 $usuarios = $consultas->obtenerTodosUsuariosDocentes();
               } else {
                 // Para otros tipos de usuario, solo mostrar su propio perfil
@@ -1424,7 +1424,7 @@ function actualizarCalendario(fechaInicio, fechaTermino) {
         <div class="col-md-4">
           <div class="form-group mt-2">
             <label for="carrera_carrera_id" class="form-label">Carrera:</label>
-            <select class="form-control" id="carrera_carrera_id" name="carrera_carrera_id" required <?php echo ($tipoUsuarioId != 3 && $tipoUsuarioId != 4 && $tipoUsuarioId != 5) ? 'disabled' : ''; ?>>
+            <select class="form-control" id="carrera_carrera_id" name="carrera_carrera_id" required <?php echo ($tipoUsuarioId != 3 && $tipoUsuarioId != 4 && $tipoUsuarioId != 5 ) ? 'disabled' : ''; ?>>
               <option value="">Selecciona una carrera</option>
               <?php foreach ($carreras as $carrera): ?>
                 <option value="<?php echo $carrera['carrera_id']; ?>" <?= ($carrera['carrera_id'] == $carreraId) ? 'selected' : ''; ?>>
