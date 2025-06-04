@@ -4,6 +4,8 @@ include('../../models/consultas.php');
 include('../../models/session.php');
 include('../../models/accesso_restringido.php');
 include('aside.php');
+require_once '../../views/templates/notificaciones.php';
+
 
 $idusuario = $_SESSION['user_id']; // Asumimos que el ID ya está en la sesión
 

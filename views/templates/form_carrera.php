@@ -4,6 +4,8 @@ include('../../controllers/db.php');
 include('../../models/consultas.php');
 include('../../models/accesso_restringido.php');
 include('aside.php');
+require_once '../../views/templates/notificaciones.php';
+
 
 $consultas = new Consultas($conn);
 $carreras = $consultas->verCarreras();

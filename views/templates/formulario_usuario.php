@@ -508,7 +508,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
                 style="<?php echo $fondo; ?>"
                 data-id="<?php echo $notificacion['id_notificacion']; ?>">
                 <div class="row align-items-center">
-                  <div class="col-auto"><span class="fe fe-box fe-24"></span></div>
+                  <div class="col-auto"><span class="fe fe-bell fe-24"></span></div>
                   <div class="col">
                     <small>
                       <strong><?php echo formatearNombreCompleto($notificacion, $usuario_tipo); ?></strong>
