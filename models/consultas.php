@@ -2412,7 +2412,17 @@ class ActualizarEstado
         var_dump($tipoUsuario);
         var_dump($datos);
 
-        $mensaje = "La incidencia ha sido {$accion} por " . ucfirst($validacion);
+        // Mapear nombres legibles
+        $nombresValidacion = [
+            'division' => 'División Académica',
+            'subdireccion' => 'Subdirección',
+            'rh' => 'Recursos Humanos'
+        ];
+
+        $nombreLegible = $nombresValidacion[$validacion] ?? ucfirst($validacion);
+
+        // Crear el mensaje
+        $mensaje = "La incidencia ha sido {$accion} por {$nombreLegible}";
         var_dump([
             'usuario_id' => $datos['usuario_usuario_id'],
             'carrera_id' => $datos['carrera_carrera_id'],

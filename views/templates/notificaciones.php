@@ -18,8 +18,21 @@ function obtenerNotificaciones($conn, $usuario_id)
     $notificaciones = [];
 
     // Personaliza según tipo de usuario
-    if ($tipo_usuario == 1) {
+    if ($tipo_usuario == 8) {
+        // Usuario tipo 8: ver todas las notificaciones sin filtrar por carrera o tipo
+        $queryNotificaciones = "
+        SELECT n.id_notificacion, n.mensaje, n.fecha, n.vista,
+               u.nombre_usuario, u.apellido_p, u.apellido_m
+        FROM notificaciones n
+        JOIN usuario u ON n.usuario_id = u.usuario_id
+        ORDER BY n.fecha DESC
+    ";
+        $stmtNotif = $conn->prepare($queryNotificaciones);
+        $stmtNotif->execute();
+        $notificaciones = $stmtNotif->fetchAll(PDO::FETCH_ASSOC);
         // Mostrar notificaciones del usuario activo
+    } elseif ($tipo_usuario == 1) {
+        
         $queryNotificaciones = "
             SELECT n.id_notificacion, n.mensaje, n.fecha, n.vista,
                    u.nombre_usuario, u.apellido_p, u.apellido_m
@@ -32,7 +45,7 @@ function obtenerNotificaciones($conn, $usuario_id)
         $stmtNotif->bindParam(':usuario_id', $usuario_id);
         $stmtNotif->execute();
         $notificaciones = $stmtNotif->fetchAll(PDO::FETCH_ASSOC);
-    }elseif ($tipo_usuario == 2) {
+    } elseif ($tipo_usuario == 2) {
         $queryNotificaciones = "
         SELECT n.id_notificacion, n.mensaje, n.fecha, n.vista,
                u.nombre_usuario, u.apellido_p, u.apellido_m
@@ -48,7 +61,7 @@ function obtenerNotificaciones($conn, $usuario_id)
         $stmtNotif->bindParam(':tipo_usuario', $tipo_usuario);
         $stmtNotif->execute();
         $notificaciones = $stmtNotif->fetchAll(PDO::FETCH_ASSOC);
-    }elseif ($tipo_usuario == 3) {
+    } elseif ($tipo_usuario == 3) {
         $queryNotificaciones = "
         SELECT n.id_notificacion, n.mensaje, n.fecha, n.vista,
                u.nombre_usuario, u.apellido_p, u.apellido_m
@@ -60,7 +73,7 @@ function obtenerNotificaciones($conn, $usuario_id)
         $stmtNotif = $conn->prepare($queryNotificaciones);
         $stmtNotif->execute();
         $notificaciones = $stmtNotif->fetchAll(PDO::FETCH_ASSOC);
-    }elseif ($tipo_usuario == 7) {
+    } elseif ($tipo_usuario == 7) {
         $queryNotificaciones = "
         SELECT n.id_notificacion, n.mensaje, n.fecha, n.vista,
                u.nombre_usuario, u.apellido_p, u.apellido_m
@@ -80,13 +93,13 @@ function obtenerNotificaciones($conn, $usuario_id)
 
 function formatearNombreCompleto($usuario, $tipo_usuario)
 {
-    switch ($tipo_usuario) { 
+    switch ($tipo_usuario) {
         case 2: //opcion posible para casos futuros
         default:
             return htmlspecialchars(
                 $usuario['nombre_usuario'] . ' ' .
-                $usuario['apellido_p'] . ' ' .
-                $usuario['apellido_m']
+                    $usuario['apellido_p'] . ' ' .
+                    $usuario['apellido_m']
             );
     }
 }

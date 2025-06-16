@@ -36,29 +36,29 @@ $menuItems = [
         'Formularios' => [
             'Registro de usuarios' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'formulario_usuario.php'],
             'Registro de incidencias' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'form_incidencias.php'],
-            
+
 
 
             'Estado Incidencia' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'validacion_incidencia.php'],
 
             'Estado Incidencia' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'validacion_incidencia.php']
         ]
-       ],
+    ],
 
-       4 => [
+    4 => [
         'Inicio' => ['icon' => 'fe fe-user fe-16', 'link' => 'index.php'],
         'Desarrollo academico' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'desarrollo_academico_docentes.php'],
-       'Formularios' => [
+        'Formularios' => [
             'Registro de materias' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'form_materia.php'],
             'Registro de carreras' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'form_carrera.php'],
             'Registro de grupos' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'formulario_grupo.php'],
             'Asignacion de mas carreras' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'form_usuarios-carreras.php'],
             'Registro de Escenario' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'form_edificio.php'],
-       ],
+        ],
         'Horario' => ['icon' => 'fe fe-file-text fe-16', 'link' => 'form_horario.php']
 
-       ],
-       
+    ],
+
     5 => [
         'Inicio' => ['icon' => 'fe fe-user fe-16', 'link' => 'index.php'],
         'Perfil docente' => ['icon' => 'fe fe-user fe-16', 'link' => 'dashboard_docentes.php'],
@@ -68,36 +68,38 @@ $menuItems = [
             'Desarrollo academico' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'desarrollo_academico_docentes.php'],
             'Recursos Humanos' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'recursos_humanos_empleados.php']
         ],
-        
+
     ],
     6 => [
         'Inicio' => ['icon' => 'fe fe-user fe-16', 'link' => 'index.php']
     ],
 
     7 => [
-            'Inicio' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'index.php'],
-            'Estado Incidencia' => ['icon' => 'fe fe-file-text fe-16', 'link' => 'validacion_incidencia.php']
+        'Inicio' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'index.php'],
+        'Estado Incidencia' => ['icon' => 'fe fe-file-text fe-16', 'link' => 'validacion_incidencia.php']
     ],
-        8 => [
-            'Inicio' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'index.php'],
-            'Dashboard' => [
-                'Perfil docente' => ['icon' => 'fe fe-user fe-16', 'link' => 'dashboard_docentes.php'],
-                'Incidencias' => ['icon' => 'fe fe-file-text fe-16', 'link' => 'form_incidencias.php'],
-                'Estado Incidencia' => ['icon' => 'fe fe-file-text fe-16', 'link' => 'validacion_incidencia.php'],
-                'Carrera' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'dashboard_carreras.php'],
-                'Desarrollo academico' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'desarrollo_academico_docentes.php'],
-                'Recursos Humanos' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'recursos_humanos_empleados.php'],
-                'Registro de materias' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'form_materia.php'],
-                'Registro de carreras' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'form_carrera.php'],
-                'Registro de grupos' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'formulario_grupo.php'],
-                'Asignacion de mas carreras' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'form_usuarios-carreras.php'],
-                'Registro de Escenario' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'form_edificio.php'],
-                'Registro de usuarios' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'formulario_usuario.php'],
-                'Horario' => ['icon' => 'fe fe-file-text fe-16', 'link' => 'form_horario.php'],
-                'Evaluacion Docente' => ['icon' => 'fe fe-file-text fe-16', 'link' => 'form_evaluacion.php']
-            ]
-        ]
-        
+    8 => [
+        'Inicio' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'index.php'],
+        'Dashboard' => [
+            'Docentes' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'dashboard_docentes.php'],
+            'Carrera' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'dashboard_carreras.php'],
+            'Desarrollo academico' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'desarrollo_academico_docentes.php'],
+            'Recursos Humanos' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'recursos_humanos_empleados.php']
+        ],
+        'Formularios' => [
+            'Registro de materias' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'form_materia.php'],
+            'Registro de carreras' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'form_carrera.php'],
+            'Registro de grupos' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'formulario_grupo.php'],
+            'Asignacion de mas carreras' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'form_usuarios-carreras.php'],
+            'Registro de edificios' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'form_edificio.php'],
+            'Registro de usuarios' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'formulario_usuario.php'],
+            'Registro de incidencias' => ['icon' => 'fe fe-calendar fe-16', 'link' => 'form_incidencias.php'],
+        ],
+        'Estado Incidencia' => ['icon' => 'fe fe-file-text fe-16', 'link' => 'validacion_incidencia.php'],
+        'Horario' => ['icon' => 'fe fe-file-text fe-16', 'link' => 'form_horario.php'],
+        'Evaluacion Docente' => ['icon' => 'fe fe-file-text fe-16', 'link' => 'form_evaluacion.php']
+    ]
+
 ];
 
 // Verificar si $tipoUsuarioId es un valor válido (un número entero)
@@ -157,4 +159,3 @@ $asideContent .= '</ul></nav></aside>'; // Cierra las etiquetas del aside y nav
 
 // Output the aside content
 echo $asideContent;
-?>

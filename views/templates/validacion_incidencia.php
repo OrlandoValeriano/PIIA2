@@ -356,16 +356,16 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
                                 <!-- Validaciones -->
                                 <td class="text-center">
                                   <?php $statusClass = getStatusClass($incidencia['validacion_division_academica']); ?>
-                                  <span class="status-color <?= $statusClass; ?>" <?php if ($usuario_tipo == 2): ?>
+                                  <span class="status-color <?= $statusClass; ?>" <?php if ($usuario_tipo == 2 || $usuario_tipo == 8 ): ?>
                                     onclick="validarIncidencia(this)"
-                                    data-incidencia-id="<?= $incidencia['incidencia_has_usuario_id']; ?>"
+                                    data-incidencia-id="<?= $incidencia['id_incidencia_has_usuario']; ?>"
                                     data-validacion="division" <?php endif; ?>>
                                   </span>
                                 </td>
 
                                 <td class="text-center">
                                   <?php $statusClass = getStatusClass($incidencia['validacion_subdireccion']); ?>
-                                  <span class="status-color <?= $statusClass; ?>" <?php if ($usuario_tipo == 7): ?>
+                                  <span class="status-color <?= $statusClass; ?>" <?php if ($usuario_tipo == 7 || $usuario_tipo == 8 ): ?>
                                     onclick="validarIncidencia(this)"
                                     data-incidencia-id="<?= $incidencia['id_incidencia_has_usuario']; ?>"
                                     data-validacion="subdireccion" <?php endif; ?>>
@@ -374,11 +374,12 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
 
                                 <td class="text-center">
                                   <?php $statusClass = getStatusClass($incidencia['validacion_rh']); ?>
-                                  <span class="status-color <?= $statusClass; ?>" <?php if ($usuario_tipo == 3): ?>
+                                  <span class="status-color <?= $statusClass; ?>" <?php if ($usuario_tipo == 3 || $usuario_tipo == 8 ): ?>
                                     onclick="validarIncidencia(this)"
                                     data-incidencia-id="<?= $incidencia['id_incidencia_has_usuario']; ?>"
                                     data-validacion="rh" <?php endif; ?>>
                                   </span>
+                                  
                                 </td>
 
                                 <!-- Estado final -->
