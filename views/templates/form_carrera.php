@@ -6,6 +6,7 @@ include('../../models/accesso_restringido.php');
 include('aside.php');
 require_once '../../views/templates/notificaciones.php';
 
+
 $consultas = new Consultas($conn);
 $carreras = $consultas->verCarreras();
 if (isset($_POST['logout'])) {
