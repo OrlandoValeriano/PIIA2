@@ -889,8 +889,8 @@ public function obtenerNombreCarreraPorId($carreraId) {
     
         
     public function obtenerDocentesPorCarrera($carrera_id) {
-        // Consulta para obtener usuarios asociados a una carrera específica
-        $query = "SELECT 
+    $query = "
+      SELECT 
         u.usuario_id,
         CONCAT(u.nombre_usuario, ' ', u.apellido_p, ' ', u.apellido_m) AS nombre_completo,
         u.edad,
@@ -905,24 +905,27 @@ public function obtenerNombreCarreraPorId($carreraId) {
         u.tipo_usuario_tipo_usuario_id,
         u.cuerpo_colegiado_cuerpo_colegiado_id,
         u.carrera_carrera_id,
-        c.carrera_id,
         c.nombre_carrera 
       FROM 
         vista_usuarios u
       JOIN 
         carrera c ON u.carrera_carrera_id = c.carrera_id
       WHERE 
-        c.carrera_id = :carrera_id AND u.tipo_usuario_tipo_usuario_id = 1"; // Filtra por tipo_usuario = 1 (docente)
+        c.carrera_id = :carrera_id 
+        AND u.tipo_usuario_tipo_usuario_id = 1
+    ";
 
-$stmt = $this->conn->prepare($query);
-$stmt->bindParam(':carrera_id', $carrera_id, PDO::PARAM_INT); // Enlazamos el parámetro
-try {
-$stmt->execute(); // Ejecutamos la consulta
-return $stmt->fetchAll(PDO::FETCH_ASSOC); // Devolvemos los resultados como un array asociativo
-} catch (PDOException $e) {
-return ['error' => 'Error en la consulta: ' . $e->getMessage()]; // Devolvemos el error
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':carrera_id', $carrera_id, PDO::PARAM_INT);
+
+    try {
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        return ['error' => 'Error en la consulta: ' . $e->getMessage()];
+    }
 }
-}
+
 
 public function obtenerEvaluacionesPorDocenteYPeriodo($usuario_id, $periodo_id) {
     // Consulta para obtener las evaluaciones de un docente en un periodo específico
