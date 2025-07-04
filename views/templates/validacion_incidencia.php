@@ -4,16 +4,18 @@ include('../../controllers/db.php');
 include('../../models/consultas.php');
 include('../../models/accesso_restringido.php');
 include('aside.php');
+require_once '../../views/templates/notificaciones.php';
 
 if (isset($_POST['logout'])) {
   $sessionManager->logoutAndRedirect('../templates/auth-login.php');
 }
 
 $conn = $database->getConnection();
-$consultas = new Consultas($conn);
-
+$consultas = new Consultas($conn); 
 // Obtener el ID del usuario actual y su tipo
-$idusuario = (int) $_SESSION['user_id'];
+$idusuario = (int) $_SESSION['user_id']; 
+// Obtener notificaciones segun el tipo de usuario
+$notificaciones = obtenerNotificaciones($conn, $idusuario);
 // Obtener el tipo de usuario
 $usuario_tipo = $consultas->obtenerTipoUsuarioPorId($idusuario);
 
@@ -138,7 +140,8 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de carreras', 'url' => 'form_carrera.php'],
     ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Registro de grupos', 'url' => 'formulario_grupo.php'],
     ['icon' => 'fe-folder-plus', 'color' => 'bg-primary', 'text' => 'Asignacion de carreras', 'url' => 'form_usuarios-carreras.php'],
-    ['icon' => 'fe-briefcase', 'color' => 'bg-primary', 'text' => 'Registro de escenario', 'url' => 'form_edificio.php']
+    ['icon' => 'fe-briefcase', 'color' => 'bg-primary', 'text' => 'Registro de escenario', 'url' => 'form_edificio.php'],
+    ['icon' => 'fe-check-square', 'color' => 'bg-primary', 'text' => 'Evaluacion docente', 'url' => 'form_evaluacion.php'],
   ];
 } else { // Otro tipo de usuario
   $atajos = [
@@ -353,16 +356,16 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
                                 <!-- Validaciones -->
                                 <td class="text-center">
                                   <?php $statusClass = getStatusClass($incidencia['validacion_division_academica']); ?>
-                                  <span class="status-color <?= $statusClass; ?>" <?php if ($usuario_tipo == 2): ?>
+                                  <span class="status-color <?= $statusClass; ?>" <?php if ($usuario_tipo == 2 || $usuario_tipo == 8 ): ?>
                                     onclick="validarIncidencia(this)"
-                                    data-incidencia-id="<?= $incidencia['incidencia_has_usuario_id']; ?>"
+                                    data-incidencia-id="<?= $incidencia['id_incidencia_has_usuario']; ?>"
                                     data-validacion="division" <?php endif; ?>>
                                   </span>
                                 </td>
 
                                 <td class="text-center">
                                   <?php $statusClass = getStatusClass($incidencia['validacion_subdireccion']); ?>
-                                  <span class="status-color <?= $statusClass; ?>" <?php if ($usuario_tipo == 7): ?>
+                                  <span class="status-color <?= $statusClass; ?>" <?php if ($usuario_tipo == 7 || $usuario_tipo == 8 ): ?>
                                     onclick="validarIncidencia(this)"
                                     data-incidencia-id="<?= $incidencia['id_incidencia_has_usuario']; ?>"
                                     data-validacion="subdireccion" <?php endif; ?>>
@@ -371,11 +374,12 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
 
                                 <td class="text-center">
                                   <?php $statusClass = getStatusClass($incidencia['validacion_rh']); ?>
-                                  <span class="status-color <?= $statusClass; ?>" <?php if ($usuario_tipo == 3): ?>
+                                  <span class="status-color <?= $statusClass; ?>" <?php if ($usuario_tipo == 3 || $usuario_tipo == 8 ): ?>
                                     onclick="validarIncidencia(this)"
                                     data-incidencia-id="<?= $incidencia['id_incidencia_has_usuario']; ?>"
                                     data-validacion="rh" <?php endif; ?>>
                                   </span>
+                                  
                                 </td>
 
                                 <!-- Estado final -->
@@ -415,44 +419,6 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     </div>
   </div>
 
-  <!-- MODAL DE NOTIFICACIONES -->
-  <?php
-  $usuario_id = $_SESSION['user_id'];
-
-  // Obtener carrera y tipo del usuario actual
-  $queryUsuario = "
-  SELECT carrera_carrera_id, tipo_usuario_tipo_usuario_id
-  FROM usuario
-  WHERE usuario_id = :usuario_id
-";
-  $stmtUsuario = $conn->prepare($queryUsuario);
-  $stmtUsuario->bindParam(':usuario_id', $usuario_id);
-  $stmtUsuario->execute();
-  $usuario = $stmtUsuario->fetch(PDO::FETCH_ASSOC);
-
-  $carrera_id = $usuario['carrera_carrera_id'];
-  $tipo_usuario = $usuario['tipo_usuario_tipo_usuario_id'];
-
-  $notificaciones = [];
-
-  if ($tipo_usuario == 2) {
-    $queryNotificaciones = "
-    SELECT n.id_notificacion, n.mensaje, n.fecha, n.vista, u.nombre_usuario, u.apellido_p, u.apellido_m
-FROM notificaciones n
-JOIN usuario u ON n.usuario_id = u.usuario_id
-WHERE n.carrera_id = :carrera_id
-ORDER BY n.fecha DESC
-
-  ";
-    $stmtNotif = $conn->prepare($queryNotificaciones);
-    $stmtNotif->bindParam(':carrera_id', $carrera_id);
-    $stmtNotif->execute();
-    $notificaciones = $stmtNotif->fetchAll(PDO::FETCH_ASSOC);
-  }
-  ?>
-
-
-
   <!-- Modal de notificaciones -->
   <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">
@@ -469,7 +435,7 @@ ORDER BY n.fecha DESC
               <?php
               $fondo = $notificacion['vista'] == 0 ? 'background-color: #CAE1C9' : '';
               ?>
-              <a href="javascript:void(0);"
+              <a href="marcar_vista.php?id=<?php echo $notificacion['id_notificacion']; ?>"
                 class="list-group-item text-reset text-decoration-none"
                 style="<?php echo $fondo; ?>"
                 data-id="<?php echo $notificacion['id_notificacion']; ?>">
@@ -477,14 +443,7 @@ ORDER BY n.fecha DESC
                   <div class="col-auto"><span class="fe fe-box fe-24"></span></div>
                   <div class="col">
                     <small>
-                      <strong>
-                        <?php
-                        echo htmlspecialchars(
-                          $notificacion['nombre_usuario'] . ' ' .
-                            $notificacion['apellido_p'] . ' ' .
-                            $notificacion['apellido_m']
-                        );
-                        ?>
+                      <strong><?php echo formatearNombreCompleto($notificacion, $usuario_tipo); ?></strong>
                       </strong>
                     </small>
                     <div class="my-0 text-muted small"><?php echo htmlspecialchars($notificacion['mensaje']); ?></div>
@@ -494,12 +453,9 @@ ORDER BY n.fecha DESC
                   </div>
                 </div>
               </a>
-
             <?php endforeach; ?>
           </div>
         </div>
-
-
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
         </div>
@@ -599,6 +555,7 @@ ORDER BY n.fecha DESC
       }).then((result) => {
         if (result.isConfirmed) {
           actualizarIncidencia(incidenciaId, validacion, 1); // Estado 1: Aceptar
+
         } else if (result.isDenied) {
           actualizarIncidencia(incidenciaId, validacion, 2); // Estado 2: Rechazar
         }

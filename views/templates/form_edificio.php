@@ -4,6 +4,8 @@ include('../../models/consultas.php');
 include('../../models/session.php');
 include('../../models/accesso_restringido.php');
 include('aside.php');
+require_once '../../views/templates/notificaciones.php';
+
 
 $idusuario = $_SESSION['user_id']; // Asumimos que el ID ya está en la sesión
 
@@ -11,6 +13,10 @@ $imgUser  = $consultas->obtenerImagen($idusuario);
 
 // Inicializa la respuesta por defecto
 $response = ['status' => 'error', 'message' => ''];
+// Obtener notificaciones segun el tipo de usuario
+$notificaciones = obtenerNotificaciones($conn, $idusuario);
+// Obtener el tipo de usuario
+$usuario_tipo = $consultas->obtenerTipoUsuarioPorId($idusuario);
 
 // Intenta conectar a la base de datos
 try {
@@ -107,7 +113,8 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de carreras', 'url' => 'form_carrera.php'],
     ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Registro de grupos', 'url' => 'formulario_grupo.php'],
     ['icon' => 'fe-folder-plus', 'color' => 'bg-primary', 'text' => 'Asignacion de carreras', 'url' => 'form_usuarios-carreras.php'],
-    ['icon' => 'fe-briefcase', 'color' => 'bg-primary', 'text' => 'Registro de escenario', 'url' => 'form_edificio.php']
+    ['icon' => 'fe-briefcase', 'color' => 'bg-primary', 'text' => 'Registro de escenario', 'url' => 'form_edificio.php'],
+    ['icon' => 'fe-check-square', 'color' => 'bg-primary', 'text' => 'Evaluacion docente', 'url' => 'form_evaluacion.php'],
   ];
 } else { // Otro tipo de usuario
   $atajos = [

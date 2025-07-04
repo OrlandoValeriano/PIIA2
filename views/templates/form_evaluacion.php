@@ -4,6 +4,7 @@ include('../../controllers/db.php');
 include('../../models/consultas.php');
 include('../../models/accesso_restringido.php');
 include('aside.php');
+require_once '../../views/templates/notificaciones.php';
 
 $idusuario = $_SESSION['user_id']; // Asumimos que el ID ya está en la sesión
 
@@ -11,6 +12,10 @@ $imgUser  = $consultas->obtenerImagen($idusuario);
 
 // Inicializa la respuesta por defecto
 $response = ['status' => 'error', 'message' => ''];
+// Obtener notificaciones segun el tipo de usuario
+$notificaciones = obtenerNotificaciones($conn, $idusuario);
+// Obtener el tipo de usuario
+$usuario_tipo = $consultas->obtenerTipoUsuarioPorId($idusuario);
 
 // Intenta conectar a la base de datos
 try {
@@ -205,7 +210,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
             </span>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#"><i class="fas fa-user"></i> Profile</a>
+            <a a class="dropdown-item" href="Perfil.php"><i class="fas fa-user"></i> Profile</a>
             <a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Settings</a>
             <a class="dropdown-item" href="#"><i class="fas fa-tasks"></i> Activities</a>
             <form method="POST" action="" id="logoutForm">
@@ -215,6 +220,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
         </li>
       </ul>
     </nav>
+<<<<<<< HEAD
   </div>
   <main role="main" class="main-content">
     <div class="container-fluid box-shadow-div p-5 mt-5">
@@ -235,8 +241,15 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
                   </option>
                 <?php endforeach; ?>
               </select>
+=======
+    <main role="main" class="main-content mt-5">
+      <div class="container-fluid mt-5  box-shadow-div p-5">
+            <div class="mb-3 font-weight-bold bg-success text-white rounded p-3 box-shadow-div-profile cont-div">
+              Promedio de Calificaciones
+>>>>>>> cd2a0cb83a2d1ee93ce88c8840ffd26f52cc208b
             </div>
 
+<<<<<<< HEAD
             <div class="form-group">
               <label for="periodo_periodo_id" class="form-label-custom">Periodo:</label>
               <select class="form-control" id="periodo_periodo_id" name="periodo_periodo_id" required onchange="filtrarUsuariosPorCarrera()">
@@ -303,6 +316,76 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
               var evaluacionEstudiantil = docente.evaluacion_estudiantil || "00.0";
 
               var row = `
+=======
+              <div class="form-group">
+                <label for="periodo_periodo_id" class="form-label-custom">Periodo:</label>
+                <select class="form-control" id="periodo_periodo_id" name="periodo_periodo_id" required onchange="filtrarUsuariosPorCarrera()">
+                  <option value="">Selecciona un periodo</option>
+                  <?php foreach ($periodos as $periodo): ?>
+                    <option value="<?php echo $periodo['periodo_id']; ?>"><?php echo htmlspecialchars($periodo['descripcion']); ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+
+
+                    <div class="table-responsive">
+                    <table class="table table-bordered" id="docentes-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre del Docente</th>
+                                <th>Evaluación TECNM</th>
+                                <th>Evaluación Estudiantil</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="docentes-table-body">
+                        <!-- Las filas se llenan dinámicamente -->
+                        </tbody>
+                            </table>
+                        </div>
+                    </div> <!-- /.col -->
+                </div> <!-- /.row -->
+                </div> <!-- /.container-fluid -->
+            </div> <!-- /.container-fluid -->
+    </main>
+
+<!-- Contenedor de Promedio de Calificaciones -->
+
+          
+          <script>
+function filtrarUsuariosPorCarrera() {
+    var carrera_id = document.getElementById("carrera_carrera_id").value;
+    var periodo_id = document.getElementById("periodo_periodo_id").value; // Obtener el valor del periodo
+
+          if (carrera_id === "" || periodo_id === "") {
+            document.querySelector("#docentes-table-body").innerHTML = ""; // Vacía la tabla si no hay selección
+            return;
+          }
+
+          fetch('../../models/obtener_docentes.php', {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+              },
+              body: `carrera_id=${carrera_id}&periodo_id=${periodo_id}` // Incluye el periodo en la solicitud
+            })
+            .then(response => response.json())
+            .then(data => {
+              var tbody = document.querySelector("#docentes-table-body");
+              tbody.innerHTML = ""; // Limpiar tabla antes de agregar nuevas filas
+
+              if (data.error) {
+                tbody.innerHTML = `<tr><td colspan="4">${data.error}</td></tr>`;
+                return;
+              }
+
+              data.forEach(docente => {
+                // Obtener las evaluaciones previas (si existen)
+                var evaluacionTecnm = docente.evaluacion_tecnm || "00.0";
+                var evaluacionEstudiantil = docente.evaluacion_estudiantil || "00.0";
+
+                var row = `
+>>>>>>> cd2a0cb83a2d1ee93ce88c8840ffd26f52cc208b
 <tr>
     <td>${docente.nombre_completo}</td>
     <td>
@@ -323,6 +406,7 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     </td>
 </tr>
 `;
+<<<<<<< HEAD
               tbody.innerHTML += row;
             });
           })
@@ -459,10 +543,125 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
                   </a>
                 </div>
               <?php endforeach; ?>
+=======
+                tbody.innerHTML += row;
+              });
+            })
+            .catch(error => console.error("Error al obtener docentes:", error));
+        }
+
+
+
+        function actualizarInputs(btn) {
+          // Previene el envío del formulario
+          event.preventDefault();
+
+          var row = btn.closest("tr");
+          var periodoValue = document.getElementById("periodo_periodo_id").value;
+          row.querySelector("#periodo_periodo_id_value").value = periodoValue;
+          row.querySelector(".input-tecnm").value = row.querySelector(".evaluacionTECNM").value;
+          row.querySelector(".input-estudiantil").value = row.querySelector(".evaluacionEstudiantil").value;
+
+          // Validación opcional
+          if (row.querySelector(".evaluacionTECNM").value === "00.0" ||
+            row.querySelector(".evaluacionEstudiantil").value === "00.0") {
+            Swal.fire({
+              icon: 'warning',
+              title: 'Advertencia',
+              text: 'Asegúrate de ingresar una evaluación válida antes de guardar.',
+              allowOutsideClick: false,
+            });
+            return false;
+          }
+
+          // Muestra el SweetAlert que el usuario cierra manualmente
+          Swal.fire({
+            icon: 'success',
+            title: '¡Registro exitoso!',
+            text: 'Se ha registrado con éxito.',
+            allowOutsideClick: false,
+            confirmButtonText: 'Cerrar',
+          }).then(() => {
+            // Enviar formulario después de mostrar SweetAlert
+            btn.closest("form").submit();
+          });
+
+          return false; // Impide envío automático
+        }
+      </script>
+
+
+      <!-- Modal de notificaciones -->
+      <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="defaultModalLabel">Notifications</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="list-group list-group-flush my-n3">
+                <?php foreach ($notificaciones as $notificacion): ?>
+                  <?php
+                  $fondo = $notificacion['vista'] == 0 ? 'background-color: #CAE1C9' : '';
+                  ?>
+                  <a href="marcar_vista.php?id=<?php echo $notificacion['id_notificacion']; ?>"
+                    class="list-group-item text-reset text-decoration-none"
+                    style="<?php echo $fondo; ?>"
+                    data-id="<?php echo $notificacion['id_notificacion']; ?>">
+                    <div class="row align-items-center">
+                      <div class="col-auto"><span class="fe fe-box fe-24"></span></div>
+                      <div class="col">
+                        <small>
+                          <strong><?php echo formatearNombreCompleto($notificacion, $usuario_tipo); ?></strong>
+                          </strong>
+                        </small>
+                        <div class="my-0 text-muted small"><?php echo htmlspecialchars($notificacion['mensaje']); ?></div>
+                        <small class="badge badge-pill badge-light text-muted">
+                          <?php echo date('g:i A - d M Y', strtotime($notificacion['fecha'])); ?>
+                        </small>
+                      </div>
+                    </div>
+                  </a>
+                <?php endforeach; ?>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
             </div>
           </div>
         </div>
       </div>
+      <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body px-5">
+              <div class="row align-items-center justify-content-start">
+                <?php foreach ($atajos as $atajo): ?>
+                  <div class="col-6 text-center">
+                    <a href="<?= $atajo['url'] ?>" class="text-decoration-none">
+                      <div class="squircle justify-content-center">
+                        <i class="fe <?= $atajo['icon'] ?> fe-32 align-self-center text-white"></i>
+                      </div>
+                      <p class="letra-atajo"><?= htmlspecialchars($atajo['text']) ?></p>
+                    </a>
+                  </div>
+                <?php endforeach; ?>
+              </div>
+>>>>>>> cd2a0cb83a2d1ee93ce88c8840ffd26f52cc208b
+            </div>
+          </div>
+        </div>
+      </div>
+<<<<<<< HEAD
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -536,6 +735,80 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
       gtag('js', new Date());
       gtag('config', 'UA-56159088-1');
     </script>
+=======
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+      <!-- DataTables JS -->
+      <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+      <!-- DataTables Bootstrap4 JS -->
+      <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+
+      <!-- SmartWizard JS -->
+      <script src="js/form_usuario.js"></script>
+      <script src="js/jquery.smartWizard.min.js"></script>
+
+      <!-- Otros scripts -->
+      <script src="js/bootstrap.bundle.min.js"></script>
+      <script src="js/popper.min.js"></script>
+      <script src="js/moment.min.js"></script>
+      <script src="js/simplebar.min.js"></script>
+      <script src='js/daterangepicker.js'></script>
+      <script src='js/jquery.stickOnScroll.js'></script>
+      <script src="js/tinycolor-min.js"></script>
+      <script src="js/config.js"></script>
+      <script src='js/jquery.mask.min.js'></script>
+      <script src='js/select2.min.js'></script>
+      <script src='js/jquery.steps.min.js'></script>
+      <script src='js/jquery.validate.min.js'></script>
+      <script src='js/jquery.timepicker.js'></script>|
+      <script src='js/dropzone.min.js'></script>
+      <script src='js/uppy.min.js'></script>
+      <script src='js/quill.min.js'></script>
+      <script src='js/apps.js'></script>
+
+      <script>
+        $(function() {
+          $('#dataTable-1').DataTable({
+            "responsive": true,
+            "autoWidth": false,
+            "pageLength": 10,
+            "language": {
+              "decimal": "",
+              "emptyTable": "No hay usuarios",
+              "info": "Mostrando _START_ a _END_ de _TOTAL_ usuarios",
+              "infoEmpty": "Mostrando 0 a 0 de 0 Saldos",
+              "thousands": ",",
+              "lengthMenu": "Mostrar  _MENU_ usuarios",
+              "loadingRecords": "Cargando...",
+              "processing": "Procesando...",
+              "search": "Buscador de usuarios",
+              "zeroRecords": "Sin resultados encontrados",
+              "paginate": {
+                "first": "Primero",
+                "last": "Último",
+                "next": "Siguiente",
+                "previous": "Anterior"
+              }
+            },
+            // Define la opción lengthMenu
+            "lengthMenu": [
+              [16, 32, 64, -1],
+              [16, 32, 64, "Todos"]
+            ]
+          });
+        });
+      </script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'UA-56159088-1');
+      </script>
+>>>>>>> cd2a0cb83a2d1ee93ce88c8840ffd26f52cc208b
 
 </body>
 

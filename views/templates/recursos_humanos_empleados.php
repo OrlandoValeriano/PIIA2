@@ -4,12 +4,14 @@ include('../../controllers/db.php'); // Conexión a la base de datos
 include('../../models/consultas.php'); // Incluir la clase de consultas
 include('../../models/accesso_restringido.php');
 include('aside.php');
-
+require_once '../../views/templates/notificaciones.php';
 // Crear instancia de Consultas
 $consultas = new Consultas($conn);
 
 // Obtener el ID del usuario actual y el tipo de usuario desde la sesión
 $idusuario = (int) $_SESSION['user_id'];
+// Obtener notificaciones segun el tipo de usuario
+$notificaciones = obtenerNotificaciones($conn, $idusuario);
 $tipoUsuarioId = $consultas->obtenerTipoUsuarioPorId($idusuario);
 $imgUser  = $consultas->obtenerImagen($idusuario);
 
@@ -158,11 +160,9 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   $atajos = [
     ['icon' => 'fe-home', 'color' => 'bg-primary', 'text' => 'Inicio', 'url' => 'index.php'],
     ['icon' => 'fe-x-circle', 'color' => 'bg-primary', 'text' => 'Estado de incidencias', 'url' => 'validacion_incidencia.php'],
-    ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
     ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
     ['icon' => 'fe-coffee', 'color' => 'bg-primary', 'text' => 'Docentes', 'url' => 'dashboard_docentes.php'],
     ['icon' => 'fe-clipboard', 'color' => 'bg-primary', 'text' => 'Carrera', 'url' => 'dashboard_carreras.php'],
-    ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Incidencias', 'url' => 'form_incidencias.php'],
     ['icon' => 'fe-calendar', 'color' => 'bg-primary', 'text' => 'Horario', 'url' => 'form_horario.php'],
     ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Recursos humanos', 'url' => 'recursos_humanos_empleados.php'],
     ['icon' => 'fe-user', 'color' => 'bg-primary', 'text' => 'Registro de usuarios', 'url' => 'formulario_usuario.php'],
@@ -171,7 +171,8 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     ['icon' => 'fe-folder-minus', 'color' => 'bg-primary', 'text' => 'Registro de carreras', 'url' => 'form_carrera.php'],
     ['icon' => 'fe-users', 'color' => 'bg-primary', 'text' => 'Registro de grupos', 'url' => 'formulario_grupo.php'],
     ['icon' => 'fe-folder-plus', 'color' => 'bg-primary', 'text' => 'Asignacion de carreras', 'url' => 'form_usuarios-carreras.php'],
-    ['icon' => 'fe-briefcase', 'color' => 'bg-primary', 'text' => 'Registro de escenario', 'url' => 'form_edificio.php']
+    ['icon' => 'fe-briefcase', 'color' => 'bg-primary', 'text' => 'Registro de escenario', 'url' => 'form_edificio.php'],
+    ['icon' => 'fe-check-square', 'color' => 'bg-primary', 'text' => 'Evaluacion docente', 'url' => 'form_evaluacion.php'],
   ];
 } else { // Otro tipo de usuario
   $atajos = [
@@ -818,6 +819,50 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
           </div>
 
           <!-- Modal de Shortcuts -->
+          <!-- Modal de notificaciones -->
+          <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="defaultModalLabel">Notifications</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="list-group list-group-flush my-n3">
+                    <?php foreach ($notificaciones as $notificacion): ?>
+                      <?php
+                      $fondo = $notificacion['vista'] == 0 ? 'background-color: #CAE1C9' : '';
+                      ?>
+                      <a href="marcar_vista.php?id=<?php echo $notificacion['id_notificacion']; ?>"
+                        class="list-group-item text-reset text-decoration-none"
+                        style="<?php echo $fondo; ?>"
+                        data-id="<?php echo $notificacion['id_notificacion']; ?>">
+                        <div class="row align-items-center">
+                          <div class="col-auto"><span class="fe fe-box fe-24"></span></div>
+                          <div class="col">
+                            <small>
+                              <strong><?php echo formatearNombreCompleto($notificacion, $tipoUsuarioId); ?></strong>
+                              </strong>
+                            </small>
+                            <div class="my-0 text-muted small"><?php echo htmlspecialchars($notificacion['mensaje']); ?></div>
+                            <small class="badge badge-pill badge-light text-muted">
+                              <?php echo date('g:i A - d M Y', strtotime($notificacion['fecha'])); ?>
+                            </small>
+                          </div>
+                        </div>
+                      </a>
+                    <?php endforeach; ?>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
