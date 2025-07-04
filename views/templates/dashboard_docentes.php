@@ -1118,92 +1118,76 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
               <div class="card-body">
                 <h2 class="font-weight-bold mb-4">Calificación promedio</h2>
                 <h1 class="text-success mb-3"><?php echo $promedioGeneral; ?></h1>
-
-            // Ajustar el tamaño del canvas
-            document.getElementById('evaluacionChart').style.height = '500px';
-            document.getElementById('evaluacionChart').style.width = '100%';
-        }
-    </script>
-</div>
-
-          <div class="container-fluid mt-0">
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="d-flex flex-column">
-                <div class="card box-shadow-div text-center border-5 mt-1 mb-1">
-                  <div class="card-body">
-                      <h2 class="font-weight-bold mb-4">Calificación promedio</h2>
-                      <h1 class="text-success mb-3"><?php echo $promedioGeneral; ?></h1>
-                  </div>
               </div>
-              <div class="card box-shadow-div text-center border-5 mt-5 mb-5">
-    <div class="card-body">
-        <h2 class="font-weight-bold mb-4">Grupo tutor</h2>
-        <h1 class="text-success mb-3"><?php echo $nombreGrupo; ?></h1>
-    </div>
-</div>
+            </div>
+            <div class="card box-shadow-div text-center border-5 mt-5 mb-5">
+              <div class="card-body">
+                <h2 class="font-weight-bold mb-4">Grupo tutor</h2>
+                <h1 class="text-success mb-3"><?php echo $nombreGrupo; ?></h1>
+              </div>
+            </div>
 
-<div class="card box-shadow-div text-center border-5 mt-3 mb-3">
-    <div class="card-body">
-        <h2 class="font-weight-bold mb-4">Día de tutoría</h2>
-        <h1 class="text-success mb-3"><?php echo $diaTutoria; ?></h1>
-    </div>
-</div>
+            <div class="card box-shadow-div text-center border-5 mt-3 mb-3">
+              <div class="card-body">
+                <h2 class="font-weight-bold mb-4">Día de tutoría</h2>
+                <h1 class="text-success mb-3"><?php echo $diaTutoria; ?></h1>
               </div>
-              </div>
+            </div>
+          </div>
+        </div>
       <!--------Inicio de la tabla ---------->
       <div class="col-lg-6">
-          <div class="card box-shadow-div text-center border-5 mt-1">
-              <div class="card-body">
-                  <div class="d-flex justify-content-center align-items-center mb-3">
-                      <p class="titulo-grande"><strong>Capacitación disciplinaria</strong></p>
-                  </div>
-                  <div class="table-responsive">
-                      <table class="table datatables" id="dataTable-certificaciones">
-                          <thead>
-                              <tr>
-                                  <th>Certificación</th>
-                                  <th>Nombre del Certificado</th>
-                                  <th>Mes</th> <!-- Nueva columna para los meses -->
-                                  <th>Certificado</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <?php if (!empty($certificacionesusuarios)): ?>
-                                  <?php foreach ($certificacionesusuarios as $certificacionusuario): ?>
-                                      <tr>
-                                          <td class="cert-text"><?php echo htmlspecialchars($certificacionusuario['certificacion_descripcion']); ?></td>
-                                          <td class="cert-text"><?php echo htmlspecialchars($certificacionusuario['nombre_certificado']); ?></td>
-                                          <td class="cert-text"><?php echo htmlspecialchars($certificacionusuario['nombre_mes']); ?></td>
-                                          <td class="text-center">
-                                              <?php if (!empty($certificacionusuario['url'])): ?>
-                                                  <?php
-                                                  $correctFilePath = str_replace('views/', '', $certificacionusuario['url']);
-                                                  ?>
-                                                  <a href="<?php echo $correctFilePath; ?>" target="_blank" class="btn btn-sm btn-primary">Ver Certificado</a>
-                                              <?php else: ?>
-                                                  No disponible
-                                              <?php endif; ?>
-                                          </td>
-                                      </tr>
-                                  <?php endforeach; ?>
-                              <?php else: ?>
-                                  <tr>
-                                      <td colspan="4" class="text-center text-muted">No hay certificaciones disponibles</td>
-                                  </tr>
-                              <?php endif; ?>
-                          </tbody>
-                      </table>
-                  </div>
-              </div>
+        <div class="card box-shadow-div text-center border-5 mt-1">
+          <div class="card-body">
+            <div class="d-flex justify-content-center align-items-center mb-3">
+                <p class="titulo-grande"><strong>Capacitación disciplinaria</strong></p>
+            </div>
+            <div class="table-responsive">
+              <table class="table datatables" id="dataTable-certificaciones">
+                <thead>
+                  <tr>
+                    <th>Certificación</th>
+                    <th>Nombre del Certificado</th>
+                    <th>Mes</th> <!-- Nueva columna para los meses -->
+                    <th>Certificado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php if (!empty($certificacionesusuarios)): ?>
+                    <?php foreach ($certificacionesusuarios as $certificacionusuario): ?>
+                      <tr>
+                        <td class="cert-text"><?php echo htmlspecialchars($certificacionusuario['certificacion_descripcion']); ?></td>
+                        <td class="cert-text"><?php echo htmlspecialchars($certificacionusuario['nombre_certificado']); ?></td>
+                        <td class="cert-text"><?php echo htmlspecialchars($certificacionusuario['nombre_mes']); ?></td>
+                        <td class="text-center">
+                          <?php if (!empty($certificacionusuario['url'])): ?>
+                              <?php
+                              $correctFilePath = str_replace('views/', '', $certificacionusuario['url']);
+                              ?>
+                              <a href="<?php echo $correctFilePath; ?>" target="_blank" class="btn btn-sm btn-primary">Ver Certificado</a>
+                          <?php else: ?>
+                              No disponible
+                          <?php endif; ?>
+                        </td>
+                      </tr>
+                    <?php endforeach; ?>
+                  <?php else: ?>
+                      <tr>
+                          <td colspan="4" class="text-center text-muted">No hay certificaciones disponibles</td>
+                      </tr>
+                  <?php endif; ?>
+                </tbody>
+              </table>
+            </div>
           </div>
+        </div>
       </div>
       <!---- fin de la card principal------>
 
       
       
       <div class="container-fluid">
-  <div id="contenedor">
+        <div id="contenedor">
     <!-- Tarjeta principal -->
     <div class="card box-shadow-div p-4 mb-3">
       <div class="logo-container row align-items-center">
