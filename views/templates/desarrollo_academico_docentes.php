@@ -16,6 +16,7 @@ $consultas = new Consultas($conn);
 $idusuario = isset($_GET['idusuario']) ? intval($_GET['idusuario']) : 1;
 // Llamamos al método para obtener el usuario actual
 $usuario = $consultas->obtenerUsuarioPorId($idusuario);
+$carreraId = $usuario['carrera_id'] ?? null;
 // Llamamos al método para obtener la carrera del usuario
 $carrera = $consultas->obtenerCarreraPorUsuarioId($idusuario);
 $carreras = $consultas->obtenerCarreras();
@@ -168,9 +169,11 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   <link rel="stylesheet" href="css/app-light.css" id="lightTheme">
   <link rel="stylesheet" href="css/app-dark.css" id="darkTheme" disabled>
   <link src="js/apps.js">
+ <!-- ===== CSS carousel ===== -->
+  <link rel="stylesheet" href="css/swiper-bundle.min.css">
+  <link rel="stylesheet" href="css/carousel-card.css">
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+g6Y1Ch6JvWc1R6FddRZnYf4M4w3LTpVj1q9Vkp8" crossorigin="anonymous"></script>
-
   <script src="js/navbar-animation.js" defer></script>
 
 </head>
@@ -221,219 +224,195 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     </nav>
   </div>
 
-    <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+  <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body px-5">
-                <div class="row align-items-center justify-content-start">
-                    <?php foreach ($atajos as $atajo): ?>
-                        <div class="col-6 text-center">
-                            <a href="<?= $atajo['url'] ?>" class="text-decoration-none">
-                                <div class="squircle justify-content-center">
-                                    <i class="fe <?= $atajo['icon'] ?> fe-32 align-self-center text-white"></i>
-                                </div>
-                                <p class="letra-atajo"><?= htmlspecialchars($atajo['text']) ?></p>
-                            </a>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-    <div class="card text-center">
-    <div class="card-body">
-      <h5 class="card-title">Filtrado por División</h5>
-      <div class="filter-container" style="position: relative;">
-        <button id="filterBtn" class="btn btn-primary" style="margin-bottom: 10px;">Seleccionar División</button>
-        <div id="filterOptions" class="filter-options d-none cass" style="top: 100%; left: 0; background: transparent; border: 1px solid #ccc; z-index: 10; overflow: hidden;text-overflow: ellipsis; white-space: nowrap;">
-          <?php foreach ($carreras as $carrera): ?>
-            <div class="dropdown-item" data-value="<?= htmlspecialchars($carrera['carrera_id']) ?>">
-              <?= htmlspecialchars($carrera['nombre_carrera']) ?>
-            </div>
-            <?php endforeach; ?>
-        </div>
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body px-5">
+              <div class="row align-items-center justify-content-start">
+                  <?php foreach ($atajos as $atajo): ?>
+                      <div class="col-6 text-center">
+                          <a href="<?= $atajo['url'] ?>" class="text-decoration-none">
+                              <div class="squircle justify-content-center">
+                                  <i class="fe <?= $atajo['icon'] ?> fe-32 align-self-center text-white"></i>
+                              </div>
+                              <p class="letra-atajo"><?= htmlspecialchars($atajo['text']) ?></p>
+                          </a>
+                      </div>
+                  <?php endforeach; ?>
+              </div>
+          </div>
       </div>
     </div>
   </div>
 
-  </div>
-  
+  <?php if ($tipoUsuarioId === 3 || $tipoUsuarioId === 4 || $tipoUsuarioId === 5 || $tipoUsuarioId === 8): ?>
+    <!-- Filtro de carreras -->
+    <div class="card text-center">
+      <div class="card-body mt-5">
+        <h5 class="card-title">Filtrado por división</h5>
+        <div class="filter-container">
+          <select id="carreraSelect" class="form-control" style="max-width: 300px; margin: auto;">
+            <option value="all">Todas las divisiones</option>
+            <?php foreach ($carreras as $carrera): ?>
+              <option value="<?= htmlspecialchars($carrera['carrera_id']) ?>">
+                <?= htmlspecialchars($carrera['nombre_carrera']) ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+      </div>
+    </div>
+  <?php endif; ?>
   
   <div role="main" class="main-content">
-    <!---Div de imagen de perfil (falta darle estilos a las letras)----------------------->
-    <div class="row justify-content-center mb-0">
-      <div class="col-12">
-        <div class="row">
-          <div class="col-md-12 col-xl-12 mb-0">
-            <div class="card box-shadow-div text-red rounded-lg">
-              <div class="row align-items-center">
-                <button class="carousel-control-prev col-1 btn btn-primary" type="button" id="anterior">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden"></span>
-                </button>
-
-                <div id="miCarrusel" class="carousel slide col-10">
-                  <div class="carousel-inner" id="carouselContent">
-                    <div class="carousel-item active animate" data-id="<?= htmlspecialchars($idusuario) ?>">
-                      <div class="row">
-                        <div class="col-12 col-md-5 col-xl-3 text-center">
-                          <strong class="name-line">Foto del Docente:</strong> <br>
-                          <img src="<?= '../' . htmlspecialchars($usuario["imagen_url"]) ?>" alt="Imagen del docente" class="img-fluid tamanoImg">
-                        </div>
-                        <div class="col-12 col-md-7 col-xl-9 data-teacher mb-0">
-                          <p class="teacher-info h4" id="teacherInfo">
-                            <strong class="name-line">Docente:</strong> <?= htmlspecialchars($usuario["nombre_usuario"] . ' ' . $usuario["apellido_p"] . ' ' . $usuario["apellido_m"]) ?><br>
-                            <strong class="name-line">Edad:</strong> <?= htmlspecialchars($usuario["edad"]) ?> años <br>
-                            <strong class="name-line">Fecha de contratación:</strong> <?= htmlspecialchars($usuario["fecha_contratacion"]) ?> <br>
-                            <strong class="name-line">Antigüedad:</strong> <?= htmlspecialchars($usuario["antiguedad"]) ?> años <br>
-                            <strong class="name-line">División Adscrita:</strong> <?= htmlspecialchars($usuario['nombre_carrera']) ?><br>
-                            <strong class="name-line">Número de Empleado:</strong> <?= htmlspecialchars($usuario["numero_empleado"]) ?> <br>
-                            <strong class="name-line">Grado académico:</strong> <?= htmlspecialchars($usuario["grado_academico"]) ?> <br>
-                            <strong class="name-line">Cédula:</strong> <?= htmlspecialchars($usuario["cedula"]) ?> <br>
-                            <strong class="name-line">Correo:</strong> <?= htmlspecialchars($usuario["correo"]) ?> <br>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- Más elementos del carrusel se generarán dinámicamente -->
-                  </div>
-                </div>
-                <button class="carousel-control-next col-1 btn btn-primary" type="button" id="siguiente">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden"></span>
-                </button>
-              </div>
-            </div>
-          </div>
+    <!-- Carrusel Swiper -->
+    <div class="slide-container swiper">
+      <div class="container-fluid mb-3">
+        <div class="mb-3 font-weight-bold bg-success text-white rounded p-3 box-shadow-div-profile flag-div">
+          PERFIL DOCENTE
         </div>
       </div>
-      <!------>
-      <script>
-        document.addEventListener("DOMContentLoaded", function() {
-          // Inicializar el carrusel con interval en false para desactivar el auto avance
-          var myCarousel = document.getElementById('miCarrusel');
-          var carousel = new bootstrap.Carousel(myCarousel, {
-            interval: false // Desactiva el desplazamiento automático
-          });
+      <div class="slide-content">
+        <div class="card-wrapper swiper-wrapper" id="card-container">
+          <!-- Las cards se generan dinámicamente -->
+        </div>
+      </div>
+      <div class="swiper-button-next swiper-navBtn"></div>
+      <div class="swiper-button-prev swiper-navBtn"></div>
+      <div class="swiper-pagination"></div>
+    </div>
 
-          // Controlar el botón "anterior"
-          document.getElementById('anterior').addEventListener('click', function() {
-            carousel.prev();
-          });
+    <script>
+      window.idusuario = <?= json_encode($idusuario); ?>;
+      window.tipoUsuarioId = <?= json_encode($tipoUsuarioId); ?>;
+      window.carreraId = <?= json_encode($carreraId); ?>;
+    </script>
 
-          // Controlar el botón "siguiente"
-          document.getElementById('siguiente').addEventListener('click', function() {
-            carousel.next();
-          });
-
-          // Código para el filtro de carreras
-          const filterBtn = document.getElementById('filterBtn');
-          const filterOptions = document.getElementById('filterOptions');
-
-          // Toggle la visibilidad de las opciones al hacer clic en el botón
-          filterBtn.addEventListener('click', function() {
-            filterOptions.classList.toggle('d-none');
-          });
-
-          // Agregar evento a cada opción de carrera
-          filterOptions.querySelectorAll('.dropdown-item').forEach(function(item) {
-            item.addEventListener('click', function() {
-              const carreraId = this.getAttribute('data-value');
-              const carreraNombre = this.textContent.trim(); // Obtener el nombre de la carrera
-
-              // Actualizar el texto del botón con el nombre de la carrera seleccionada
-              filterBtn.textContent = carreraNombre;
-
-              // Enviar el carrera_id seleccionado al servidor mediante AJAX
-              $.ajax({
-                url: '../templates/filtrarPorCarrera.php',
-                type: 'POST',
-                data: {
-                  carrera_id: carreraId
-                },
-                dataType: 'json',
-                success: function(response) {
-                  if (response && response.length > 0) {
-                    actualizarCarrusel(response);
-                  } else {
-                    console.error("No se recibieron usuarios.");
-                  }
-                },
-                error: function() {
-                  console.error('Error al obtener los usuarios por carrera.');
-                }
-              });
-
-              // Ocultar las opciones de carrera después de la selección
-              filterOptions.classList.add('d-none');
-            });
-          });
+    <!-- ===== JS carousel ===== -->
+    <script src="js/swiper-bundle.min.js" defer></script>
+    <script src="js/carousel-card.js" defer></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        // Inicializar el carrusel con interval en false para desactivar el auto avance
+        var myCarousel = document.getElementById('miCarrusel');
+        var carousel = new bootstrap.Carousel(myCarousel, {
+          interval: false // Desactiva el desplazamiento automático
         });
 
-        function actualizarCarrusel(usuarios) {
-          const carouselContent = document.getElementById('carouselContent');
+        // Controlar el botón "anterior"
+        document.getElementById('anterior').addEventListener('click', function() {
+          carousel.prev();
+        });
 
-          // Limpiar el contenido anterior
-          carouselContent.innerHTML = '';
+        // Controlar el botón "siguiente"
+        document.getElementById('siguiente').addEventListener('click', function() {
+          carousel.next();
+        });
 
-          // Iterar sobre los usuarios y generar nuevas entradas del carrusel
-          usuarios.forEach((usuario, index) => {
-            const activeClass = index === 0 ? 'active' : ''; // Solo la primera entrada será activa
+        // Código para el filtro de carreras
+        const filterBtn = document.getElementById('filterBtn');
+        const filterOptions = document.getElementById('filterOptions');
 
-            // Convertir la fecha de contratación en un objeto Date
-            const fechaContratacion = new Date(usuario.fecha_contratacion);
-            const fechaActual = new Date();
+        // Toggle la visibilidad de las opciones al hacer clic en el botón
+        filterBtn.addEventListener('click', function() {
+          filterOptions.classList.toggle('d-none');
+        });
 
-            // Calcular la diferencia en años entre la fecha actual y la fecha de contratación
-            let antiguedad = fechaActual.getFullYear() - fechaContratacion.getFullYear();
-            const mesActual = fechaActual.getMonth();
-            const mesContratacion = fechaContratacion.getMonth();
+        // Agregar evento a cada opción de carrera
+        filterOptions.querySelectorAll('.dropdown-item').forEach(function(item) {
+          item.addEventListener('click', function() {
+            const carreraId = this.getAttribute('data-value');
+            const carreraNombre = this.textContent.trim(); // Obtener el nombre de la carrera
 
-            // Ajustar la antigüedad si el mes actual es anterior al mes de contratación
-            // O si es el mismo mes pero el día actual es anterior al día de contratación
-            if (mesActual < mesContratacion || (mesActual === mesContratacion && fechaActual.getDate() < fechaContratacion.getDate())) {
-              antiguedad--;
-            }
+            // Actualizar el texto del botón con el nombre de la carrera seleccionada
+            filterBtn.textContent = carreraNombre;
 
-            const carouselItem = `
-            <div class="carousel-item ${activeClass}">
-                <div class="row">
-                    <div class="col-12 col-md-5 col-xl-3 text-center">
-                        <strong class="name-line">Foto del Docente:</strong> <br>
-                        <img src="../${usuario.imagen_url}" alt="Imagen del docente" class="img-fluid tamanoImg">
-                    </div>
-                    <div class="col-12 col-md-7 col-xl-9 data-teacher mb-0">
-                        <p class="teacher-info h4">
-                            <strong class="name-line">Docente:</strong> ${usuario.nombre_usuario} ${usuario.apellido_p} ${usuario.apellido_m}<br>
-                            <strong class="name-line">Edad:</strong> ${usuario.edad} años <br>
-                            <strong class="name-line">Fecha de contratación:</strong> ${usuario.fecha_contratacion} <br>
-                            <strong class="name-line">Antigüedad:</strong> ${antiguedad} años <br>
-                            <strong class="name-line">División Adscrita:</strong> ${usuario.nombre_carrera}<br>
-                            <strong class="name-line">Número de Empleado:</strong> ${usuario.numero_empleado} <br>
-                            <strong class="name-line">Grado académico:</strong> ${usuario.grado_academico} <br>
-                            <strong class="name-line">Cédula:</strong> ${usuario.cedula} <br>
-                            <strong class="name-line">Correo:</strong> ${usuario.correo} <br>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        `;
+            // Enviar el carrera_id seleccionado al servidor mediante AJAX
+            $.ajax({
+              url: '../templates/filtrarPorCarrera.php',
+              type: 'POST',
+              data: {
+                carrera_id: carreraId
+              },
+              dataType: 'json',
+              success: function(response) {
+                if (response && response.length > 0) {
+                  actualizarCarrusel(response);
+                } else {
+                  console.error("No se recibieron usuarios.");
+                }
+              },
+              error: function() {
+                console.error('Error al obtener los usuarios por carrera.');
+              }
+            });
 
-            // Insertar el nuevo elemento en el carrusel
-            carouselContent.innerHTML += carouselItem;
+            // Ocultar las opciones de carrera después de la selección
+            filterOptions.classList.add('d-none');
           });
-        }
-      </script>
+        });
+      });
 
+      function actualizarCarrusel(usuarios) {
+        const carouselContent = document.getElementById('carouselContent');
 
+        // Limpiar el contenido anterior
+        carouselContent.innerHTML = '';
 
+        // Iterar sobre los usuarios y generar nuevas entradas del carrusel
+        usuarios.forEach((usuario, index) => {
+          const activeClass = index === 0 ? 'active' : ''; // Solo la primera entrada será activa
+
+          // Convertir la fecha de contratación en un objeto Date
+          const fechaContratacion = new Date(usuario.fecha_contratacion);
+          const fechaActual = new Date();
+
+          // Calcular la diferencia en años entre la fecha actual y la fecha de contratación
+          let antiguedad = fechaActual.getFullYear() - fechaContratacion.getFullYear();
+          const mesActual = fechaActual.getMonth();
+          const mesContratacion = fechaContratacion.getMonth();
+
+          // Ajustar la antigüedad si el mes actual es anterior al mes de contratación
+          // O si es el mismo mes pero el día actual es anterior al día de contratación
+          if (mesActual < mesContratacion || (mesActual === mesContratacion && fechaActual.getDate() < fechaContratacion.getDate())) {
+            antiguedad--;
+          }
+
+          const carouselItem = `
+          <div class="carousel-item ${activeClass}">
+              <div class="row">
+                  <div class="col-12 col-md-5 col-xl-3 text-center">
+                      <strong class="name-line">Foto del Docente:</strong> <br>
+                      <img src="../${usuario.imagen_url}" alt="Imagen del docente" class="img-fluid tamanoImg">
+                  </div>
+                  <div class="col-12 col-md-7 col-xl-9 data-teacher mb-0">
+                      <p class="teacher-info h4">
+                          <strong class="name-line">Docente:</strong> ${usuario.nombre_usuario} ${usuario.apellido_p} ${usuario.apellido_m}<br>
+                          <strong class="name-line">Edad:</strong> ${usuario.edad} años <br>
+                          <strong class="name-line">Fecha de contratación:</strong> ${usuario.fecha_contratacion} <br>
+                          <strong class="name-line">Antigüedad:</strong> ${antiguedad} años <br>
+                          <strong class="name-line">División Adscrita:</strong> ${usuario.nombre_carrera}<br>
+                          <strong class="name-line">Número de Empleado:</strong> ${usuario.numero_empleado} <br>
+                          <strong class="name-line">Grado académico:</strong> ${usuario.grado_academico} <br>
+                          <strong class="name-line">Cédula:</strong> ${usuario.cedula} <br>
+                          <strong class="name-line">Correo:</strong> ${usuario.correo} <br>
+                      </p>
+                  </div>
+              </div>
+          </div>
+      `;
+
+          // Insertar el nuevo elemento en el carrusel
+          carouselContent.innerHTML += carouselItem;
+        });
+      }
+    </script>
 
       <div class="container-fluid">
         <div class="mb-3 font-weight-bold bg-success text-white rounded p-3 box-shadow-div-profile flag-div ">

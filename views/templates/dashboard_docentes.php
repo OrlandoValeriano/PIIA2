@@ -307,12 +307,14 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   <link rel="stylesheet" href="css/app-dark.css" id="darkTheme">
   <!-- Agregar en el <head> si aún no tienes Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <!-- ===== CSS carousel ===== -->
+  <link rel="stylesheet" href="css/swiper-bundle.min.css">
+  <link rel="stylesheet" href="css/carousel-card.css">
+  <!-- ===== JS navbar ===== -->
   <script src="js/navbar-animation.js" defer></script>
-
 
   <!-- Bootstrap JS -->
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 
 </head>
 
@@ -362,8 +364,8 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   </div>
 
 
-  <!-- 1. Filtro de carreras (ya lo tienes correcto) -->
   <?php if ($tipoUsuarioId === 3 || $tipoUsuarioId === 4 || $tipoUsuarioId === 5 || $tipoUsuarioId === 8): ?>
+    <!-- Filtro de carreras -->
     <div class="card text-center">
       <div class="card-body mt-5">
         <h5 class="card-title">Filtrado por división</h5>
@@ -381,205 +383,35 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
     </div>
   <?php endif; ?>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      <?php if ($tipoUsuarioId === 3 || $tipoUsuarioId === 4 || $tipoUsuarioId === 5 || $tipoUsuarioId === 8): ?>
-
-        const carreraSelect = document.getElementById('carreraSelect');
-        const carouselContent = document.getElementById('carouselContent');
-        const btnSiguiente = document.getElementById('siguiente');
-        const btnAnterior = document.getElementById('anterior');
-
-        let usuarios = [];
-        let currentIndex = 0;
-
-        function calcularAntiguedad(fechaStr) {
-          if (!fechaStr) return 'N/A';
-          const fechaContrato = new Date(fechaStr);
-          const hoy = new Date();
-          let años = hoy.getFullYear() - fechaContrato.getFullYear();
-          if (
-            hoy.getMonth() < fechaContrato.getMonth() ||
-            (hoy.getMonth() === fechaContrato.getMonth() && hoy.getDate() < fechaContrato.getDate())
-          ) {
-            años--;
-          }
-          return años;
-        }
-
-        function actualizarCarrusel() {
-          if (!usuarios.length) {
-            carouselContent.innerHTML = `
-          <div class="carousel-item active">
-            <p class="text-center text-danger">No se encontraron docentes</p>
-          </div>
-        `;
-            if (btnAnterior) btnAnterior.disabled = true;
-            if (btnSiguiente) btnSiguiente.disabled = true;
-            return;
-          }
-
-          const u = usuarios[currentIndex];
-          const antiguedad = calcularAntiguedad(u.fecha_contratacion);
-
-          carouselContent.innerHTML = `
-        <div class="carousel-item active" data-id="${u.usuario_id}">
-          <div class="row">
-            <div class="col-12 col-md-5 col-xl-3 text-center">
-              <strong class="name-line">Foto del Docente:</strong><br>
-              <img src="../${u.imagen_url || 'assets/avatars/default.jpg'}" alt="Imagen del docente" class="img-fluid tamanoImg">
-            </div>
-            <div class="col-12 col-md-7 col-xl-9 data-teacher mb-0">
-              <p class="teacher-info h4">
-                <strong class="name-line">Docente:</strong> ${u.nombre_usuario || ''} ${u.apellido_p || ''} ${u.apellido_m || ''}<br>
-                <strong class="name-line">Edad:</strong> ${u.edad || 'N/A'} años<br>
-                <strong class="name-line">Fecha de contratación:</strong> ${u.fecha_contratacion || 'N/A'}<br>
-                <strong class="name-line">Antigüedad:</strong> ${antiguedad} años<br>
-                <strong class="name-line">División Adscrita:</strong> ${u.nombre_carrera || 'N/A'}<br>
-                <strong class="name-line">Número de Empleado:</strong> ${u.numero_empleado || 'N/A'}<br>
-                <strong class="name-line">Grado académico:</strong> ${u.grado_academico || 'N/A'}<br>
-                <strong class="name-line">Cédula:</strong> ${u.cedula || 'N/A'}<br>
-                <strong class="name-line">Correo:</strong> ${u.correo || 'N/A'}<br>
-              </p>
-            </div>
-          </div>
-        </div>
-      `;
-
-          if (btnAnterior) btnAnterior.disabled = (currentIndex === 0);
-          if (btnSiguiente) btnSiguiente.disabled = (currentIndex === usuarios.length - 1);
-        }
-
-        function cargarDocentesPorCarrera(carreraId) {
-          carouselContent.innerHTML = `
-        <div class="text-center py-4">
-          <i class="fe fe-loader fe-spin fe-24"></i> Cargando docentes…
-        </div>
-      `;
-          if (btnAnterior) btnAnterior.disabled = true;
-          if (btnSiguiente) btnSiguiente.disabled = true;
-
-          const timeout = setTimeout(() => {
-            carouselContent.innerHTML = `
-          <div class="text-center text-danger py-4">
-            Tiempo de espera agotado
-          </div>
-        `;
-          }, 10000);
-
-          $.ajax({
-            url: '../templates/filtrarPorCarrera.php',
-            type: 'POST',
-            data: {
-              carrera_id: (carreraId === 'all' ? '' : carreraId),
-              all_carreras: (carreraId === 'all' ? 1 : 0)
-            },
-            dataType: 'json',
-            success: function(response) {
-              clearTimeout(timeout);
-              console.log("Respuesta completa de filtrarPorCarrera.php:", response);
-              if (response && Array.isArray(response) && response.length > 0) {
-                usuarios = response;
-                currentIndex = 5;
-                actualizarCarrusel();
-              } else {
-                usuarios = [];
-                actualizarCarrusel();
-              }
-            },
-            error: function(xhr, status, error) {
-              clearTimeout(timeout);
-              console.error("Error al cargar docentes:", error);
-              carouselContent.innerHTML = `
-            <div class="text-center text-danger py-4">
-              Error al cargar docentes
-            </div>
-          `;
-            },
-            complete: function() {
-              if (btnAnterior) btnAnterior.disabled = false;
-              if (btnSiguiente) btnSiguiente.disabled = false;
-            }
-          });
-        }
-
-        if (btnAnterior) {
-          btnAnterior.addEventListener('click', function() {
-            if (currentIndex > 0) {
-              currentIndex--;
-              actualizarCarrusel();
-            }
-          });
-        }
-        if (btnSiguiente) {
-          btnSiguiente.addEventListener('click', function() {
-            if (currentIndex < usuarios.length - 1) {
-              console.log("Siguiente usuario:", usuarios[currentIndex + 1]);
-              currentIndex++;
-              actualizarCarrusel();
-            }
-          });
-        }
-
-        if (carreraSelect) {
-          carreraSelect.addEventListener('change', function() {
-            cargarDocentesPorCarrera(this.value);
-          });
-          cargarDocentesPorCarrera('all');
-        }
-
-      <?php endif; ?>
-    });
-  </script>
-
   <!-- Código HTML del carrusel -->
   <main role="main" class="main-content">
-    <div class="mb-3 font-weight-bold bg-success text-white rounded p-3 box-shadow-div-profile flag-div">
-      PERFIL DOCENTE
-    </div>
-    <div id="teacherCarousel" class="carousel slide mt-5" data-bs-ride="carousel">
-      <div class="carousel-inner" id="carouselContent">
-        <div class="carousel-item active animate" data-id="<?= htmlspecialchars($idusuario) ?>">
-          <div class="row">
-            <div class="col-12 col-md-5 col-xl-3 text-center">
-              <strong class="name-line">Foto del Docente:</strong><br>
-              <img src="<?= '../' . htmlspecialchars($usuario["imagen_url"]) ?>" alt="Imagen del docente" class="img-fluid tamanoImg">
-            </div>
-            <div class="col-12 col-md-7 col-xl-9 data-teacher mb-0">
-              <p class="teacher-info h4">
-                <strong class="name-line">Docente:</strong> <?= htmlspecialchars($usuario["nombre_usuario"] . ' ' . $usuario["apellido_p"] . ' ' . $usuario["apellido_m"]) ?><br>
-                <strong class="name-line">Edad:</strong> <?= htmlspecialchars($usuario["edad"]) ?> años<br>
-                <strong class="name-line">Fecha de contratación:</strong> <?= htmlspecialchars($usuario["fecha_contratacion"]) ?><br>
-                <strong class="name-line">Antigüedad:</strong> <?= htmlspecialchars($usuario["antiguedad"]) ?> años<br>
-                <strong class="name-line">División Adscrita:</strong> <?= htmlspecialchars($usuario['nombre_carrera']) ?><br>
-                <strong class="name-line">Número de Empleado:</strong> <?= htmlspecialchars($usuario["numero_empleado"]) ?><br>
-                <strong class="name-line">Grado académico:</strong> <?= htmlspecialchars($usuario["grado_academico"]) ?><br>
-                <strong class="name-line">Cédula:</strong> <?= htmlspecialchars($usuario["cedula"]) ?><br>
-                <strong class="name-line">Correo:</strong> <?= htmlspecialchars($usuario["correo"]) ?><br>
-              </p>
-            </div>
-          </div>
+    <!-- Carrusel Swiper -->
+    <div class="slide-container swiper">
+      <div class="container-fluid mb-3">
+        <div class="mb-3 font-weight-bold bg-success text-white rounded p-3 box-shadow-div-profile flag-div">
+          PERFIL DOCENTE
         </div>
       </div>
-
-      <!-- Botones de Bootstrap -->
-      <button class="carousel-control-prev col-1 btn btn-primary"
-        type="button"
-        data-bs-target="#teacherCarousel"
-        data-bs-slide="prev"
-        id="anterior">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden"><-</span>
-      </button>
-      <button class="carousel-control-next col-1 btn btn-primary"
-        type="button"
-        data-bs-target="#teacherCarousel"
-        data-bs-slide="next"
-        id="siguiente">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">-></span>
-      </button>
+      <div class="slide-content">
+        <div class="card-wrapper swiper-wrapper" id="card-container">
+          <!-- Las cards se generan dinámicamente -->
+        </div>
+      </div>
+      <div class="swiper-button-next swiper-navBtn"></div>
+      <div class="swiper-button-prev swiper-navBtn"></div>
+      <div class="swiper-pagination"></div>
     </div>
+
+    <script>
+      const idusuario = <?= json_encode($idusuario); ?>;
+      const tipoUsuarioId = <?= json_encode($tipoUsuarioId); ?>;
+      const carreraId = <?= json_encode($carreraId); ?>;
+    </script>
+
+    <!-- ===== JS carousel ===== -->
+    <script src="js/swiper-bundle.min.js" defer></script>
+    <script src="js/carousel-card.js" defer></script>
+
     <script>
       function toggleCampos() {
         var selectElement = document.getElementById('incidencias');
@@ -1213,7 +1045,6 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
                   borderWidth: 1,
                   borderRadius: 15,
                 }
-<<<<<<< HEAD
               ]
             },
             options: {
@@ -1287,15 +1118,12 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
               <div class="card-body">
                 <h2 class="font-weight-bold mb-4">Calificación promedio</h2>
                 <h1 class="text-success mb-3"><?php echo $promedioGeneral; ?></h1>
-=======
-            });
 
             // Ajustar el tamaño del canvas
             document.getElementById('evaluacionChart').style.height = '500px';
             document.getElementById('evaluacionChart').style.width = '100%';
         }
     </script>
-<?php endif; ?>
 </div>
 
           <div class="container-fluid mt-0">
@@ -1405,54 +1233,61 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
       </div>
 
       <!-- Contenido principal -->
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group mt-2">
-            <label for="numero_empleado" class="form-label">Número de empleado:</label>
-            <input type="text" id="numero_empleado" class="form-control" value="<?php echo htmlspecialchars($usuario['numero_empleado'] ?? ''); ?>" readonly>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group mt-2">
+              <label for="numero_empleado" class="form-label">Número de empleado:</label>
+              <input type="text" id="numero_empleado" class="form-control"
+                value="<?php echo htmlspecialchars($usuario['numero_empleado'] ?? ''); ?>" readonly>
+            </div>
           </div>
-        </div>
-        
-        <div class="col-md-4">
-          <div class="form-group mt-2">
-            <label for="usuario_usuario_id">Docente:</label>
-            <select class="form-control" id="usuario_usuario_id" name="usuario_usuario_id" required <?php echo ($tipoUsuarioId != 2 && $tipoUsuarioId != 3 && $tipoUsuarioId != 4 && $tipoUsuarioId != 5 && $tipoUsuarioId != 8) ? 'disabled' : ''; ?>>
-              <option value="">Selecciona un docente</option>
-              <?php 
-              // Obtener lista de usuarios según el tipo de usuario
-              $usuarios = [];
-              if ($tipoUsuarioId == 2 || $tipoUsuarioId == 5 || $tipoUsuarioId == 8) { // Jefe de carrera o Dirección
-                $usuarios = $consultas->obtenerUsuariosPorCarrera($carreraId);
-              } elseif ($tipoUsuarioId == 3 || $tipoUsuarioId == 4) { // RH o Desarrollo Académico
-                $usuarios = $consultas->obtenerTodosUsuariosDocentes();
-              } else {
-                // Para otros tipos de usuario, solo mostrar su propio perfil
-                $usuarios = [$usuario];
-              }
-              
-              foreach ($usuarios as $docente): ?>
-                <option value="<?php echo $docente['usuario_id']; ?>" <?= ($docente['usuario_id'] == $idusuario) ? 'selected' : ''; ?>>
-                  <?php echo htmlspecialchars($docente['nombre_usuario'] . ' ' . $docente['apellido_p'] . ' ' . $docente['apellido_m']); ?>
-                </option>
-              <?php endforeach; ?>
-            </select>
+
+          <div class="col-md-4">
+            <div class="form-group mt-2">
+              <label for="usuario_usuario_id">Docente:</label>
+              <select class="form-control" id="usuario_usuario_id" name="usuario_usuario_id" required
+                <?php echo (!in_array($tipoUsuarioId, [2, 3, 4, 5, 8])) ? 'disabled' : ''; ?>>
+                <option value="">Selecciona un docente</option>
+                <?php
+                $usuarios = [];
+
+                if (in_array($tipoUsuarioId, [2, 5, 8])) {
+                  $usuarios = $consultas->obtenerUsuariosPorCarrera($carreraId);
+                } elseif (in_array($tipoUsuarioId, [3, 4])) {
+                  $usuarios = $consultas->obtenerTodosUsuariosDocentes();
+                } else {
+                  $usuarios = $consultas->obtenerUsuariosPorCarrera($carreraId); // para tipo 1,6,7
+                }
+
+                foreach ($usuarios as $docente) {
+                  $selected = ($docente['usuario_id'] == $idusuario) ? 'selected' : '';
+                  echo '<option value="' . $docente['usuario_id'] . '" ' . $selected . '>'
+                    . htmlspecialchars($docente['nombre_usuario'] . ' ' . $docente['apellido_p'] . ' ' . $docente['apellido_m'])
+                    . '</option>';
+                }
+                ?>
+              </select>
+            </div>
           </div>
-        </div>
       
-        <div class="col-md-4">
-          <div class="form-group mt-2">
-            <label for="carrera_carrera_id" class="form-label">Carrera:</label>
-            <select class="form-control" id="carrera_carrera_id" name="carrera_carrera_id" required <?php echo ($tipoUsuarioId != 3 && $tipoUsuarioId != 4 && $tipoUsuarioId != 5 && $tipoUsuarioId != 8) ? 'disabled' : ''; ?>>
-              <option value="">Selecciona una carrera</option>
-              <?php foreach ($carreras as $carrera): ?>
-                <option value="<?php echo $carrera['carrera_id']; ?>" <?= ($carrera['carrera_id'] == $carreraId) ? 'selected' : ''; ?>>
-                  <?php echo htmlspecialchars($carrera['nombre_carrera']); ?>
-                </option>
-              <?php endforeach; ?>
-            </select>
+          <script>
+            const tipoUsuarioId = <?php echo json_encode($tipoUsuarioId); ?>;
+          </script>
+
+          <div class="col-md-4">
+            <div class="form-group mt-2">
+              <label for="carrera_carrera_id" class="form-label">Carrera:</label>
+              <select class="form-control" id="carrera_carrera_id" name="carrera_carrera_id" required <?php echo ($tipoUsuarioId != 3 && $tipoUsuarioId != 4 && $tipoUsuarioId != 5 && $tipoUsuarioId != 8) ? 'disabled' : ''; ?>>
+                <option value="">Selecciona una carrera</option>
+                <?php foreach ($carreras as $carrera): ?>
+                  <option value="<?php echo $carrera['carrera_id']; ?>" <?= ($carrera['carrera_id'] == $carreraId) ? 'selected' : ''; ?>>
+                    <?php echo htmlspecialchars($carrera['nombre_carrera']); ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+            </div>
           </div>
         </div>
-      </div>
       
       <!-- Tabla del Horario - Siempre visible -->
       <div class="row" id="horarioContainer">

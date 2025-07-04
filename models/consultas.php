@@ -912,27 +912,32 @@ class Consultas
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-
-
-    //*********************** PRUEBA ************************************************************* */    
-
-    public function obtenerUsuariosPorCarrera($carrera_id)
+     //*********************** PRUEBA ************************************************************* */    
+    public function obtenerUsuariosPorCarrera($carrera_id = null)
     {
-        $sql = "SELECT * from vista_usuarios
-                INNER JOIN usuario_has_carrera uhc ON usuario_id = uhc.usuario_usuario_id
-                WHERE uhc.carrera_carrera_id = :carrera_id";
+        if ($carrera_id === null || $carrera_id === 'all') {
+            $sql = "SELECT u.*, c.nombre_carrera
+                FROM usuario u
+                INNER JOIN usuario_has_carrera uhc ON u.usuario_id = uhc.usuario_usuario_id
+                INNER JOIN carrera c ON uhc.carrera_carrera_id = c.carrera_id";
+            $stmt = $this->conn->prepare($sql);
+        } else {
+            $sql = "SELECT u.*, c.nombre_carrera
+                FROM usuario u
+                INNER JOIN usuario_has_carrera uhc ON u.usuario_id = uhc.usuario_usuario_id
+                INNER JOIN carrera c ON uhc.carrera_carrera_id = c.carrera_id
+                WHERE c.carrera_id = :carrera_id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':carrera_id', $carrera_id, PDO::PARAM_INT);
+        }
 
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':carrera_id', $carrera_id, PDO::PARAM_INT); // ✅ Usar bindParam con PDO
         $stmt->execute();
-
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    
-    
-        
-    public function obtenerDocentesPorCarrera($carrera_id) {
+
+
+    public function obtenerDocentesPorCarrera($carrera_id)
+    {
         // Consulta para obtener usuarios asociados a una carrera específica
         $query = "SELECT 
         u.usuario_id,
@@ -949,25 +954,24 @@ class Consultas
         u.tipo_usuario_tipo_usuario_id,
         u.cuerpo_colegiado_cuerpo_colegiado_id,
         u.carrera_carrera_id,
+        c.carrera_id,
         c.nombre_carrera 
-      FROM 
+        FROM 
         vista_usuarios u
-      JOIN 
+        JOIN 
         carrera c ON u.carrera_carrera_id = c.carrera_id
-      WHERE 
-        c.carrera_id = :carrera_id 
-        AND u.tipo_usuario_tipo_usuario_id = 1
-    ";
+        WHERE 
+        c.carrera_id = :carrera_id AND u.tipo_usuario_tipo_usuario_id = 1"; // Filtra por tipo_usuario = 1 (docente)
 
-$stmt = $this->conn->prepare($query);
-$stmt->bindParam(':carrera_id', $carrera_id, PDO::PARAM_INT); // Enlazamos el parámetro
-try {
-$stmt->execute(); // Ejecutamos la consulta
-return $stmt->fetchAll(PDO::FETCH_ASSOC); // Devolvemos los resultados como un array asociativo
-} catch (PDOException $e) {
-return ['error' => 'Error en la consulta: ' . $e->getMessage()]; // Devolvemos el error
-}
-}
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':carrera_id', $carrera_id, PDO::PARAM_INT); // Enlazamos el parámetro
+        try {
+            $stmt->execute(); // Ejecutamos la consulta
+            return $stmt->fetchAll(PDO::FETCH_ASSOC); // Devolvemos los resultados como un array asociativo
+        } catch (PDOException $e) {
+            return ['error' => 'Error en la consulta: ' . $e->getMessage()]; // Devolvemos el error
+        }
+    }
 
     public function obtenerEvaluacionesPorDocenteYPeriodo($usuario_id, $periodo_id)
     {

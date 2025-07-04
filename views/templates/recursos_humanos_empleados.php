@@ -29,6 +29,7 @@ $idusuario = isset($_GET['idusuario']) ? intval($_GET['idusuario']) : 1;
 // Obtener usuario y carrera
 $idusuario = isset($_GET['idusuario']) ? intval($_GET['idusuario']) : $idusuario;
 $usuario = $consultas->obtenerUsuarioPorId($idusuario);
+$carreraId = $usuario['carrera_id'] ?? null;
 $carrera = $consultas->obtenerCarreraPorUsuarioId($idusuario);
 $carreras = $consultas->obtenerCarreras();
 
@@ -217,7 +218,9 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
   <!-- App CSS -->
   <link rel="stylesheet" href="css/app-light.css" id="lightTheme">
   <link rel="stylesheet" href="css/app-dark.css" id="darkTheme" disabled>
-
+  <!-- ===== CSS carousel ===== -->
+  <link rel="stylesheet" href="css/swiper-bundle.min.css">
+  <link rel="stylesheet" href="css/carousel-card.css">
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+g6Y1Ch6JvWc1R6FddRZnYf4M4w3LTpVj1q9Vkp8" crossorigin="anonymous"></script>
 
@@ -273,87 +276,56 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
       </ul>
     </nav>
   </div>
-  <!-- Div de imagen de perfil (con espacio debajo del botón para separarlo) -->
-  <div class="card text-center">
-    <div class="card-body mt-5">
-      <h5 class="card-title">Filtrado por División</h5>
-      <div class="d-flex flex-column align-items-center">
-        <div class="d-flex justify-content-center mb-3">
-          <button id="filterBtn" class="btn btn-primary">Seleccionar División</button>
-          <div style="width: 20px;"></div>
-          <button class="btn btn-primary" onclick="descargarExcel()">Descargar Base de Datos</button>
-        </div>
-
-        <div class="filter-container position-relative">
-          <div id="filterOptions" class="filter-options d-none cass" style="top: 100%; left: 0; background: transparent; border: 1px solid #ccc; z-index: 10; overflow: hidden;text-overflow: ellipsis; white-space: nowrap;">
+  
+  <?php if ($tipoUsuarioId === 3 || $tipoUsuarioId === 4 || $tipoUsuarioId === 5 || $tipoUsuarioId === 8): ?>
+    <!-- Filtro de carreras -->
+    <div class="card text-center">
+      <div class="card-body mt-5">
+        <h5 class="card-title">Filtrado por división</h5>
+        <div class="filter-container">
+          <select id="carreraSelect" class="form-control" style="max-width: 300px; margin: auto;">
+            <option value="all">Todas las divisiones</option>
             <?php foreach ($carreras as $carrera): ?>
-              <div class="dropdown-item" data-value="<?= htmlspecialchars($carrera['carrera_id']) ?>">
+              <option value="<?= htmlspecialchars($carrera['carrera_id']) ?>">
                 <?= htmlspecialchars($carrera['nombre_carrera']) ?>
-              </div>
+              </option>
             <?php endforeach; ?>
-          </div>
+          </select>
+          <button class="btn btn-primary" onclick="descargarExcel()">Descargar Base de Datos</button>
         </div>
       </div>
     </div>
-  </div>
+  <?php endif; ?>
 
   <div role="main" class="main-content">
     <!---Div de imagen de perfil (falta darle estilos a las letras)----------------------->
     <div id="teacherCarousel" class="carousel slide" data-bs-ride="carousel">
+    <!-- Carrusel Swiper -->
+    <div class="slide-container swiper">
       <div class="container-fluid mb-3">
         <div class="mb-3 font-weight-bold bg-success text-white rounded p-3 box-shadow-div-profile flag-div">
           RECURSOS HUMANOS
         </div>
-        <div class="row justify-content-center mb-0">
-          <div class="col-12">
-            <div class="row">
-              <div class="col-md-12 col-xl-12 mb-0">
-                <div class="card box-shadow-div text-red rounded-lg">
-                  <div class="row align-items-center">
-                    <button class="carousel-control-prev col-1 btn btn-primary" type="button" id="anterior">
-                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span class="visually-hidden"></span>
-                    </button>
-
-                    <div id="miCarrusel" class="carousel slide col-10">
-                      <div class="carousel-inner" id="carouselContent">
-                        <div class="carousel-item active animate" data-id="<?= htmlspecialchars($idusuario) ?>">
-                          <div class="row">
-                            <div class="col-12 col-md-5 col-xl-3 text-center">
-                              <strong class="name-line">Foto del Docente:</strong> <br>
-                              <img src="<?= '../' . htmlspecialchars($usuario["imagen_url"]) ?>" alt="Imagen del docente" class="img-fluid tamanoImg">
-                            </div>
-                            <div class="col-12 col-md-7 col-xl-9 data-teacher mb-0">
-                              <p class="teacher-info h4" id="teacherInfo">
-                                <strong class="name-line">Docente:</strong> <?= htmlspecialchars($usuario["nombre_usuario"] . ' ' . $usuario["apellido_p"] . ' ' . $usuario["apellido_m"]) ?><br>
-                                <strong class="name-line">Edad:</strong> <?= htmlspecialchars($usuario["edad"]) ?> años <br>
-                                <strong class="name-line">Fecha de contratación:</strong> <?= htmlspecialchars($usuario["fecha_contratacion"]) ?> <br>
-                                <strong class="name-line">Antigüedad:</strong> <?= htmlspecialchars($usuario["antiguedad"]) ?> años <br>
-                                <strong class="name-line">División Adscrita:</strong> <?= htmlspecialchars($usuario['nombre_carrera']) ?><br>
-                                <strong class="name-line">Número de Empleado:</strong> <?= htmlspecialchars($usuario["numero_empleado"]) ?> <br>
-                                <strong class="name-line">Grado académico:</strong> <?= htmlspecialchars($usuario["grado_academico"]) ?> <br>
-                                <strong class="name-line">Cédula:</strong> <?= htmlspecialchars($usuario["cedula"]) ?> <br>
-                                <strong class="name-line">Correo:</strong> <?= htmlspecialchars($usuario["correo"]) ?> <br>
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- Más elementos del carrusel se generarán dinámicamente -->
-                      </div>
-                    </div>
-
-                    <button class="carousel-control-next col-1 btn btn-primary" type="button" id="siguiente">
-                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span class="visually-hidden"></span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      </div>
+      <div class="slide-content">
+        <div class="card-wrapper swiper-wrapper" id="card-container">
+          <!-- Las cards se generan dinámicamente -->
         </div>
       </div>
+      <div class="swiper-button-next swiper-navBtn"></div>
+      <div class="swiper-button-prev swiper-navBtn"></div>
+      <div class="swiper-pagination"></div>
+    </div>
 
+    <script>
+      const idusuario = <?= json_encode($idusuario); ?>;
+      const tipoUsuarioId = <?= json_encode($tipoUsuarioId); ?>;
+      const carreraId = <?= json_encode($carreraId); ?>;
+    </script>
+
+    <!-- ===== JS carousel ===== -->
+    <script src="js/swiper-bundle.min.js" defer></script>
+    <script src="js/carousel-card.js" defer></script>   
 
       <script>
         document.addEventListener("DOMContentLoaded", function() {

@@ -18569,3 +18569,78 @@ button#downloadPDF {
 .tbl_incidencias {
   height: auto;
 }
+
+/* =============== DESIGN CARD =============== */
+.card-c {
+    border-radius: 25px;
+    background-color: #212529;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8)
+}
+
+.overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: #000;
+    border-radius: 25px 25px 0 25px;
+}
+
+.overlay::before,
+.overlay::after {
+    content: '';
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    background: #000;
+    right: 0;
+    bottom: -40px;
+}
+
+.overlay::after {
+    border-radius: 0 25px 0 0;
+    background: #212529;
+    z-index: 10;
+}
+
+.card-image {
+    position: relative;
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    background-color: #212529;
+    padding: 3px;
+}
+
+.card-image .card-img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #555555;
+}
+
+.name {
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.description {
+    font-size: 14px;
+    color: #ddd;
+    text-align: center;
+}
+
+.button {
+    border: none;
+    font-size: 16px;
+    color: #fff;
+    padding: 8px 16px;
+    background-color: #008000b3;
+    border-radius: 6px;
+    margin: 14px;
+    cursor: pointer;
+    transition: all .3s ease;
+}

@@ -1,0 +1,97 @@
+/* =================== GOOGLE FONT ==================== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.slide-container {
+    width: 100%;
+    padding: 50px 0;
+}
+
+.slide-content {
+    margin: 0 40px;
+    overflow: hidden;
+    border-radius: 25px;
+    padding: 20px 15px;
+}
+
+.image-content,
+.card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 14px;
+    transition: height .3s ease-in-out;
+}
+
+
+.image-content {
+    position: relative;
+    row-gap: 5px;
+    padding: 25px 0;
+}
+
+.button:hover {
+    background-color: #00ac00b3;
+}
+
+.swiper-wrapper {
+    height: auto;
+}
+
+.swiper-navBtn {
+    color: #6e93f7;
+    transition: color .3s ease-in-out;
+}
+
+.swiper-navBtn:hover {
+    color: #008A45;
+}
+
+.swiper-navBtn::before,
+.swiper-navBtn::after {
+    font-size: 40px;
+}
+
+.swiper-button-next {
+    right: 0;
+}
+
+.swiper-button-prev {
+    left: 0;
+}
+
+.swiper-pagination-bullet {
+    background-color: #35b173;
+    opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: #008A45;
+}
+
+.detalle-perfil {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+    border-top: 1px solid #ccc;
+    padding-top: 0;
+    font-size: 14px;
+}
+
+/* Cuando esté activo */
+.detalle-perfil.activo {
+    max-height: 500px;
+    /* Ajusta según contenido */
+    opacity: 1;
+    padding-top: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .slide-content {
+        margin: 0 10px;
+    }
+
+    .swiper-navBtn {
+        display: none;
+    }
+}
