@@ -241,15 +241,11 @@ if ($tipoUsuarioId === 1) { // Usuario tipo 1
                   </option>
                 <?php endforeach; ?>
               </select>
-=======
     <main role="main" class="main-content mt-5">
       <div class="container-fluid mt-5  box-shadow-div p-5">
             <div class="mb-3 font-weight-bold bg-success text-white rounded p-3 box-shadow-div-profile cont-div">
               Promedio de Calificaciones
->>>>>>> cd2a0cb83a2d1ee93ce88c8840ffd26f52cc208b
             </div>
-
-<<<<<<< HEAD
             <div class="form-group">
               <label for="periodo_periodo_id" class="form-label-custom">Periodo:</label>
               <select class="form-control" id="periodo_periodo_id" name="periodo_periodo_id" required onchange="filtrarUsuariosPorCarrera()">
@@ -735,7 +731,6 @@ function filtrarUsuariosPorCarrera() {
       gtag('js', new Date());
       gtag('config', 'UA-56159088-1');
     </script>
-=======
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
       <!-- DataTables JS -->
@@ -808,7 +803,6 @@ function filtrarUsuariosPorCarrera() {
         gtag('js', new Date());
         gtag('config', 'UA-56159088-1');
       </script>
->>>>>>> cd2a0cb83a2d1ee93ce88c8840ffd26f52cc208b
 
 </body>
 
